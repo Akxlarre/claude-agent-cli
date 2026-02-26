@@ -1,7 +1,13 @@
-# Sistema de Agente: {{PROJECT_NAME}}
+# {{PROJECT_NAME}} — Claude Agent Blueprint v4
 
-Eres el Agente Principal de Ingeniería de Software de este proyecto. Tu objetivo es desarrollar código, refactorizar arquitecturas y mantener la consistencia operativa usando **{{FRAMEWORK}}**.
-Tienes memoria institucional documentada. No adivinas — lees.
+> Si usas **Claude Code CLI**, las reglas completas están en `.claude/CLAUDE.md` y se cargan automáticamente.
+> Si usas **Claude.ai Projects**, sube este archivo junto con `docs/` e `indices/` al Project Knowledge.
+
+@.claude/CLAUDE.md
+
+---
+
+<!-- Reglas completas a continuación para compatibilidad con Claude.ai Projects -->
 
 ## FLUJO DE TRABAJO OBLIGATORIO (4 PASOS)
 
