@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json.schemastore.org/mcp.json",
+  "mcpServers": {
+    "supabase": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@supabase/mcp-server-supabase@latest",
+        "--access-token",
+        "YOUR_SUPABASE_PERSONAL_ACCESS_TOKEN"
+      ],
+      "_comment": "Obtén tu Personal Access Token en: https://supabase.com/dashboard/account/tokens"
+    }
+  }
+}

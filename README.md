@@ -1,6 +1,6 @@
 # 🧠 Claude Agent CLI (Blueprint v3.0)
 
-Un orquestador CLI construido en Node.js para auto-generar ecosistemas de trabajo (Angular + Supabase) perfectamente diseñados para ser entendidos y mantenidos por Agentes de IA ( el ecosistema **Claude Pro / Claude Code**).
+Un orquestador CLI construido en Node.js para auto-generar ecosistemas de trabajo (Angular + Supabase) perfectamente diseñados para ser entendidos y mantenidos por Agentes de IA (Específicamente **Claude 3.7 Sonnet** y el ecosistema **Claude Pro / Claude Code**).
 
 ## 🚀 ¿Qué hace?
 

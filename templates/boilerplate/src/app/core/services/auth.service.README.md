@@ -10,7 +10,7 @@ Gestión de autenticación con Supabase. Mantiene el usuario actual desde `auth.
 |---------|------|-------------|
 | `currentUser` | `Signal<User \| null>` | Usuario actual (null si no autenticado). Incluye id, name, email, role, initials, avatarUrl, householdId. |
 | `isAuthenticated` | `ComputedSignal<boolean>` | true si hay usuario logueado |
-| `canSwitchSchool` | `ComputedSignal<boolean>` | Siempre false (compatibilidad con SchoolSelector oculto) |
+
 | `whenReady` | `Promise<void>` | Resuelve cuando la comprobación inicial de sesión ha terminado. Usado por AuthGuard. |
 | `login(email, password)` | `Promise<{ error: Error \| null }>` | Inicia sesión con Supabase. El listener actualiza currentUser. |
 | `signUp(email, password, options?)` | `Promise<{ data; error }>` | Registro de usuario. options.data puede incluir display_name. |
