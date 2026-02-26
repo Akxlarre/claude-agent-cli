@@ -1,0 +1,47 @@
+/* Design System Tokens */
+@use './styles/tokens/variables';
+
+/* PrimeNG overrides (design system tokens + toast position) */
+@use './styles/vendors/primeng-overrides';
+
+/* Layouts */
+@use './styles/layout/bento-grid';
+
+/* Motion — View Transitions API (page transitions premium) */
+@use './styles/motion/view-transitions';
+
+/* Typography Imports */
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap');
+/* Geist: CDN bloqueado por ORB; usar @fontsource si se necesita Geist:
+   npm i @fontsource/geist @fontsource/geist-mono
+   @import '@fontsource/geist'; @import '@fontsource/geist-mono';
+   Tokens usan fallbacks (SF Pro, Plus Jakarta, system-ui). */
+
+/* Bloqueo de scroll cuando drawer mobile está abierto */
+body.layout-drawer-open {
+  overflow: hidden;
+}
+
+/* Bloqueo de scroll cuando modal está abierto */
+body.modal-open {
+  overflow: hidden;
+}
+
+/* Modal overlay wrapper — estilos globales (el div se crea con document.createElement,
+   no recibe encapsulación de Angular). Bloquea fondo, scroll y recibe clics. */
+.modal-overlay__wrapper {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: auto !important;
+  overflow: auto;
+}
+
+.modal-overlay__wrapper > * {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: auto !important;
+}

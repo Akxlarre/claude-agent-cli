@@ -91,7 +91,44 @@ async function main() {
     };
 
     try {
-        copyRecursiveSync(TEMPLATES_DIR, targetDir);
+        // Copy the AI blueprint rules (docs, indices, etc)
+        const AI_BLUEPRINT_DIR = path.join(TEMPLATES_DIR, 'docs') // Or however we want to filter this
+        // Actually, let's keep it simple: copy everything EXCEPT the `boilerplate` folder first
+
+        fs.readdirSync(TEMPLATES_DIR).forEach(item => {
+            if (item !== 'boilerplate') {
+                copyRecursiveSync(path.join(TEMPLATES_DIR, item), path.join(targetDir, item));
+            }
+        });
+
+        // If Full Scaffold, also inject the code boilerplate and update app.config.ts
+        if (answers.action && answers.action.includes('Full Scaffold')) {
+            const BOILERPLATE_SRC = path.join(TEMPLATES_DIR, 'boilerplate', 'src');
+            if (fs.existsSync(BOILERPLATE_SRC)) {
+                console.log(chalk.yellow('\n🏗️ Inyectando Boilerplate de Código (Core, Auth, GSAP, Styles)...'));
+                copyRecursiveSync(BOILERPLATE_SRC, path.join(targetDir, 'src'));
+
+                // Update app.config.ts to include PrimeNG Theme
+                const appConfigPath = path.join(targetDir, 'src', 'app', 'app.config.ts');
+                if (fs.existsSync(appConfigPath)) {
+                    let configStr = fs.readFileSync(appConfigPath, 'utf8');
+
+                    // Add imports
+                    const importsToAdd = `import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';\nimport { providePrimeNG } from 'primeng/config';\nimport Aura from '@primeng/themes/aura';\n`;
+                    if (!configStr.includes('providePrimeNG')) {
+                        configStr = importsToAdd + configStr;
+
+                        // Add providers
+                        configStr = configStr.replace(
+                            /providers: \[([^\]]+)\]/,
+                            `providers: [$1, provideAnimationsAsync(), providePrimeNG({ theme: { preset: Aura, options: { cssLayer: { name: 'primeng', order: 'tailwind-base, primeng, tailwind-utilities' } } } })]`
+                        );
+                        fs.writeFileSync(appConfigPath, configStr);
+                        console.log(chalk.green('   ✓ app.config.ts actualizado con PrimeNG v18+'));
+                    }
+                }
+            }
+        }
 
         // 2. Inject answers into CLAUDE.md
         const claudePath = path.join(targetDir, 'CLAUDE.md');
