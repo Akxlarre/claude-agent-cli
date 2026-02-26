@@ -7,7 +7,6 @@ export interface User {
   role: UserRole;
   initials: string;
   avatarUrl?: string;
-  householdId?: string;
 }
 
 /**

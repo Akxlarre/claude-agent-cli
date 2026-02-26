@@ -20,9 +20,6 @@ export class AuthService {
   readonly currentUser = this._currentUser.asReadonly();
   readonly isAuthenticated = computed(() => this._currentUser() !== null);
 
-  /** Mantener por compatibilidad con SchoolSelector (oculto en FamilyApp). */
-  readonly canSwitchSchool = computed(() => false);
-
   /** Resuelve cuando la comprobación inicial de sesión ha terminado (para guards). */
   readonly whenReady: Promise<void>;
 
@@ -32,7 +29,7 @@ export class AuthService {
       resolveReady = resolve;
     });
 
-    this.supabase.client.auth.onAuthStateChange((event, session) => {
+    this.supabase.client.auth.onAuthStateChange((event: any, session: any) => {
       if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session?.user) {
         this.loadUserFromSession(session.user);
       } else if (event === 'SIGNED_OUT') {
@@ -40,7 +37,7 @@ export class AuthService {
       }
     });
 
-    this.supabase.getUser().then(async ({ data: { user } }) => {
+    this.supabase.getUser().then(async ({ data: { user } }: any) => {
       if (user) await this.loadUserFromSession(user);
     }).finally(() => resolveReady());
   }
@@ -63,8 +60,7 @@ export class AuthService {
       email: authUser.email ?? '',
       role: profile?.role === 'admin' ? 'admin' : 'member',
       initials: getInitialsFromDisplayName(name),
-      avatarUrl: profile?.avatar_url ?? undefined,
-      householdId: profile?.household_id ?? undefined,
+      avatarUrl: profile?.avatar_url ?? undefined
     };
     this._currentUser.set(user);
   }
@@ -101,11 +97,5 @@ export class AuthService {
 
   setUser(user: User | null): void {
     this._currentUser.set(user);
-  }
-
-  /** Vuelve a cargar el perfil desde Supabase (útil tras crear/unirse a un hogar). */
-  async refreshProfile(): Promise<void> {
-    const { data: { user } } = await this.supabase.getUser();
-    if (user) await this.loadUserFromSession(user);
   }
 }

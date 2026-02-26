@@ -1,6 +1,6 @@
 /* ============================================================
-   FAMILYAPP — Design System Tokens v2.0
-   Panel de 5 expertos: Color · Diseño · UX · Branding · Componentes
+   {{PROJECT_NAME}} — Design System Tokens 
+   Design System Base Auto-Generado
    ============================================================
 
    ARQUITECTURA DE CAPAS:
@@ -54,198 +54,222 @@
    ============================================================ */
 :root {
 
-  /* ──────────────────────────────────────────
+   /* ──────────────────────────────────────────
      CAPA 1 — ESCALA PRIMITIVA
      Valores base del universo visual.
      No referencian otros tokens.
      No se usan directamente en componentes.
   ────────────────────────────────────────── */
 
-  /* Escala de radio */
-  --radius-sm:   6px;
-  --radius-md:   10px;
-  --radius-lg:   14px;
-  --radius-xl:   20px;
-  --radius-2xl:  28px;
-  --radius-full: 9999px;
+   /* Escala de radio */
+   --radius-sm: 6px;
+   --radius-md: 10px;
+   --radius-lg: 14px;
+   --radius-xl: 20px;
+   --radius-2xl: 28px;
+   --radius-full: 9999px;
 
-  /* Escala de espaciado (base 4px) */
-  --space-1:  4px;
-  --space-2:  8px;
-  --space-3:  12px;
-  --space-4:  16px;
-  --space-5:  20px;
-  --space-6:  24px;
-  --space-8:  32px;
-  --space-10: 40px;
-  --space-12: 48px;
-  --space-16: 64px;
+   /* Escala de espaciado (base 4px) */
+   --space-1: 4px;
+   --space-2: 8px;
+   --space-3: 12px;
+   --space-4: 16px;
+   --space-5: 20px;
+   --space-6: 24px;
+   --space-8: 32px;
+   --space-10: 40px;
+   --space-12: 48px;
+   --space-16: 64px;
 
-  /* Escala tipográfica */
-  --text-xs:   0.75rem;    /* 12px */
-  --text-sm:   0.875rem;   /* 14px */
-  --text-base: 1rem;       /* 16px */
-  --text-lg:   1.125rem;   /* 18px */
-  --text-xl:   1.25rem;    /* 20px */
-  --text-2xl:  1.5rem;     /* 24px */
-  --text-3xl:  1.875rem;   /* 30px */
-  --text-4xl:  2.25rem;    /* 36px */
-  --text-5xl:  3rem;       /* 48px */
+   /* Escala tipográfica */
+   --text-xs: 0.75rem;
+   /* 12px */
+   --text-sm: 0.875rem;
+   /* 14px */
+   --text-base: 1rem;
+   /* 16px */
+   --text-lg: 1.125rem;
+   /* 18px */
+   --text-xl: 1.25rem;
+   /* 20px */
+   --text-2xl: 1.5rem;
+   /* 24px */
+   --text-3xl: 1.875rem;
+   /* 30px */
+   --text-4xl: 2.25rem;
+   /* 36px */
+   --text-5xl: 3rem;
+   /* 48px */
 
-  --font-regular:  400;
-  --font-medium:   500;
-  --font-semibold: 600;
-  --font-bold:     700;
+   --font-regular: 400;
+   --font-medium: 500;
+   --font-semibold: 600;
+   --font-bold: 700;
 
-  --leading-tight:   1.25;
-  --leading-snug:    1.375;
-  --leading-normal:  1.5;
-  --leading-relaxed: 1.625;
+   --leading-tight: 1.25;
+   --leading-snug: 1.375;
+   --leading-normal: 1.5;
+   --leading-relaxed: 1.625;
 
-  /* Familias tipográficas */
-  --font-display: 'SF Pro Display', 'Plus Jakarta Sans', system-ui, sans-serif;
-  --font-body:    'SF Pro Text',    'Plus Jakarta Sans', system-ui, sans-serif;
-  --font-mono:    'SF Mono', 'JetBrains Mono', monospace;
+   /* Familias tipográficas */
+   --font-display: 'SF Pro Display', 'Plus Jakarta Sans', system-ui, sans-serif;
+   --font-body: 'SF Pro Text', 'Plus Jakarta Sans', system-ui, sans-serif;
+   --font-mono: 'SF Mono', 'JetBrains Mono', monospace;
 
-  /* Escala de duración */
-  --duration-instant:  100ms;
-  --duration-fast:     200ms;
-  --duration-normal:   300ms;
-  --duration-slow:     450ms;
-  --duration-slower:   600ms;
-  --duration-page-out: 180ms;  /* salir rápido */
-  --duration-page-in:  280ms;  /* entrar suave — asimetría intencional */
-  --duration-theme:    220ms;
+   /* Escala de duración */
+   --duration-instant: 100ms;
+   --duration-fast: 200ms;
+   --duration-normal: 300ms;
+   --duration-slow: 450ms;
+   --duration-slower: 600ms;
+   --duration-page-out: 180ms;
+   /* salir rápido */
+   --duration-page-in: 280ms;
+   /* entrar suave — asimetría intencional */
+   --duration-theme: 220ms;
 
-  /* Escala de easing */
-  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-spring:   cubic-bezier(0.34, 1.56, 0.64, 1);  /* celebración, logros */
-  --ease-out:      cubic-bezier(0, 0, 0.2, 1);
-  --ease-in:       cubic-bezier(0.4, 0, 1, 1);
+   /* Escala de easing */
+   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+   /* celebración, logros */
+   --ease-out: cubic-bezier(0, 0, 0.2, 1);
+   --ease-in: cubic-bezier(0.4, 0, 1, 1);
 
-  /* Alias legacy (compatibilidad) */
-  --motion-ease-standard: var(--ease-standard);
-  --motion-duration-fast: var(--duration-fast);
+   /* Alias legacy (compatibilidad) */
+   --motion-ease-standard: var(--ease-standard);
+   --motion-duration-fast: var(--duration-fast);
 
 
-  /* ──────────────────────────────────────────
+   /* ──────────────────────────────────────────
      CAPA 2 — SEMÁNTICA DE SUPERFICIE
      Describen roles visuales, no valores.
      Fix 2: jerarquía de luminosidad garantizada.
      Delta mínimo entre niveles: +2.5% L.
   ────────────────────────────────────────── */
 
-  /* Fondos y superficies
+   /* Fondos y superficies
      bg-base    L:96%
      bg-surface L:100% → delta +4% ✓
      bg-elevated L:98% → delta -2% (aceptable en light, invertido intencionalmente)
      bg-subtle  L:90%  → delta -8% ✓ visible como área de input */
-  --bg-base:     #f4f4f5;  /* Zinc 100 */
-  --bg-surface:  #ffffff;  /* Tarjetas, modales, sidebar */
-  --bg-elevated: #fafafa;  /* Hover de filas, áreas diferenciadas */
-  --bg-subtle:   #e4e4e7;  /* Inputs, chips, separadores */
+   --bg-base: #f4f4f5;
+   /* Zinc 100 */
+   --bg-surface: #ffffff;
+   /* Tarjetas, modales, sidebar */
+   --bg-elevated: #fafafa;
+   /* Hover de filas, áreas diferenciadas */
+   --bg-subtle: #e4e4e7;
+   /* Inputs, chips, separadores */
 
-  /* Puente para color-mix */
-  --bg-surface-mix: #ffffff;
-  --bg-glass-surface: rgba(255, 255, 255, 0.92);
+   /* Puente para color-mix */
+   --bg-surface-mix: #ffffff;
+   --bg-glass-surface: rgba(255, 255, 255, 0.92);
 
-  /* Tipografía — jerarquía de texto
+   /* Tipografía — jerarquía de texto
      NUNCA usar para fondos ni acciones (Fix 1) */
-  --text-primary:   #09090b;  /* Zinc 950 */
-  --text-secondary: #52525b;  /* Zinc 600 */
-  --text-muted:     #a1a1aa;  /* Zinc 400 */
-  --text-disabled:  #d4d4d8;  /* Zinc 300 */
+   --text-primary: #09090b;
+   /* Zinc 950 */
+   --text-secondary: #52525b;
+   /* Zinc 600 */
+   --text-muted: #a1a1aa;
+   /* Zinc 400 */
+   --text-disabled: #d4d4d8;
+   /* Zinc 300 */
 
-  /* Bordes */
-  --border-subtle:  rgba(9, 9, 11, 0.06);
-  --border-default: rgba(9, 9, 11, 0.12);
-  --border-strong:  rgba(9, 9, 11, 0.20);
+   /* Bordes */
+   --border-subtle: rgba(9, 9, 11, 0.06);
+   --border-default: rgba(9, 9, 11, 0.12);
+   --border-strong: rgba(9, 9, 11, 0.20);
 
-  /* Sombras — Apple style (light) */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05),
-               0 2px 4px -2px rgba(0, 0, 0, 0.05);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05),
-               0 4px 6px  -4px rgba(0, 0, 0, 0.02);
+   /* Sombras — Apple style (light) */
+   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05),
+      0 2px 4px -2px rgba(0, 0, 0, 0.05);
+   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05),
+      0 4px 6px -4px rgba(0, 0, 0, 0.02);
 
-  --shadow-layout-topbar:  0 1px 3px rgba(0, 0, 0, 0.04);
-  --shadow-layout-sidebar: 4px 0 24px -4px rgba(0, 0, 0, 0.03),
-                           1px 0 0 0 var(--border-subtle);
-  --shadow-layout-divider: 1px 0 0 0 var(--border-subtle);
-  --overlay-backdrop:      rgba(9, 9, 11, 0.40);
+   --shadow-layout-topbar: 0 1px 3px rgba(0, 0, 0, 0.04);
+   --shadow-layout-sidebar: 4px 0 24px -4px rgba(0, 0, 0, 0.03),
+      1px 0 0 0 var(--border-subtle);
+   --shadow-layout-divider: 1px 0 0 0 var(--border-subtle);
+   --overlay-backdrop: rgba(9, 9, 11, 0.40);
 
-  /* Estados semánticos
+   /* Estados semánticos
      state-* = resultado de acciones del sistema
      ("guardado", "error de formulario", "alerta")
      NO confundir con trend-* (salud financiera) */
-  --state-success:        #16a34a;
-  --state-success-bg:     #f0fdf4;
-  --state-success-border: #bbf7d0;
+   --state-success: #16a34a;
+   --state-success-bg: #f0fdf4;
+   --state-success-border: #bbf7d0;
 
-  --state-warning:        #d97706;
-  --state-warning-bg:     #fffbeb;
-  --state-warning-border: #fde68a;
+   --state-warning: #d97706;
+   --state-warning-bg: #fffbeb;
+   --state-warning-border: #fde68a;
 
-  --state-error:        #dc2626;  /* SOLO para errores, nunca como marca */
-  --state-error-bg:     #fef2f2;
-  --state-error-border: #fecaca;
+   --state-error: #dc2626;
+   /* SOLO para errores, nunca como marca */
+   --state-error-bg: #fef2f2;
+   --state-error-border: #fecaca;
 
-  --state-info:        #0284c7;
-  --state-info-bg:     #f0f9ff;
-  --state-info-border: #bae6fd;
+   --state-info: #0284c7;
+   --state-info-bg: #f0f9ff;
+   --state-info-border: #bae6fd;
 
 
-  /* ──────────────────────────────────────────
+   /* ──────────────────────────────────────────
      CAPA 3 — MARCA Y COLOR PRIMARIO
      Fix 1: --color-primary SIEMPRE es el azul.
      Nunca apunta a --text-primary.
      Fix 3: gradiente azul→índigo (temperatura).
   ────────────────────────────────────────── */
 
-  /* Azul de marca — columna vertebral
+   /* Azul de marca — columna vertebral
      "Confianza, estructura, datos." */
-  --ds-brand:            #2563eb;  /* alias canónico */
-  --color-primary:       #2563eb;
-  --color-primary-hover: #1d4ed8;
-  --color-primary-dark:  #1e40af;
-  --color-primary-muted: rgba(37, 99, 235, 0.08);
-  --color-primary-tint:  rgba(37, 99, 235, 0.04);
-  --color-primary-text:  #ffffff;
-  --accent-border:       rgba(37, 99, 235, 0.20);
-  --accent-glow:         rgba(37, 99, 235, 0.15);
-  --shadow-focus:        0 0 0 3px rgba(37, 99, 235, 0.08);
+   --ds-brand: #2563eb;
+   /* alias canónico */
+   --color-primary: #2563eb;
+   --color-primary-hover: #1d4ed8;
+   --color-primary-dark: #1e40af;
+   --color-primary-muted: rgba(37, 99, 235, 0.08);
+   --color-primary-tint: rgba(37, 99, 235, 0.04);
+   --color-primary-text: #ffffff;
+   --accent-border: rgba(37, 99, 235, 0.20);
+   --accent-glow: rgba(37, 99, 235, 0.15);
+   --shadow-focus: 0 0 0 3px rgba(37, 99, 235, 0.08);
 
-  /* Amber — corazón del sistema
+   /* Amber — corazón del sistema
      "Celebración, logros, calidez familiar."
      NUNCA como fondo de botón (no pasa WCAG).
      NUNCA para errores ni estados críticos. */
-  --color-warm:       #f59e0b;  /* Amber 500 */
-  --color-warm-hover: #d97706;  /* Amber 600 */
-  --color-warm-muted: rgba(245, 158, 11, 0.10);
-  --color-warm-tint:  rgba(245, 158, 11, 0.05);
+   --color-warm: #f59e0b;
+   /* Amber 500 */
+   --color-warm-hover: #d97706;
+   /* Amber 600 */
+   --color-warm-muted: rgba(245, 158, 11, 0.10);
+   --color-warm-tint: rgba(245, 158, 11, 0.05);
 
-  /* Gradientes — Fix 3: temperatura azul→índigo
+   /* Gradientes — Fix 3: temperatura azul→índigo
      Antes: azul frío → azul frío (genérico B2B)
      Ahora: azul → índigo (confiable pero personal) */
-  --gradient-primary: linear-gradient(135deg, #2563eb 0%, #6366f1 100%);
-  --gradient-warm:    linear-gradient(135deg, #f59e0b 0%, #fb923c 100%);
-  --gradient-hero:    linear-gradient(135deg,
-                        #2563eb  0%,
-                        #6366f1 50%,
-                        #8b5cf6 100%);
-  --gradient-subtle:  linear-gradient(135deg,
-                        rgba(37, 99, 235, 0.06) 0%,
-                        rgba(37, 99, 235, 0.02) 100%);
+   --gradient-primary: linear-gradient(135deg, #2563eb 0%, #6366f1 100%);
+   --gradient-warm: linear-gradient(135deg, #f59e0b 0%, #fb923c 100%);
+   --gradient-hero: linear-gradient(135deg,
+         #2563eb 0%,
+         #6366f1 50%,
+         #8b5cf6 100%);
+   --gradient-subtle: linear-gradient(135deg,
+         rgba(37, 99, 235, 0.06) 0%,
+         rgba(37, 99, 235, 0.02) 100%);
 
-  /* Aliases semánticos — Fix 1
+   /* Aliases semánticos — Fix 1
      Separación limpia: acción ≠ texto */
-  --action-primary:       var(--ds-brand);
-  --action-primary-hover: var(--color-primary-hover);
-  --action-primary-text:  var(--color-primary-text);
-  --color-brand:          var(--ds-brand);
+   --action-primary: var(--ds-brand);
+   --action-primary-hover: var(--color-primary-hover);
+   --action-primary-text: var(--color-primary-text);
+   --color-brand: var(--ds-brand);
 
 
-  /* ──────────────────────────────────────────
+   /* ──────────────────────────────────────────
      CAPA 4 — DOMINIO FINANCIERO
      Fix 3 + debate Rafael/Diego.
      trend-* = estado de salud financiera del hogar
@@ -254,38 +278,41 @@
      Ambos son distintos de state-* (acciones del sistema).
   ────────────────────────────────────────── */
 
-  /* Tendencias financieras */
-  --trend-positive:          #10b981;  /* Emerald 500 */
-  --trend-positive-text:     #10b981;
-  --trend-positive-bg:       rgba(16, 185, 129, 0.08);
-  --trend-positive-bg-hover: rgba(16, 185, 129, 0.14);
-  --trend-positive-border:   rgba(16, 185, 129, 0.20);
+   /* Tendencias financieras */
+   --trend-positive: #10b981;
+   /* Emerald 500 */
+   --trend-positive-text: #10b981;
+   --trend-positive-bg: rgba(16, 185, 129, 0.08);
+   --trend-positive-bg-hover: rgba(16, 185, 129, 0.14);
+   --trend-positive-border: rgba(16, 185, 129, 0.20);
 
-  --trend-negative:          #f43f5e;  /* Rose 500 */
-  --trend-negative-text:     #f43f5e;
-  --trend-negative-bg:       rgba(244, 63, 94, 0.08);
-  --trend-negative-bg-hover: rgba(244, 63, 94, 0.14);
-  --trend-negative-border:   rgba(244, 63, 94, 0.20);
+   --trend-negative: #f43f5e;
+   /* Rose 500 */
+   --trend-negative-text: #f43f5e;
+   --trend-negative-bg: rgba(244, 63, 94, 0.08);
+   --trend-negative-bg-hover: rgba(244, 63, 94, 0.14);
+   --trend-negative-border: rgba(244, 63, 94, 0.20);
 
-  --trend-neutral:           #8b5cf6;  /* Violet 500 */
-  --trend-neutral-text:      #8b5cf6;
-  --trend-neutral-bg:        rgba(139, 92, 246, 0.08);
-  --trend-neutral-bg-hover:  rgba(139, 92, 246, 0.14);
-  --trend-neutral-border:    rgba(139, 92, 246, 0.20);
+   --trend-neutral: #8b5cf6;
+   /* Violet 500 */
+   --trend-neutral-text: #8b5cf6;
+   --trend-neutral-bg: rgba(139, 92, 246, 0.08);
+   --trend-neutral-bg-hover: rgba(139, 92, 246, 0.14);
+   --trend-neutral-border: rgba(139, 92, 246, 0.20);
 
-  /* Celebración — momentos de logro */
-  --celebration-primary:     #f59e0b;
-  --celebration-glow:        rgba(245, 158, 11, 0.20);
-  --celebration-bg:          rgba(245, 158, 11, 0.08);
+   /* Celebración — momentos de logro */
+   --celebration-primary: #f59e0b;
+   --celebration-glow: rgba(245, 158, 11, 0.20);
+   --celebration-bg: rgba(245, 158, 11, 0.08);
 
-  /* Tokens de badge de celebración (Fix 4: amber no es botón) */
-  --celebration-badge-bg:     var(--celebration-bg);
-  --celebration-badge-border: var(--celebration-glow);
-  --celebration-badge-text:   var(--text-primary);
-  --celebration-icon-color:   var(--color-warm);
+   /* Tokens de badge de celebración (Fix 4: amber no es botón) */
+   --celebration-badge-bg: var(--celebration-bg);
+   --celebration-badge-border: var(--celebration-glow);
+   --celebration-badge-text: var(--text-primary);
+   --celebration-icon-color: var(--color-warm);
 
 
-  /* ──────────────────────────────────────────
+   /* ──────────────────────────────────────────
      CAPA 5 — COMPONENTES
      Fix 4: tokens de componente.
      Regla: cero valores fijos — todo referencia
@@ -294,77 +321,77 @@
      numéricos, no propiedades CSS completas.
   ────────────────────────────────────────── */
 
-  /* ── Botón primario ── */
-  --btn-primary-bg:           var(--ds-brand);
-  --btn-primary-bg-hover:     var(--color-primary-hover);
-  --btn-primary-text:         var(--color-primary-text);
-  --btn-primary-radius:       var(--radius-md);
-  --btn-primary-padding-x:    var(--space-4);
-  --btn-primary-padding-y:    var(--space-3);
-  --btn-primary-shadow:       var(--shadow-sm);
-  --btn-primary-shadow-hover: var(--shadow-md);
+   /* ── Botón primario ── */
+   --btn-primary-bg: var(--ds-brand);
+   --btn-primary-bg-hover: var(--color-primary-hover);
+   --btn-primary-text: var(--color-primary-text);
+   --btn-primary-radius: var(--radius-md);
+   --btn-primary-padding-x: var(--space-4);
+   --btn-primary-padding-y: var(--space-3);
+   --btn-primary-shadow: var(--shadow-sm);
+   --btn-primary-shadow-hover: var(--shadow-md);
 
-  /* ── Botón secundario ── */
-  --btn-secondary-bg:         transparent;
-  --btn-secondary-bg-hover:   var(--color-primary-muted);
-  --btn-secondary-border:     var(--border-default);
-  --btn-secondary-text:       var(--color-primary);
-  --btn-secondary-radius:     var(--radius-md);
+   /* ── Botón secundario ── */
+   --btn-secondary-bg: transparent;
+   --btn-secondary-bg-hover: var(--color-primary-muted);
+   --btn-secondary-border: var(--border-default);
+   --btn-secondary-text: var(--color-primary);
+   --btn-secondary-radius: var(--radius-md);
 
-  /* ── Botón ghost / terciario ── */
-  --btn-ghost-bg:             transparent;
-  --btn-ghost-bg-hover:       var(--bg-subtle);
-  --btn-ghost-text:           var(--text-secondary);
-  --btn-ghost-text-hover:     var(--text-primary);
-  --btn-ghost-radius:         var(--radius-md);
+   /* ── Botón ghost / terciario ── */
+   --btn-ghost-bg: transparent;
+   --btn-ghost-bg-hover: var(--bg-subtle);
+   --btn-ghost-text: var(--text-secondary);
+   --btn-ghost-text-hover: var(--text-primary);
+   --btn-ghost-radius: var(--radius-md);
 
-  /* ── Input ──
+   /* ── Input ──
      Fix 4: --input-bg referencia --bg-subtle (Fix 2 garantiza
      que sea visible sobre --bg-elevated en ambos temas).
      Incluye todos los estados: default, focus, error, success, disabled. */
-  --input-bg:               var(--bg-subtle);
-  --input-text:             var(--text-primary);
-  --input-placeholder:      var(--text-muted);
-  --input-radius:           var(--radius-md);
-  --input-padding-x:        var(--space-4);
-  --input-padding-y:        var(--space-3);
+   --input-bg: var(--bg-subtle);
+   --input-text: var(--text-primary);
+   --input-placeholder: var(--text-muted);
+   --input-radius: var(--radius-md);
+   --input-padding-x: var(--space-4);
+   --input-padding-y: var(--space-3);
 
-  --input-border-default:   var(--border-default);
-  --input-border-focus:     var(--color-primary);
-  --input-border-error:     var(--state-error);
-  --input-border-success:   var(--trend-positive);
+   --input-border-default: var(--border-default);
+   --input-border-focus: var(--color-primary);
+   --input-border-error: var(--state-error);
+   --input-border-success: var(--trend-positive);
 
-  /* Fix 4 (Sarah): focus neutral explícito — crítico para navegación por teclado.
+   /* Fix 4 (Sarah): focus neutral explícito — crítico para navegación por teclado.
      REGLA: ningún componente suprime outline nativo sin reemplazar con este token. */
-  --input-shadow-focus-neutral: var(--shadow-focus);
-  --input-shadow-focus-error:   0 0 0 3px var(--state-error-bg);
-  --input-shadow-focus-success: 0 0 0 3px var(--trend-positive-bg);
+   --input-shadow-focus-neutral: var(--shadow-focus);
+   --input-shadow-focus-error: 0 0 0 3px var(--state-error-bg);
+   --input-shadow-focus-success: 0 0 0 3px var(--trend-positive-bg);
 
-  --input-disabled-bg:      var(--bg-subtle);
-  --input-disabled-text:    var(--text-disabled);
-  --input-disabled-opacity: 0.6;
+   --input-disabled-bg: var(--bg-subtle);
+   --input-disabled-text: var(--text-disabled);
+   --input-disabled-opacity: 0.6;
 
-  /* ── Card ── */
-  --card-bg:           var(--bg-surface);
-  --card-border:       var(--border-subtle);
-  --card-radius:       var(--radius-lg);
-  --card-shadow:       var(--shadow-md);
-  --card-shadow-hover: var(--shadow-lg);
-  --card-padding:      var(--space-6);
-  --accent-border-width: 3px;
+   /* ── Card ── */
+   --card-bg: var(--bg-surface);
+   --card-border: var(--border-subtle);
+   --card-radius: var(--radius-lg);
+   --card-shadow: var(--shadow-md);
+   --card-shadow-hover: var(--shadow-lg);
+   --card-padding: var(--space-6);
+   --accent-border-width: 3px;
 
-  /* ── Trend Badge ── */
-  --badge-radius:      var(--radius-full);
-  --badge-padding-x:   var(--space-3);
-  --badge-padding-y:   var(--space-1);
+   /* ── Trend Badge ── */
+   --badge-radius: var(--radius-full);
+   --badge-padding-x: var(--space-3);
+   --badge-padding-y: var(--space-1);
 
-  /* ── Overlay / Modal ── */
-  --modal-bg:          var(--bg-surface);
-  --modal-radius:      var(--radius-xl);
-  --modal-shadow:      var(--shadow-lg);
-  --modal-padding:     var(--space-8);
+   /* ── Overlay / Modal ── */
+   --modal-bg: var(--bg-surface);
+   --modal-radius: var(--radius-xl);
+   --modal-shadow: var(--shadow-lg);
+   --modal-padding: var(--space-8);
 
-  /* ── Motion de componentes ──
+   /* ── Motion de componentes ──
      Fix 4 (Marcus + Rafael): tokens guardan VALORES, no propiedades CSS.
      El componente construye la propiedad CSS usando el valor.
 
@@ -374,30 +401,30 @@
      Uso correcto:
      .card:hover { transform: translateY(var(--card-hover-lift-y)); }
      .card.scaled:hover { transform: translateY(var(--card-hover-lift-y)) scale(1.01); } */
-  --btn-press-scale-value:  0.97;
-  --card-hover-lift-y:     -2px;
-  --card-hover-scale:       1.005;
+   --btn-press-scale-value: 0.97;
+   --card-hover-lift-y: -2px;
+   --card-hover-scale: 1.005;
 
-  --transition-btn:
-    background-color var(--duration-fast)   var(--ease-standard),
-    box-shadow       var(--duration-fast)   var(--ease-standard),
-    transform        var(--duration-fast)   var(--ease-standard),
-    color            var(--duration-fast)   var(--ease-standard);
+   --transition-btn:
+      background-color var(--duration-fast) var(--ease-standard),
+      box-shadow var(--duration-fast) var(--ease-standard),
+      transform var(--duration-fast) var(--ease-standard),
+      color var(--duration-fast) var(--ease-standard);
 
-  --transition-input:
-    border-color     var(--duration-fast)   var(--ease-standard),
-    box-shadow       var(--duration-fast)   var(--ease-standard);
+   --transition-input:
+      border-color var(--duration-fast) var(--ease-standard),
+      box-shadow var(--duration-fast) var(--ease-standard);
 
-  --transition-card:
-    box-shadow       var(--duration-normal) var(--ease-standard),
-    transform        var(--duration-normal) var(--ease-standard);
+   --transition-card:
+      box-shadow var(--duration-normal) var(--ease-standard),
+      transform var(--duration-normal) var(--ease-standard);
 
-  --transition-color:
-    color            var(--duration-fast)   var(--ease-standard),
-    background-color var(--duration-fast)   var(--ease-standard),
-    border-color     var(--duration-fast)   var(--ease-standard);
+   --transition-color:
+      color var(--duration-fast) var(--ease-standard),
+      background-color var(--duration-fast) var(--ease-standard),
+      border-color var(--duration-fast) var(--ease-standard);
 
-  /* Fix 4 (Diego + Rafael): --ease-spring es una propiedad de easing,
+   /* Fix 4 (Diego + Rafael): --ease-spring es una propiedad de easing,
      no de un componente específico. El componente decide cuándo usarlo.
      Uso: animation: badge-enter var(--duration-normal) var(--ease-spring); */
 }
@@ -414,131 +441,139 @@
    ============================================================ */
 [data-mode='dark'] {
 
-  /* ── Capa 2: Superficies ── */
-  --bg-base:     #09090b;  /* Zinc 950 */
-  --bg-surface:  #18181b;  /* Zinc 900 */
-  --bg-elevated: #27272a;  /* Zinc 800 */
-  --bg-subtle:   #2d2d30;  /* Fix 2: era #27272a — delta +2.8% L */
+   /* ── Capa 2: Superficies ── */
+   --bg-base: #09090b;
+   /* Zinc 950 */
+   --bg-surface: #18181b;
+   /* Zinc 900 */
+   --bg-elevated: #27272a;
+   /* Zinc 800 */
+   --bg-subtle: #2d2d30;
+   /* Fix 2: era #27272a — delta +2.8% L */
 
-  --bg-surface-mix:   #27272a;
-  --bg-glass-surface: rgba(24, 24, 27, 0.85);
+   --bg-surface-mix: #27272a;
+   --bg-glass-surface: rgba(24, 24, 27, 0.85);
 
-  /* ── Capa 2: Tipografía ── */
-  --text-primary:   #f4f4f5;
-  --text-secondary: #a1a1aa;
-  --text-muted:     #71717a;
-  --text-disabled:  #52525b;
+   /* ── Capa 2: Tipografía ── */
+   --text-primary: #f4f4f5;
+   --text-secondary: #a1a1aa;
+   --text-muted: #71717a;
+   --text-disabled: #52525b;
 
-  /* ── Capa 2: Bordes ──
+   /* ── Capa 2: Bordes ──
      Fix 2: opacidades aumentadas para WCAG 1.4.11 (Non-text Contrast).
      Inputs sobre --bg-subtle necesitan ratio 3:1 contra su contenedor.
      Antes: 0.08 → ratio ~1.28:1 (falla).
      Ahora: 0.12 → ratio mejorado, combinado con --bg-subtle diferenciado. */
-  --border-subtle:  rgba(255, 255, 255, 0.04);
-  --border-default: rgba(255, 255, 255, 0.12);  /* era 0.08 */
-  --border-strong:  rgba(255, 255, 255, 0.20);  /* era 0.15 */
+   --border-subtle: rgba(255, 255, 255, 0.04);
+   --border-default: rgba(255, 255, 255, 0.12);
+   /* era 0.08 */
+   --border-strong: rgba(255, 255, 255, 0.20);
+   /* era 0.15 */
 
-  /* ── Capa 2: Sombras (micro-bordes en dark) ── */
-  --shadow-sm: 0 0 0 1px var(--border-subtle);
-  --shadow-md: 0 0 0 1px var(--border-default),
-               0 4px 16px rgba(0, 0, 0, 0.40);
-  --shadow-lg: 0 0 0 1px var(--border-default),
-               0 8px 32px rgba(0, 0, 0, 0.60);
+   /* ── Capa 2: Sombras (micro-bordes en dark) ── */
+   --shadow-sm: 0 0 0 1px var(--border-subtle);
+   --shadow-md: 0 0 0 1px var(--border-default),
+      0 4px 16px rgba(0, 0, 0, 0.40);
+   --shadow-lg: 0 0 0 1px var(--border-default),
+      0 8px 32px rgba(0, 0, 0, 0.60);
 
-  --shadow-layout-topbar:  0 1px 0 0 var(--border-subtle);
-  --shadow-layout-sidebar: 1px 0 0 0 var(--border-subtle);
-  --shadow-layout-divider: 1px 0 0 0 var(--border-subtle);
-  --overlay-backdrop:      rgba(0, 0, 0, 0.70);
+   --shadow-layout-topbar: 0 1px 0 0 var(--border-subtle);
+   --shadow-layout-sidebar: 1px 0 0 0 var(--border-subtle);
+   --shadow-layout-divider: 1px 0 0 0 var(--border-subtle);
+   --overlay-backdrop: rgba(0, 0, 0, 0.70);
 
-  /* ── Capa 2: Estados semánticos (glass effect) ── */
-  --state-success:        #4ade80;
-  --state-success-bg:     rgba(74, 222, 128, 0.10);
-  --state-success-border: rgba(74, 222, 128, 0.20);
+   /* ── Capa 2: Estados semánticos (glass effect) ── */
+   --state-success: #4ade80;
+   --state-success-bg: rgba(74, 222, 128, 0.10);
+   --state-success-border: rgba(74, 222, 128, 0.20);
 
-  --state-warning:        #fbbf24;
-  --state-warning-bg:     rgba(251, 191, 36, 0.10);
-  --state-warning-border: rgba(251, 191, 36, 0.20);
+   --state-warning: #fbbf24;
+   --state-warning-bg: rgba(251, 191, 36, 0.10);
+   --state-warning-border: rgba(251, 191, 36, 0.20);
 
-  --state-error:        #f87171;
-  --state-error-bg:     rgba(248, 113, 113, 0.10);
-  --state-error-border: rgba(248, 113, 113, 0.20);
+   --state-error: #f87171;
+   --state-error-bg: rgba(248, 113, 113, 0.10);
+   --state-error-border: rgba(248, 113, 113, 0.20);
 
-  --state-info:        #38bdf8;
-  --state-info-bg:     rgba(56, 189, 248, 0.10);
-  --state-info-border: rgba(56, 189, 248, 0.20);
+   --state-info: #38bdf8;
+   --state-info-bg: rgba(56, 189, 248, 0.10);
+   --state-info-border: rgba(56, 189, 248, 0.20);
 
-  /* ── Capa 3: Marca (dark — WCAG compliant) ──
+   /* ── Capa 3: Marca (dark — WCAG compliant) ──
      #3b82f6 más luminoso que #2563eb para pasar contraste en dark. */
-  --ds-brand:            #3b82f6;
-  --color-primary:       #3b82f6;
-  --color-primary-hover: #60a5fa;
-  --color-primary-dark:  #2563eb;
-  --color-primary-muted: rgba(59, 130, 246, 0.15);
-  --color-primary-tint:  rgba(59, 130, 246, 0.08);
-  --color-primary-text:  #ffffff;
-  --accent-border:       rgba(59, 130, 246, 0.25);
-  --accent-glow:         rgba(59, 130, 246, 0.25);
-  --shadow-focus:        0 0 0 3px rgba(59, 130, 246, 0.30);
+   --ds-brand: #3b82f6;
+   --color-primary: #3b82f6;
+   --color-primary-hover: #60a5fa;
+   --color-primary-dark: #2563eb;
+   --color-primary-muted: rgba(59, 130, 246, 0.15);
+   --color-primary-tint: rgba(59, 130, 246, 0.08);
+   --color-primary-text: #ffffff;
+   --accent-border: rgba(59, 130, 246, 0.25);
+   --accent-glow: rgba(59, 130, 246, 0.25);
+   --shadow-focus: 0 0 0 3px rgba(59, 130, 246, 0.30);
 
-  --color-warm:       #fbbf24;  /* Amber más luminoso para dark */
-  --color-warm-hover: #f59e0b;
-  --color-warm-muted: rgba(251, 191, 36, 0.12);
-  --color-warm-tint:  rgba(251, 191, 36, 0.06);
+   --color-warm: #fbbf24;
+   /* Amber más luminoso para dark */
+   --color-warm-hover: #f59e0b;
+   --color-warm-muted: rgba(251, 191, 36, 0.12);
+   --color-warm-tint: rgba(251, 191, 36, 0.06);
 
-  --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #818cf8 100%);
-  --gradient-warm:    linear-gradient(135deg, #fbbf24 0%, #fb923c 100%);
-  --gradient-hero:    linear-gradient(135deg,
-                        #3b82f6  0%,
-                        #818cf8 50%,
-                        #a78bfa 100%);
-  --gradient-subtle:  linear-gradient(135deg,
-                        rgba(59, 130, 246, 0.12) 0%,
-                        rgba(59, 130, 246, 0.04) 100%);
+   --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #818cf8 100%);
+   --gradient-warm: linear-gradient(135deg, #fbbf24 0%, #fb923c 100%);
+   --gradient-hero: linear-gradient(135deg,
+         #3b82f6 0%,
+         #818cf8 50%,
+         #a78bfa 100%);
+   --gradient-subtle: linear-gradient(135deg,
+         rgba(59, 130, 246, 0.12) 0%,
+         rgba(59, 130, 246, 0.04) 100%);
 
-  --action-primary:       var(--ds-brand);
-  --action-primary-hover: var(--color-primary-hover);
-  --action-primary-text:  var(--color-primary-text);
-  --color-brand:          var(--ds-brand);
+   --action-primary: var(--ds-brand);
+   --action-primary-hover: var(--color-primary-hover);
+   --action-primary-text: var(--color-primary-text);
+   --color-brand: var(--ds-brand);
 
-  /* ── Capa 4: Dominio financiero (dark — WCAG ajustado) ── */
-  --trend-positive:          #34d399;
-  --trend-positive-text:     #34d399;
-  --trend-positive-bg:       rgba(52, 211, 153, 0.10);
-  --trend-positive-bg-hover: rgba(52, 211, 153, 0.16);
-  --trend-positive-border:   rgba(52, 211, 153, 0.22);
+   /* ── Capa 4: Dominio financiero (dark — WCAG ajustado) ── */
+   --trend-positive: #34d399;
+   --trend-positive-text: #34d399;
+   --trend-positive-bg: rgba(52, 211, 153, 0.10);
+   --trend-positive-bg-hover: rgba(52, 211, 153, 0.16);
+   --trend-positive-border: rgba(52, 211, 153, 0.22);
 
-  --trend-negative:          #fb7185;
-  --trend-negative-text:     #fb7185;
-  --trend-negative-bg:       rgba(251, 113, 133, 0.10);
-  --trend-negative-bg-hover: rgba(251, 113, 133, 0.16);
-  --trend-negative-border:   rgba(251, 113, 133, 0.22);
+   --trend-negative: #fb7185;
+   --trend-negative-text: #fb7185;
+   --trend-negative-bg: rgba(251, 113, 133, 0.10);
+   --trend-negative-bg-hover: rgba(251, 113, 133, 0.16);
+   --trend-negative-border: rgba(251, 113, 133, 0.22);
 
-  --trend-neutral:           #a78bfa;
-  --trend-neutral-text:      #a78bfa;
-  --trend-neutral-bg:        rgba(167, 139, 250, 0.10);
-  --trend-neutral-bg-hover:  rgba(167, 139, 250, 0.16);
-  --trend-neutral-border:    rgba(167, 139, 250, 0.22);
+   --trend-neutral: #a78bfa;
+   --trend-neutral-text: #a78bfa;
+   --trend-neutral-bg: rgba(167, 139, 250, 0.10);
+   --trend-neutral-bg-hover: rgba(167, 139, 250, 0.16);
+   --trend-neutral-border: rgba(167, 139, 250, 0.22);
 
-  --celebration-primary:    #fbbf24;
-  --celebration-glow:       rgba(251, 191, 36, 0.25);
-  --celebration-bg:         rgba(251, 191, 36, 0.10);
+   --celebration-primary: #fbbf24;
+   --celebration-glow: rgba(251, 191, 36, 0.25);
+   --celebration-bg: rgba(251, 191, 36, 0.10);
 
-  --celebration-badge-bg:     var(--celebration-bg);
-  --celebration-badge-border: var(--celebration-glow);
-  --celebration-badge-text:   var(--text-primary);
-  --celebration-icon-color:   var(--color-warm);
+   --celebration-badge-bg: var(--celebration-bg);
+   --celebration-badge-border: var(--celebration-glow);
+   --celebration-badge-text: var(--text-primary);
+   --celebration-icon-color: var(--color-warm);
 
-  /* ── Capa 5: Componentes (dark — solo overrides necesarios) ──
+   /* ── Capa 5: Componentes (dark — solo overrides necesarios) ──
      La mayoría de tokens de componente propagan automáticamente
      porque referencian tokens de escala. Solo se redefinen
      los que necesitan ajuste explícito en dark. */
-  --input-bg:          var(--bg-subtle);   /* #2d2d30 — Fix 2: ahora visible */
-  --input-disabled-bg: var(--bg-elevated);
+   --input-bg: var(--bg-subtle);
+   /* #2d2d30 — Fix 2: ahora visible */
+   --input-disabled-bg: var(--bg-elevated);
 
-  --card-bg:     var(--bg-surface);
-  --card-border: var(--border-subtle);
+   --card-bg: var(--bg-surface);
+   --card-border: var(--border-subtle);
 
-  /* Los estados de input (focus, error, success) propagan
+   /* Los estados de input (focus, error, success) propagan
      automáticamente desde --shadow-focus, --state-error-bg,
      y --trend-positive-bg redefinidos arriba. */
 }
@@ -548,21 +583,23 @@
    ESTILOS BASE
    ============================================================ */
 
-h1, h2, h3 {
-  font-family: var(--font-display);
+h1,
+h2,
+h3 {
+   font-family: var(--font-display);
 }
 
 body {
-  font-family:               var(--font-body);
-  background:                var(--bg-base);
-  color:                     var(--text-primary);
-  -webkit-font-smoothing:    antialiased;
-  -moz-osx-font-smoothing:   grayscale;
-  /* Transición concentrada en la capa raíz, no en todo el DOM */
-  transition:
-    background-color var(--duration-theme) var(--ease-standard),
-    color            var(--duration-theme) var(--ease-standard),
-    border-color     var(--duration-theme) var(--ease-standard);
+   font-family: var(--font-body);
+   background: var(--bg-base);
+   color: var(--text-primary);
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+   /* Transición concentrada en la capa raíz, no en todo el DOM */
+   transition:
+      background-color var(--duration-theme) var(--ease-standard),
+      color var(--duration-theme) var(--ease-standard),
+      border-color var(--duration-theme) var(--ease-standard);
 }
 
 
@@ -626,5 +663,3 @@ body {
    --ease-in        Elementos que salen de pantalla
 
    ============================================================ */
-
-
