@@ -1,4 +1,4 @@
-# {{PROJECT_NAME}} — Koa Agent Blueprint v5.0
+# {{PROJECT_NAME}} — Koa Agent Blueprint v5.1
 
 > Si usas **Claude Code CLI**, las reglas completas están en `.claude/CLAUDE.md` y se cargan automáticamente.
 > Si usas **Claude.ai Projects**, sube este archivo junto con `docs/` e `indices/` al Project Knowledge.
@@ -9,14 +9,26 @@
 
 <!-- Reglas completas a continuación para compatibilidad con Claude.ai Projects -->
 
-## FLUJO DE TRABAJO OBLIGATORIO (4 PASOS)
+## SISTEMA DE HOOKS (solo Claude Code CLI)
 
-Para cada solicitud que implique escribir código o ensamblar UI, debes seguir estos pasos mentalmente (`<thought_process>`):
+Si estás en Claude Code, este proyecto tiene **guardrails automáticos** que te bloquean
+si intentas violar las reglas. No necesitas que el humano te lo recuerde:
 
-1. **DESCUBRIR:** Revisa `indices/COMPONENTS.md`, `indices/SERVICES.md` y `indices/DATABASE.md`. ¿Ya existe algo que resuelva parcial o totalmente el problema? Úsalo.
+- **Discovery Gate**: No puedes escribir código sin leer primero los índices
+- **Architect Guard**: Cada Edit/Write se valida contra las reglas arquitectónicas
+- **Sync Check**: Al terminar, se verifica si actualizaste los índices
+
+Detalle completo: `docs/HOOKS-SYSTEM.md`
+
+## FLUJO DE TRABAJO OBLIGATORIO (5 PASOS)
+
+Para cada solicitud que implique escribir código o ensamblar UI:
+
+1. **DESCUBRIR:** Revisa `indices/COMPONENTS.md`, `indices/SERVICES.md`, `indices/DIRECTIVES.md` y `indices/DATABASE.md`. ¿Ya existe algo que resuelva parcial o totalmente el problema? Úsalo. **En Claude Code, el Discovery Gate te bloqueará si no lo haces.**
 2. **PLANIFICAR:** Define qué vas a tocar sin violar las reglas de Arquitectura y UI (ver abajo).
-3. **EJECUTAR:** Escribe el código. Prioriza reutilizar.
-4. **DOCUMENTAR AL CERRAR:** Antes de dar por terminada tu tarea, usa TUS herramientas de sistema de archivos para agregar/actualizar físicamente los nuevos componentes o tablas en `indices/COMPONENTS.md`, `indices/SERVICES.md` o `indices/DATABASE.md`. ¡Tú eres responsable de mantener tu propia memoria al día!
+3. **EJECUTAR:** Escribe el código. Prioriza reutilizar. Los hooks validarán cada escritura en tiempo real.
+4. **VALIDAR:** Corre `npm run lint:arch` para una auditoría completa.
+5. **SINCRONIZAR:** Actualiza `indices/*.md` con los componentes/servicios creados.
 
 ## LÍMITES Y CAPACIDADES DEL AGENTE
 

@@ -160,6 +160,19 @@ async function main() {
                 [], { cwd: targetDir }
             );
             spinnerNpm.succeed(chalk.green('Dependencias instaladas'));
+
+            // Initialize Supabase
+            const spinnerSupabase = ora({
+                text: chalk.yellow('Inicializando Supabase...'),
+                color: 'yellow'
+            }).start();
+            try {
+                await run('npx supabase init', [], { cwd: targetDir });
+                spinnerSupabase.succeed(chalk.green('Supabase inicializado'));
+            } catch (e) {
+                // Ignore error if supabase CLI not found, just warn
+                spinnerSupabase.warn(chalk.yellow('No se pudo inicializar Supabase (¿CLI no instalada?)'));
+            }
         } catch (e) {
             spinnerNpm.fail(chalk.red('Error al instalar dependencias'));
             console.error(chalk.gray(e.message));
@@ -225,8 +238,15 @@ async function main() {
         if (isFull) {
             const BOILERPLATE_DIR = path.join(TEMPLATES_DIR, 'boilerplate');
             const BOILERPLATE_SRC = path.join(BOILERPLATE_DIR, 'src');
+            const BOILERPLATE_SCRIPTS = path.join(BOILERPLATE_DIR, 'scripts');
+
             if (fs.existsSync(BOILERPLATE_SRC)) {
                 copyRecursiveSync(BOILERPLATE_SRC, path.join(targetDir, 'src'));
+
+                if (fs.existsSync(BOILERPLATE_SCRIPTS)) {
+                    copyRecursiveSync(BOILERPLATE_SCRIPTS, path.join(targetDir, 'scripts'));
+                    console.log(chalk.green('   ✓ scripts/ copiado'));
+                }
 
                 // Copy postcss.config.mjs to project root (Tailwind v4)
                 const postcssConfigSrc = path.join(BOILERPLATE_DIR, 'postcss.config.mjs');
