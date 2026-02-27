@@ -182,7 +182,9 @@ async function main() {
         if (isDirectory) {
             if (!fs.existsSync(dest)) fs.mkdirSync(dest, { recursive: true });
             fs.readdirSync(src).forEach(childItemName => {
-                copyRecursiveSync(path.join(src, childItemName), path.join(dest, childItemName));
+                let destName = childItemName;
+                if (childItemName === 'gitignore.template') destName = '.gitignore';
+                copyRecursiveSync(path.join(src, childItemName), path.join(dest, destName));
             });
         } else {
             fs.copyFileSync(src, dest);
@@ -202,9 +204,11 @@ async function main() {
         // 1. Copy everything from templates/ except boilerplate/
         fs.readdirSync(TEMPLATES_DIR).forEach(item => {
             if (item !== 'boilerplate') {
+                let destName = item;
+                if (item === 'gitignore.template') destName = '.gitignore';
                 copyRecursiveSync(
                     path.join(TEMPLATES_DIR, item),
-                    path.join(targetDir, item)
+                    path.join(targetDir, destName)
                 );
             }
         });
