@@ -23,15 +23,16 @@ Este CLI inyecta una **Arquitectura Estricta "Harness"** que domina la ventana d
 
 ---
 
-## 🚀 Arquitectura v5.0 (Los 5 Pilares)
+## 🚀 Arquitectura v5.0 (Los 6 Pilares)
 
-Nuestro andamiaje inyecta los "5 Superpoderes del Arquitecto Agéntico":
+Nuestro andamiaje inyecta los "6 Superpoderes del Arquitecto Agéntico":
 
 1. 🔍 **Context Engineering (LSP vía MCP):** El proyecto se genera con conectividad nativa a `ts-lsp-mcp`. La IA ya no es ciega; consulta el AST completo para inferir tipos y referencias cruzadas como lo hace tu IDE.
 2. 🛠️ **Orquestación Atomizada (MCP):** Configuración lista para *Model Context Protocol* (`.mcp.json`). La IA delega código estructural disparando herramientas oficiales (`@angular/cli`, `supabase`) en vez de comandos bash impredecibles.
-3. 🚧 **Guardrails Programáticos (Shadow CI):** Un validador AST (`architect.js`) que rompe el proceso de compilación si la IA intenta romper patrones de diseño como el *Strict Facade Pattern*.
-4. 🤖 **Agentic TDD (Testing Autónomo):** Prohibición sistémica de entregar Features de lógica de negocio (Core) sin su correspondiente test unitario (`.spec.ts`), validado estáticamente.
-5. 🎨 **Diseño Agnóstico y AI-Readability:** Bloqueo explícito del "Vibe Coding", forzando a la IA a usar *Design Tokens* predefinidos e inyectar el estándar *Shadow Semantic Overlay* (`data-llm-*`) para que el HTML renderizado siga siendo nativamente legible por otras IAs.
+3. 🪝 **Sistema de Hooks Activos:** Constraints automáticos en tiempo real (ej. `pre-write-guard`, `bash-guard`) que operan en cada request, bloqueando a la IA al instante si intenta violar una regla de diseño, inyectando contexto dinámico de forma inteligente.
+4. 🚧 **Guardrails Programáticos (Shadow CI):** Un validador AST (`architect.js`) que funciona como auditoría completa post-hoc (defensa en profundidad), rompiendo el proceso de compilación si se detecta deriva estructural.
+5. 🤖 **Agentic TDD (Testing Autónomo):** Prohibición sistémica de entregar Features de lógica de negocio (Core) sin su correspondiente test unitario (`.spec.ts`), validado estáticamente.
+6. 🎨 **Diseño Agnóstico y AI-Readability:** Bloqueo explícito del "Vibe Coding", forzando a la IA a usar *Design Tokens* predefinidos e inyectar el estándar *Shadow Semantic Overlay* (`data-llm-*`) para que el HTML renderizado siga siendo nativamente legible por otras IAs.
 
 ---
 
@@ -87,6 +88,7 @@ Al ejecutar el motor, este es el esqueleto de memoria y reglas inyectado para so
 tu-nuevo-proyecto/
 ├── .claude/
 │   ├── CLAUDE.md                   # Directiva maestra de estilo de programación (OnPush, Signals)
+│   ├── hooks/                      # Guardrails en tiempo real (Pre-Write, Bash, Discovery)
 │   └── rules/
 │       ├── architecture.md         # Validaciones del Functional Core y Facades
 │       ├── testing-tdd.md          # Flujos de validación Agentic TDD
