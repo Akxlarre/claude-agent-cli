@@ -6,12 +6,12 @@
 2. `PrimeNG` — Para inputs complejos, tablas, calendarios, dropdowns
 3. Componente custom — Solo si 1 y 2 no cubren la necesidad
 
-## Tokens de color (PROHIBIDO hardcodear)
+## Tokens de color y Agnósticos (PROHIBIDO hardcodear)
 
 - Textos: `text-primary`, `text-secondary`, `text-muted`
-- Fondos: `bg-base` (página), `bg-surface` (cards/modales)
+- Fondos: `bg-base` (página), `bg-surface` (cards), `bg-surface-elevated`
 - Marca: `var(--ds-brand)`, `var(--color-primary)`
-- **NUNCA**: `text-red-500`, `bg-[#ff0000]`, colores Tailwind arbitrarios, hex hardcodeados
+- **NUNCA**: `text-red-500`, `bg-[#ff0000]`, u otras utilities de colores arbitrarios de Tailwind. Usa siempre variables abstractas. Así mantenemos el estilo desconectado de la lógica para cambiar de "tema" sin tocar código.
 
 ## Bento Grid
 
@@ -32,9 +32,10 @@
 - `this.themeService.setColorMode('dark' | 'light' | 'system')`
 - PrimeNG: usar `darkModeSelector: '.fake-dark-mode'` para evitar conflictos
 
-## Animaciones (GSAP obligatorio)
+## Animaciones y Motion Physics (GSAP obligatorio)
 
-- **PROHIBIDO** `@angular/animations` ni CSS `@keyframes` para entradas de vistas
+- **PROHIBIDO** `@angular/animations` ni CSS `@keyframes` para entradas de vistas.
+- **PROHIBIDO** inventar `durations` o `eases` arbitrarios en tus llamadas a GSAP. Usa siempre constantes físicas si el proyecto las provee, o variables CSS.
 - **OBLIGATORIO** `GsapAnimationsService` en `ngAfterViewInit`
 - Métodos clave: `animateBentoGrid()`, `animateHero()`, `animateCounter()`, `addCardHover()`
 - Siempre `clearProps: 'transform'` tras animaciones de movimiento

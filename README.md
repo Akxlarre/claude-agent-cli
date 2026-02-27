@@ -1,60 +1,117 @@
-# 🧠 Claude Agent CLI (Blueprint v5.0)
+<div align="center">
+  <h1>🧠 Claude Agent CLI</h1>
+  <p><h3>El orquestador definitivo para el Arquitecto de Sistemas Agénticos (AI Workflow Engineer)</h3></p>
+  
+  <p>
+    <a href="https://nodejs.org"><img src="https://img.shields.io/badge/node-%3E%3D20.0.0-success.svg?style=flat-square&logo=nodedotjs" alt="Node Version" /></a>
+    <a href="https://github.com/angular/angular"><img src="https://img.shields.io/badge/Angular-%5E18.0.0-dd0031.svg?style=flat-square&logo=angular" alt="Angular" /></a>
+    <a href="https://supabase.com"><img src="https://img.shields.io/badge/Supabase-DB-3ecf8e.svg?style=flat-square&logo=supabase" alt="Supabase" /></a>
+    <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square" alt="License: MIT"></a>
+    <a href="#"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square" alt="PRs Welcome"></a>
+  </p>
+</div>
 
-**El orquestador definitivo para el Arquitecto de Sistemas Agénticos (AI Workflow Engineer).**
+---
 
-`claude-agent-cli` es un motor de scaffolding construido en Node.js diseñado para generar ecosistemas de trabajo (Angular + Supabase) optimizados específicamente para ser operados por Agentes de IA (específicamente **Claude 3.7 Sonnet** y **Claude Code**).
+**`koa-agent-cli`** es un motor de scaffolding construido en Node.js diseñado para generar ecosistemas de trabajo (Angular + Supabase) optimizados específicamente para ser operados por **Agentes Inteligentes** (ej. Claude 3.7 Sonnet, Claude Code).
 
-## 🎯 Nuestra Misión
-Empoderar al **Arquitecto Agéntico**. Cerrar la brecha entre el diseño humano y la ejecución de la IA. En lugar de generar código genérico, este CLI inyecta una **Arquitectura AI-Native** estricta que domina la ventana de contexto de la IA, transformando a Claude de un asistente que "adivina" a un teclado ultra-rápido que sigue tus convenciones exactas.
+## 💡 El Problema (La Gran Fricción)
 
-## 🚀 Arquitectura v5.0 (Los 4 Pilares)
+En la era del software *AI-Native*, el cuello de botella ya no es la generación de código, sino la **orquestación**. Cuando lanzas una IA avanzada hacia un repositorio tradicional, el resultado suele ser código espagueti y deuda técnica acelerada.
 
-1.  **Context Engineering 2.0 (LSP vía MCP):** El proyecto se genera con conectividad nativa a `ts-lsp-mcp`. La IA ya no está ciega ni es dependiente de RAG plano; puede consultar el AST completo, inferir tipos, variables estáticas y referencias cruzadas en tiempo real.
-2.  **Tooling y Orquestación Avanzada:** Autoconfiguración de Angular CLI y Supabase a través de *Model Context Protocol* (`.mcp.json`). La IA puede generar estructuralmente módulos de código y bases de datos disparando herramientas oficiales en lugar de comandos Bash frágiles.
-3.  **Guardrails Programáticos (Shadow CI):** No bastaban las instrucciones en texto. v5.0 inyecta un Linter Arquitectónico (AST) en JavaScript (`architect.js`) capaz de bloquear y fallar la compilación si la IA intenta romper el Patrón Facade inyectando Supabase directamente a la UI.
-4.  **Testing Autónomo:** Obligación irrefutable para la IA de crear y actualizar tests unitarios antes de dar por cerrada cualquier iteración de código de negocio.
+Este CLI inyecta una **Arquitectura Estricta "Harness"** que domina la ventana de contexto de la IA. Transformamos a Claude de un asistente que "improvisa" a un teclado ultra-rápido operando bajo un *Shadow CI* que previene la deriva arquitectónica y garantiza resultados de grado enterprise.
 
+---
 
-## 📦 Instalación Global (Opcional)
+## 🚀 Arquitectura v5.0 (Los 5 Pilares)
 
-Si quieres usar esta herramienta desde cualquier lugar en tu máquina, enlaza el paquete globalmente:
+Nuestro andamiaje inyecta los "5 Superpoderes del Arquitecto Agéntico":
+
+1. 🔍 **Context Engineering (LSP vía MCP):** El proyecto se genera con conectividad nativa a `ts-lsp-mcp`. La IA ya no es ciega; consulta el AST completo para inferir tipos y referencias cruzadas como lo hace tu IDE.
+2. 🛠️ **Orquestación Atomizada (MCP):** Configuración lista para *Model Context Protocol* (`.mcp.json`). La IA delega código estructural disparando herramientas oficiales (`@angular/cli`, `supabase`) en vez de comandos bash impredecibles.
+3. 🚧 **Guardrails Programáticos (Shadow CI):** Un validador AST (`architect.js`) que rompe el proceso de compilación si la IA intenta romper patrones de diseño como el *Strict Facade Pattern*.
+4. 🤖 **Agentic TDD (Testing Autónomo):** Prohibición sistémica de entregar Features de lógica de negocio (Core) sin su correspondiente test unitario (`.spec.ts`), validado estáticamente.
+5. 🎨 **Diseño Agnóstico y AI-Readability:** Bloqueo explícito del "Vibe Coding", forzando a la IA a usar *Design Tokens* predefinidos e inyectar el estándar *Shadow Semantic Overlay* (`data-llm-*`) para que el HTML renderizado siga siendo nativamente legible por otras IAs.
+
+---
+
+## ⚙️ Requisitos Previos
+
+Antes de instalar `koa-agent-cli`, asegúrate de tener:
+- **Node.js** v20.0.0 o superior ([Descargar](https://nodejs.org/)).
+- **npm** (viene con Node) o tu gestor de paquetes favorito (`yarn`, `pnpm`).
+- (Recomendado) Entorno preparado para Angular v18+ y un proyecto local de Supabase.
+
+---
+
+## 📦 Instalación
+
+Puedes clonar el repositorio y enlazarlo globalmente en tu máquina para usar el comando en cualquier directorio:
 
 ```bash
-cd /ruta/a/claude-agent-cli
+git clone https://github.com/tu-usuario/koa-agent-cli.git
+cd koa-agent-cli
+npm install
 npm link
 ```
 
-## 🛠️ Uso
+---
 
-Simplemente abre una terminal en la carpeta (fuera de un workspace de Angular existente) donde desees alojar tu nuevo proyecto, y ejecuta:
+## 🛠️ Uso y Scaffolding
 
-```bash
-create-claude-agent
-```
-
-O si no la has hecho global:
+Abre una consola en el directorio donde desees inicializar tu nuevo proyecto AI-Native y ejecuta:
 
 ```bash
-node /ruta/a/claude-agent-cli/bin/index.js
+create-koa-agent
 ```
 
-### Opciones Interactivas
-El asistente interactivo (`inquirer`) te preguntará:
-- **Acción:** `Full Scaffold (Angular 20 + PrimeNG + Supabase + Boilerplate AI)` o `Solo inyectar Memoria Claude en carpeta actual`.
-- **Nombre del proyecto:** Para estructurar correctamente la carpeta principal.
+*(Si no realizaste la instalación global, puedes usar: `node /ruta/a/koa-agent-cli/bin/index.js`)*
 
-## 🏛️ Arquitectura Inyectada (El "Blueprint")
+### El Asistente Interactivo
 
-Cuando inyectas la "Memoria Claude", obtienes:
+El CLI te ofrecerá opciones de inyección dependiendo de tus necesidades:
 
-- `CLAUDE.md`: La directiva principal que gobierna cómo la IA debe escribir código (Uso estricto de OnPush, Signals y prohibición de inyectar dependencias directamente en la UI).
-- `docs/TECH-STACK-RULES.md`: Explicación cruda sobre *Smart vs Dumb Components*.
-- `docs/CLAUDE-USER-GUIDE.md`: Instrucciones para el **Humano** sobre cómo darle los mejores prompts a Claude.
-- `docs/BRAND_GUIDELINES.md`: Tokens estandarizados prohibiendo las clases abusivas de Tailwind.
-- `indices/`: Índices de base de datos y componentes que Claude mantendrá vivos.
+```text
+? ¿Qué deseas hacer?
+❯ Full Scaffold (Angular + PrimeNG + Supabase + Boilerplate AI)
+  Inyectar "Memoria Claude" (Docs & Reglas) en carpeta actual
+```
 
-## 🤝 Filosofía
+---
 
-> *"Eres el Arquitecto Agéntico. Claude es tu Maestro de Obra y Teclado Ultra-rápido."*
+## 🏛️ Estructura Inyectada (El "Blueprint")
 
-Este boilerplate busca domar la ventana de 200k tokens de Claude para que en lugar de que improvise arquitecturas "Hola Mundo", siga tus convenciones maduras de nivel enterprise desde el segundo cero.
+Al ejecutar el motor, este es el esqueleto de memoria y reglas inyectado para someter a tu IA:
+
+```text
+tu-nuevo-proyecto/
+├── .claude/
+│   ├── CLAUDE.md                   # Directiva maestra de estilo de programación (OnPush, Signals)
+│   └── rules/
+│       ├── architecture.md         # Validaciones del Functional Core y Facades
+│       ├── testing-tdd.md          # Flujos de validación Agentic TDD
+│       ├── visual-system.md        # Tokens estandarizados (Tailwind/PrimeNG)
+│       └── ai-readability.md       # Reglas obligatorias para usar atributos data-llm-*
+├── docs/
+│   ├── CLAUDE-USER-GUIDE.md        # Prompts recomendados para el usuario humano
+│   ├── PRODUCT-VISION.md           # Visión fundacional para anclar a la IA
+│   └── TECH-STACK-RULES.md         # Filosofía Smart vs Dumb components.
+├── indices/                        # (Smart Memory) Índices dinámicos de componentes iterados por la IA
+├── .mcp.json                       # Manifiesto para el Model Context Protocol
+└── scripts/
+    └── architect.js                # Linter semántico (TypeScript AST validator)
+```
+
+---
+
+## 🤝 Filosofía Central
+
+> *"Eres el Arquitecto Agéntico. Claude es tu Maestro de Obra y tu Teclado Ultra-rápido."*
+
+Este motor existe porque el código autogenerado a mano alzada no escala. Tu trabajo humano ahora es pensar profundo; el de la IA es implementar rápido; y el de **koa-agent-cli** es garantizar que nadie rompa la base.
+
+---
+
+## 📜 Licencia
+
+Este proyecto se distribuye bajo la licencia **MIT**. Consulta el archivo `LICENSE` para más información.

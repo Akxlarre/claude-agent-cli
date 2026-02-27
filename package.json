@@ -1,5 +1,5 @@
 {
-  "name": "claude-agent-cli",
+  "name": "koa-agent-cli",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -16,6 +16,6 @@
   },
   "type": "module",
   "bin": {
-    "create-claude-agent": "./bin/index.js"
+    "create-koa-agent": "./bin/index.js"
   }
 }

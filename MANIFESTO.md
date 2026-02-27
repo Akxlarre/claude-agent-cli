@@ -3,9 +3,9 @@
 ## La Gran Fricción
 Estamos en una era donde la IA puede escribir miles de líneas de código en segundos. Sin embargo, el cuello de botella ya no es la escritura, sino la **orquestación**. Cuando lanzas a una IA a un repositorio desordenado, el resultado es deuda técnica acelerada.
 
-`claude-agent-cli` nace para resolver la paradoja del desarrollador moderno: **¿Cómo mantengo la calidad de arquitecto senior operando a la velocidad de una IA?** Nuestro objetivo es equipar al **Arquitecto de Sistemas Agénticos** (o AI Workflow Engineer) con las herramientas precisas para escalar su visión.
+`koa-agent-cli` nace para resolver la paradoja del desarrollador moderno: **¿Cómo mantengo la calidad de arquitecto senior operando a la velocidad de una IA?** Nuestro objetivo es equipar al **Arquitecto de Sistemas Agénticos** (o AI Workflow Engineer) con las herramientas precisas para escalar su visión.
 
-## Los 4 Superpoderes del Arquitecto Agéntico
+## Los 5 Superpoderes del Arquitecto Agéntico
 
 ### 1. Ingeniería de Contexto 2.0 (LSP y Contexto Dinámico)
 No inyectamos solo código y markdown muertos; inyectamos **memoria viva**. A través de la integración nativa y obligatoria de **Language Server Protocol (`ts-lsp-mcp`)**, la IA ya no adivina sintaxis. Es capaz de leer tu AST, consultar referencias cruzadas, evaluar firmas de métodos estáticos y resolver el código de la misma forma determinista en que lo haría un humano desde su IDE.
@@ -20,11 +20,15 @@ Nuestra arquitectura v5 introduce **Linters Arquitectónicos de AST** inyectados
 ### 4. Testing Autónomo (Autonomous Validation)
 Una *Feature* no es solo código escrito, es código probado empíricamente. El agente asume el rol de QA a nivel lógico. En este sistema, la IA tiene **prohibido** dar por terminada una Feature que altere la lógica de negocio sin actualizar o crear el test unitario (`.spec.ts`) o E2E correspondiente que valide dicho comportamiento en la respectiva `Facade`.
 
+### 5. Semántica de IAs (AI-Readability) & Diseño Agnóstico
+Las UIs ya no son solo para humanos. Al implementar *Shadow Semantic Overlay* y aislar la estética usando puros "Design Tokens", eliminamos el "Vibe Coding Visual" (donde la IA adivina colores). Forzamos a la IA a crear interfaces que otras IAs o frameworks de testing puedan operar ciegamente a través de atributos `data-llm-*`.
+
 ### Nuestra Apuesta Técnica
 - **Angular**: Por su estructura rígida y orientada a tipos, ideal para que una IA no cometa errores de referencia.
 - **Supabase**: Por su velocidad de iteración y esquema relacional claro.
-- **Strict Patterns**: El uso de `OnPush`, `Signals` y `Facades` garantiza que el estado estricto de la aplicación sea predecible para un agente.
-- **Visuales Dictatoriales (Tokens & Bento Grid)**: Prohibimos a la IA "diseñar" con clases nativas incontrolables; la atamos a un Design System crudo (`branding tokens`) para curar su "ceguera UI" y garantizar componentes que luzcan premium de fábrica.
+- **TypeScript AST**: Para parsear con precisión milimétrica las inyecciones de dependencias y evitar falsos positivos en los guardrails.
+- **Strict Patterns**: El uso de `Functional Core`, `OnPush`, `Signals` y `Facades` garantiza que el estado estricto de la aplicación sea testeable por un agente en milisegundos.
+- **Visuales Dictatoriales (Tokens & Bento Grid)**: Prohibimos a la IA "diseñar" con clases nativas incontrolables; la atamos a un Design System crudo (`branding tokens`) para curar su "ceguera UI" y garantizar componentes premium.
 
 ---
 

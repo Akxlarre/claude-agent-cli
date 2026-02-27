@@ -1,4 +1,4 @@
-# {{PROJECT_NAME}} — Claude Agent Blueprint v4.1
+# {{PROJECT_NAME}} — Koa Agent Blueprint v5.0
 
 Tu stack: **Angular + Tailwind v4 + PrimeNG + Supabase + GSAP**.
 
@@ -25,6 +25,7 @@ Tu stack: **Angular + Tailwind v4 + PrimeNG + Supabase + GSAP**.
 @.claude/rules/architecture.md
 @.claude/rules/visual-system.md
 @.claude/rules/testing-tdd.md
+@.claude/rules/ai-readability.md
 
 ## Referencias
 

@@ -16,11 +16,12 @@ supabase/
 └── migrations/       # SQL idempotentes — NUNCA alterar BD manualmente
 ```
 
-## Patrón Facade (obligatorio)
+## Patrón Facade y Núcleo Funcional (Functional Core)
 
-- La UI **NUNCA** inyecta `SupabaseService`, `HttpClient`, ni clientes REST directamente
-- **SIEMPRE** usar un `*FacadeService` que centraliza estado vía Signals
-- El Facade expone data al template con `toSignal()`
+- La UI **NUNCA** inyecta `SupabaseService`, `HttpClient`, ni clientes REST directamente.
+- **SIEMPRE** usar un `*FacadeService` que centraliza estado vía Signals.
+- El Facade expone data al template con `toSignal()`.
+- **NÚCLEO FUNCIONAL (Functional Core):** No acumules lógica compleja, matemática pesada o transformaciones de datos algorítmicas dentro de la Facade ni en los componentes. Extrae esa inteligencia a **funciones puras** de TypeScript (Data Out, Data In) en `core/utils/` o dominios específicos. Esto permite testear la lógica del negocio instantáneamente sin levantar inyecciones de Angular.
 
 ## Detección de cambios
 

@@ -1,4 +1,4 @@
-# 🧠 Claude Agent CLI (Blueprint v3.0)
+# 🧠 Koa Agent CLI (Blueprint v5.0)
 
 Un orquestador CLI construido en Node.js para auto-generar ecosistemas de trabajo (Angular + Supabase) perfectamente diseñados para ser entendidos y mantenidos por Agentes de IA ( el ecosistema **Claude Pro / Claude Code**).
 
@@ -15,7 +15,7 @@ A diferencia de un simple *template*, esta herramienta ejecuta comandos reales y
 Si quieres usar esta herramienta desde cualquier lugar en tu máquina, enlaza el paquete globalmente:
 
 ```bash
-cd /ruta/a/claude-agent-cli
+cd /ruta/a/koa-agent-cli
 npm link
 ```
 
@@ -24,13 +24,13 @@ npm link
 Simplemente abre una terminal en la carpeta (fuera de un workspace de Angular existente) donde desees alojar tu nuevo proyecto, y ejecuta:
 
 ```bash
-create-claude-agent
+create-koa-agent
 ```
 
 O si no la has hecho global:
 
 ```bash
-node /ruta/a/claude-agent-cli/bin/index.js
+node /ruta/a/koa-agent-cli/bin/index.js
 ```
 
 ### Opciones Interactivas

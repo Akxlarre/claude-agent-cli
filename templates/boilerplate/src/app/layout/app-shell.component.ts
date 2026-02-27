@@ -5,13 +5,13 @@ import {
   viewChild,
   ElementRef,
   afterNextRender,
-} from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+} from "@angular/core";
+import { RouterOutlet } from "@angular/router";
 
-import { LayoutService } from '@core/services/layout.service';
-import { GsapAnimationsService } from '@core/services/gsap-animations.service';
-import { SidebarComponent } from './sidebar.component';
-import { TopbarComponent } from './topbar.component';
+import { LayoutService } from "@core/services/layout.service";
+import { GsapAnimationsService } from "@core/services/gsap-animations.service";
+import { SidebarComponent } from "./sidebar.component";
+import { TopbarComponent } from "./topbar.component";
 
 /**
  * AppShellComponent — layout principal de rutas protegidas.
@@ -26,7 +26,7 @@ import { TopbarComponent } from './topbar.component';
  * ```
  */
 @Component({
-  selector: 'app-shell',
+  selector: "app-shell",
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterOutlet, SidebarComponent, TopbarComponent],
@@ -38,11 +38,14 @@ import { TopbarComponent } from './topbar.component';
         class="fixed inset-0 z-[49] cursor-pointer bg-[var(--overlay-backdrop)] lg:hidden"
         role="presentation"
         aria-hidden="true"
+        data-llm-action="close-mobile-sidebar"
         (click)="layout.closeSidebar()"
       ></div>
     }
 
-    <div class="grid min-h-[100dvh] grid-cols-1 bg-base lg:grid-cols-[auto_1fr]">
+    <div
+      class="grid min-h-[100dvh] grid-cols-1 bg-base lg:grid-cols-[auto_1fr]"
+    >
       <!-- Sidebar -->
       <app-sidebar
         #sidebarEl
@@ -54,19 +57,25 @@ import { TopbarComponent } from './topbar.component';
       <div class="grid min-w-0 grid-rows-[auto_1fr] overflow-hidden">
         <app-topbar />
 
-        <main #contentEl class="overflow-y-auto p-6 transition-[view-transition-name:main-content]" style="view-transition-name: main-content;" role="main" tabindex="-1">
+        <main
+          #contentEl
+          class="overflow-y-auto p-6 transition-[view-transition-name:main-content]"
+          style="view-transition-name: main-content;"
+          role="main"
+          tabindex="-1"
+        >
           <router-outlet />
         </main>
       </div>
     </div>
   `,
-  host: { style: 'display: contents;' }
+  host: { style: "display: contents;" },
 })
 export class AppShellComponent {
   protected readonly layout = inject(LayoutService);
   private readonly gsap = inject(GsapAnimationsService);
 
-  private readonly contentEl = viewChild<ElementRef<HTMLElement>>('contentEl');
+  private readonly contentEl = viewChild<ElementRef<HTMLElement>>("contentEl");
 
   constructor() {
     afterNextRender(() => {

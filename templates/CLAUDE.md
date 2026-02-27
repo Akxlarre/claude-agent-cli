@@ -1,4 +1,4 @@
-# {{PROJECT_NAME}} — Claude Agent Blueprint v4
+# {{PROJECT_NAME}} — Koa Agent Blueprint v5.0
 
 > Si usas **Claude Code CLI**, las reglas completas están en `.claude/CLAUDE.md` y se cargan automáticamente.
 > Si usas **Claude.ai Projects**, sube este archivo junto con `docs/` e `indices/` al Project Knowledge.

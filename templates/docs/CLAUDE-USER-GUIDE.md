@@ -1,6 +1,6 @@
 # 🧠 Guía del Usuario: Cómo Operar a Claude
 
-Bienvenido a tu nuevo Workspace orquestado por **Claude Agent System Blueprint v5.0**.
+Bienvenido a tu nuevo Workspace orquestado por **Koa Agent System Blueprint v5.0**.
 Este documento es para **TI (el humano)**. Te enseñará a extraer el máximo rendimiento de la inteligencia artificial de este repositorio.
 
 ## 1. El Concepto de "Project Knowledge"
@@ -13,7 +13,7 @@ Si usas **Claude Code CLI**, el agente leerá autómaticamente `CLAUDE.md` apena
 Claude a veces intenta ser "demasiado útil" e inventa. Para evitar esto, sé dictatorial y **fuérzalo a usar sus herramientas MCP v5**:
 
 ### A. Para Orquestar Nuevos Componentes (Uso de MCP)
-> "Usa tu herramienta MCP de Angular (`@angular/cli`) para generar un componente standalone de estadísticas en `features/dashboard`. Después, impleméntale el estilo usando los tokens de `BRAND_GUIDELINES.md` (ej. `bg-surface`). No lo crees manualmente, orquéstalo."
+> "Usa tu herramienta MCP de Angular (`@angular/cli`) para generar un componente standalone de estadísticas en `features/dashboard`. Después, impleméntale el estilo usando los tokens delineados en `.claude/rules/visual-system.md` (ej. `bg-surface-elevated`). Recuerda inyectar la AI-Readability base a los botones. No lo crees manualmente, orquéstalo."
 
 ### B. Para Code Intelligence Profunda (LSP)
 > "Estoy viendo un error en la inyección de dependencias en `home.component.ts`. Usa tus herramientas LSP (`get_type_at_position` o `get_symbols`) para revisar la firma exacta del Facade antes de intentar corregirlo a ciegas."
@@ -34,6 +34,6 @@ Claude a veces intenta ser "demasiado útil" e inventa. Para evitar esto, sé di
 ## 4. Evolución del Sistema
 A medida que tu app escale:
 1. Agrégale más `.agent/skills/` (ej: `testing-cypress.md` o `ngrx-rules.md`).
-2. Actualiza `BRAND_GUIDELINES.md` si cambias tu esquema visual.
+2. Actualiza `.claude/rules/visual-system.md` si cambias tu esquema visual base o tus variables CSS.
 
 **Eres el Arquitecto. Claude es tu Teclado Ultra-rápido.** Delega la escritura, retén el diseño del sistema.

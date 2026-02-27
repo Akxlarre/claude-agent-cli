@@ -7,16 +7,15 @@ Servicios estructurales compartidos que proveen funcionalidades base, autenticac
 
 | Servicio | Responsabilidad Principal | Ubicación (File Path) | Dependencias | Estado |
 |----------|---------------------------|-----------------------|--------------|--------|
-| `AuthService` | Gestión de sesión Supabase; expone `currentUser`, `login()`, `logout()`, `onAuthStateChange` | `core/services/auth.service.ts` | SupabaseService, Router | ✅ Estable |
-| `SupabaseService` | Cliente Supabase singleton — NO inyectar en UI, solo en servicios | `core/services/supabase.service.ts` | @supabase/supabase-js | ✅ Estable |
+| `SupabaseService` | Cliente Supabase singleton — NO inyectar en UI, solo en Facades/Services | `core/services/supabase.service.ts` | @supabase/supabase-js | ✅ Estable |
 | `ThemeService` | Modo claro/oscuro/sistema con `[data-mode='dark']` en documentElement; persiste en localStorage | `core/services/theme.service.ts` | GsapAnimationsService, MessageService | ✅ Estable |
 | `GsapAnimationsService` | Centraliza TODAS las animaciones GSAP: bento, counters, hover, page enter, reduced-motion | `core/services/gsap-animations.service.ts` | gsap, ScrollTrigger | ✅ Estable |
 | `LayoutService` | Estado responsive del sidebar drawer en mobile (`sidebarOpen` signal) | `core/services/layout.service.ts` | — | ✅ Estable |
 | `MenuConfigService` | Items de navegación del sidebar (PrimeNG MenuItem[]) — personalizar por proyecto | `core/services/menu-config.service.ts` | PrimeNG MenuItem | ✅ Estable |
 | `NotificationsService` | Estado signal de notificaciones en-app con filtros y `unreadCount` computed | `core/services/notifications.service.ts` | — | ✅ Estable |
 | `SearchPanelService` | Estado signal del panel de búsqueda global (open/close/toggle) para `[appSearchShortcut]` | `core/services/search-panel.service.ts` | — | ✅ Estable |
-| `BreadcrumbService` | Gestión dinámica de breadcrumbs por ruta activa | `core/services/breadcrumb.service.ts` | Router | ✅ Estable |
-| `ConfirmModalService` | Wrapper signal sobre PrimeNG ConfirmationService para diálogos de confirmación | `core/services/confirm-modal.service.ts` | ConfirmationService | ✅ Estable |
+| `BreadcrumbService` | Breadcrumb reactivo; soporta menús planos y jerárquicos; deriva el trail desde `MenuConfigService` | `core/services/breadcrumb.service.ts` | Router, MenuConfigService | ✅ Estable |
+| `ConfirmModalService` | Modal de confirmación imperativo con patrón `confirm() → Promise<boolean>`; sin dependencia de PrimeNG | `core/services/confirm-modal.service.ts` | — | ✅ Estable |
 | `ModalOverlayService` | Teleporta modales al overlay container (z-index > topbar) | `core/services/modal-overlay.service.ts` | — | ✅ Estable |
 
 ## 2. Facades & Feature-Specific State
@@ -24,4 +23,4 @@ Servicios que median entre la UI (`features/`) y las APIs de datos (`SupabaseSer
 
 | Facade | Manejo de Dominio | Ubicación (File Path) | Dependencias | Estado |
 |--------|-------------------|-----------------------|--------------|--------|
-| — | — | — | — | — |
+| `AuthFacade` | Autenticación con Supabase; expone `currentUser`, `isAuthenticated`, `login()`, `logout()`, `whenReady` | `core/services/auth.facade.ts` | SupabaseService, Router | ✅ Estable |

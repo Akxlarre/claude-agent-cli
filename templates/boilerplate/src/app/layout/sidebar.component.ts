@@ -5,37 +5,42 @@ import {
   viewChild,
   ElementRef,
   afterNextRender,
-} from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+} from "@angular/core";
+import { RouterLink, RouterLinkActive } from "@angular/router";
 
-import { AuthService } from '@core/services/auth.service';
-import { ThemeService } from '@core/services/theme.service';
-import { LayoutService } from '@core/services/layout.service';
-import { MenuConfigService } from '@core/services/menu-config.service';
-import { GsapAnimationsService } from '@core/services/gsap-animations.service';
-import { Button } from 'primeng/button';
-import { Avatar } from 'primeng/avatar';
+import { AuthFacade } from "@core/services/auth.facade";
+import { ThemeService } from "@core/services/theme.service";
+import { LayoutService } from "@core/services/layout.service";
+import { MenuConfigService } from "@core/services/menu-config.service";
+import { GsapAnimationsService } from "@core/services/gsap-animations.service";
+import { Button } from "primeng/button";
+import { Avatar } from "primeng/avatar";
 
 /**
  * SidebarComponent — navegación lateral principal.
  *
- * Smart component: inyecta AuthService, ThemeService, LayoutService y MenuConfigService.
+ * Smart component: inyecta AuthFacade, ThemeService, LayoutService y MenuConfigService.
  * Los nav items se leen desde MenuConfigService — edita ese servicio para añadir rutas.
  *
  * GSAP: addPillHovers() se aplica en afterNextRender para feedback de hover/press.
  */
 @Component({
-  selector: 'app-sidebar',
+  selector: "app-sidebar",
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink, RouterLinkActive, Button, Avatar],
   template: `
-    <nav #sidebarEl class="flex h-full w-[240px] flex-col border-r border-border-subtle bg-surface py-4 shadow-[var(--shadow-layout-sidebar)]" aria-label="Navegación principal">
-
+    <nav
+      #sidebarEl
+      class="flex h-full w-[240px] flex-col border-r border-border-subtle bg-surface py-4 shadow-[var(--shadow-layout-sidebar)]"
+      aria-label="Navegación principal"
+    >
       <!-- Brand -->
       <div class="px-5 pb-6 pt-2">
         <!-- TODO: Reemplaza con el nombre de tu app o un logo -->
-        <span class="font-display text-lg font-bold text-brand">{{PROJECT_NAME}}</span>
+        <span class="font-display text-lg font-bold text-brand">{{
+          PROJECT_NAME
+        }}</span>
       </div>
 
       <!-- Nav items -->
@@ -47,6 +52,7 @@ import { Avatar } from 'primeng/avatar';
               routerLinkActive="!bg-brand-muted !text-brand"
               class="flex items-center gap-3 rounded-md px-4 py-3 text-sm font-medium text-text-secondary no-underline transition-[var(--transition-color)] hover:bg-brand-muted hover:text-brand"
               [attr.aria-label]="item.label"
+              [attr.data-llm-nav]="item.routerLink"
             >
               <i [class]="item.icon" aria-hidden="true"></i>
               <span>{{ item.label }}</span>
@@ -63,7 +69,10 @@ import { Avatar } from 'primeng/avatar';
           severity="secondary"
           size="small"
           [icon]="theme.darkMode() ? 'pi pi-sun' : 'pi pi-moon'"
-          [ariaLabel]="theme.darkMode() ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
+          [ariaLabel]="
+            theme.darkMode() ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'
+          "
+          data-llm-action="toggle-color-mode"
           (onClick)="theme.cycleColorMode($event)"
         />
 
@@ -71,25 +80,28 @@ import { Avatar } from 'primeng/avatar';
           <div class="flex flex-1 items-center gap-2 min-w-0">
             <p-avatar [label]="user.initials" shape="circle" size="normal" />
             <div class="flex flex-col min-w-0">
-              <span class="truncate text-sm font-medium text-text-primary">{{ user.name }}</span>
-              <span class="whitespace-nowrap text-xs text-text-muted">{{ user.role }}</span>
+              <span class="truncate text-sm font-medium text-text-primary">{{
+                user.name
+              }}</span>
+              <span class="whitespace-nowrap text-xs text-text-muted">{{
+                user.role
+              }}</span>
             </div>
           </div>
         }
       </div>
-
     </nav>
   `,
-  styles: []
+  styles: [],
 })
 export class SidebarComponent {
-  protected readonly auth = inject(AuthService);
+  protected readonly auth = inject(AuthFacade);
   protected readonly theme = inject(ThemeService);
   protected readonly layout = inject(LayoutService);
   protected readonly menuConfig = inject(MenuConfigService);
   private readonly gsap = inject(GsapAnimationsService);
 
-  private readonly sidebarEl = viewChild<ElementRef<HTMLElement>>('sidebarEl');
+  private readonly sidebarEl = viewChild<ElementRef<HTMLElement>>("sidebarEl");
 
   constructor() {
     afterNextRender(() => {

@@ -34,8 +34,8 @@ function printBanner() {
     console.log('');
     console.log(topBottom('╔══════════════════════════════════════════════╗'));
     console.log(`${border}                                              ${border}`);
-    console.log(`${border}   ${chalk.white.bold('🧠  Claude Agent CLI  ·  Blueprint v4.1')}   ${border}`);
-    console.log(`${border}   ${chalk.blue('Angular · Tailwind · Supabase · PrimeNG')}  ${border}`);
+    console.log(`${border}   ${chalk.white.bold('🧠  Koa Agent CLI  ·  Blueprint v5.0')}   ${border}`);
+    console.log(`${border}   ${chalk.blue('Angular · Tails · Supabase · AI-Native')}  ${border}`);
     console.log(`${border}                                              ${border}`);
     console.log(topBottom('╚══════════════════════════════════════════════╝'));
     console.log('');
@@ -45,7 +45,7 @@ function printSuccess(projectName, isFull, targetDir) {
     const line = chalk.blue('──────────────────────────────────────────────');
     console.log('');
     console.log(line);
-    console.log(`  ${chalk.green('✅')}  ${chalk.white.bold(projectName)} ${chalk.blue('·')} ${chalk.white('Blueprint v4.1 listo')}`);
+    console.log(`  ${chalk.green('✅')}  ${chalk.white.bold(projectName)} ${chalk.blue('·')} ${chalk.white('Koa Blueprint v5.0 inyectado')}`);
     console.log(line);
     console.log('');
     console.log(chalk.white.bold('  Próximos pasos:'));
@@ -73,8 +73,8 @@ function printSuccess(projectName, isFull, targetDir) {
         step++;
     }
 
-    console.log(`  ${chalk.blue.bold(step)}  ${chalk.white('Abre Claude Code y escribe:')}`);
-    console.log(`     ${chalk.cyan.italic('"Lee CLAUDE.md y dime si estás listo para trabajar."')}`);
+    console.log(`  ${chalk.blue.bold(step)}  ${chalk.white('Abre tu Terminal Agéntica (Claude Code) y escribe:')}`);
+    console.log(`     ${chalk.cyan.italic('"Aplica las convenciones de CLAUDE.md y prepara el entorno."')}`);
     console.log('');
 
     if (isFull) {
@@ -107,8 +107,8 @@ async function main() {
                 name: 'action',
                 message: '¿Qué deseas hacer?',
                 choices: [
-                    'Full Scaffold (Angular + Tailwind + PrimeNG + Supabase + Boilerplate AI)',
-                    'Solo inyectar Memoria Claude en carpeta actual'
+                    'Full Scaffold (Angular + Tailwind + Supabase + Boilerplate AI)',
+                    'Solo inyectar Memoria Koa Blueprint en carpeta actual'
                 ]
             },
             {
@@ -169,7 +169,7 @@ async function main() {
 
     // --- Spinner: template injection ---
     const spinnerBlueprint = ora({
-        text: chalk.yellow('Inyectando Blueprint v4.1...'),
+        text: chalk.yellow('Inyectando Koa Blueprint v5.0...'),
         color: 'blue'
     }).start();
 
