@@ -1,18 +1,17 @@
 import {
   Directive,
-  Input,
   TemplateRef,
   ViewContainerRef,
   inject,
+  input,
   effect,
-  signal,
 } from '@angular/core';
 import { AuthService } from '@core/services/auth.service';
 import type { UserRole } from '@core/models/user.model';
 
 /**
- * Directiva estructural para ocultar elementos según el rol del usuario.
- * No requiere lógica en el componente.
+ * Directiva estructural para renderizar contenido según el rol del usuario.
+ * Reactiva a cambios de sesión vía signal effect.
  *
  * @example
  * <button *appHasRole="'admin'">Solo administradores</button>
@@ -23,21 +22,18 @@ import type { UserRole } from '@core/models/user.model';
   standalone: true,
 })
 export class HasRoleDirective {
-  private templateRef = inject(TemplateRef<unknown>);
-  private viewContainer = inject(ViewContainerRef);
-  private auth = inject(AuthService);
+  private readonly templateRef = inject(TemplateRef<unknown>);
+  private readonly viewContainer = inject(ViewContainerRef);
+  private readonly auth = inject(AuthService);
 
-  private roles = signal<UserRole[]>([]);
-
-  @Input() set appHasRole(value: UserRole | UserRole[]) {
-    this.roles.set(Array.isArray(value) ? value : [value]);
-  }
+  readonly appHasRole = input<UserRole | UserRole[]>([]);
 
   constructor() {
     effect(() => {
+      const value = this.appHasRole();
+      const roles = Array.isArray(value) ? value : [value];
       const user = this.auth.currentUser();
-      const allowedRoles = this.roles();
-      const hasRole = user && allowedRoles.length > 0 && allowedRoles.includes(user.role);
+      const hasRole = user !== null && roles.length > 0 && roles.includes(user.role);
 
       this.viewContainer.clear();
       if (hasRole) {

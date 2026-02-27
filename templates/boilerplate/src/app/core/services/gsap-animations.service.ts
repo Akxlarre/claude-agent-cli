@@ -100,18 +100,15 @@ export class GsapAnimationsService {
             return;
         }
 
-        gsap.fromTo(
-            { val: 0 },
-            { val: 0 },
-            {
-                val: target,
-                duration: 1.2,
-                ease: 'power2.out',
-                onUpdate() {
-                    el.textContent = Math.round(this['targets']()[0]['val']) + suffix;
-                },
-            }
-        );
+        const obj = { val: 0 };
+        gsap.to(obj, {
+            val: target,
+            duration: 1.2,
+            ease: 'power2.out',
+            onUpdate: () => {
+                el.textContent = Math.round(obj.val) + suffix;
+            },
+        });
     }
 
     /**
@@ -177,15 +174,18 @@ export class GsapAnimationsService {
     }
 
     /**
-     * Transición de cambio de tema.
+     * Transición de cambio de tema — swap inmediato.
      *
-     * Implementación sencilla y sobria:
-     * - Ejecuta el callback de swap inmediatamente.
-     * - Las transiciones suaves de colores se delegan a CSS
-     *   (regla global `* { transition: background-color, color, border-color, box-shadow }`).
+     * El cambio visual suave se delega a CSS transitions en body:
+     *   transition: background-color, color, border-color (220ms)
      *
-     * El parámetro `origin` se mantiene sólo por compatibilidad con llamadas existentes,
-     * pero actualmente no se usa para ningún efecto visual extra.
+     * No se usa View Transitions API para tema porque:
+     * - CSS transitions ya proveen suavidad suficiente
+     * - Es más robusto cross-browser
+     * - Evita glitches en toggles rápidos
+     *
+     * @param onSwap - Callback que aplica el cambio de tema (data-mode, signals, etc.)
+     * @param _origin - No usado. Mantenido por compatibilidad con ThemeService.
      */
     animateThemeChange(onSwap: () => void, _origin?: { x: number; y: number }): Promise<void> {
         onSwap();
@@ -616,7 +616,7 @@ export class GsapAnimationsService {
      * @returns Función de cleanup para ngOnDestroy
      */
     addPressFeedback(el: HTMLElement): () => void {
-        if (!this.shouldAnimate()) return () => {};
+        if (!this.shouldAnimate()) return () => { };
 
         const down = () =>
             gsap.to(el, {
@@ -654,7 +654,7 @@ export class GsapAnimationsService {
      * @returns Función de cleanup para ngOnDestroy
      */
     addInteractiveFeedback(el: HTMLElement): () => void {
-        if (!this.shouldAnimate()) return () => {};
+        if (!this.shouldAnimate()) return () => { };
 
         let isHovered = false;
 
@@ -737,7 +737,7 @@ export class GsapAnimationsService {
      * @param containerEl - Contenedor con .p-menu-item-content o .p-menu-item-link
      */
     addPillHovers(containerEl: HTMLElement): () => void {
-        if (!this.shouldAnimate()) return () => {};
+        if (!this.shouldAnimate()) return () => { };
 
         let pills = containerEl.querySelectorAll<HTMLElement>('.p-menu-item-content');
         if (pills.length === 0) {
@@ -998,7 +998,7 @@ export class GsapAnimationsService {
      * @returns Función de cleanup para detener el pulso
      */
     animateRestTimerPulse(el: HTMLElement): () => void {
-        if (!this.shouldAnimate()) return () => {};
+        if (!this.shouldAnimate()) return () => { };
 
         gsap.set(el, { opacity: 0 });
         const tween = gsap.to(el, {

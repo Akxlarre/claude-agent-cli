@@ -7,46 +7,31 @@ export type NotificationFilter = 'all' | 'unread' | NotificationType;
   providedIn: 'root',
 })
 export class NotificationsService {
+  // TODO: Reemplazar estos datos de ejemplo con la fuente real del proyecto
   private _notifications = signal<Notification[]>([
     {
       id: '1',
-      title: 'Documento vencido',
-      message: 'Vehículo ABC-123 requiere revisión técnica',
-      type: 'error',
-      read: false,
-      createdAt: new Date(Date.now() - 3600000),
-    },
-    {
-      id: '2',
-      title: 'Pago recibido',
-      message: 'Juan Pérez - $280.000',
-      type: 'success',
-      read: false,
-      createdAt: new Date(Date.now() - 720000),
-    },
-    {
-      id: '3',
-      title: 'Nueva matrícula',
-      message: 'Maria González - Clase B',
+      title: 'Bienvenido',
+      message: 'El entorno está listo. Reemplaza estas notificaciones con datos reales.',
       type: 'info',
       read: false,
       createdAt: new Date(Date.now() - 300000),
     },
     {
-      id: '4',
-      title: 'Clase reprogramada',
-      message: 'Clase práctica - Juan Pérez',
+      id: '2',
+      title: 'Operación completada',
+      message: 'La acción se procesó correctamente.',
+      type: 'success',
+      read: false,
+      createdAt: new Date(Date.now() - 3600000),
+    },
+    {
+      id: '3',
+      title: 'Atención requerida',
+      message: 'Revisa la configuración de tu perfil para continuar.',
       type: 'warning',
       read: true,
       createdAt: new Date(Date.now() - 86400000),
-    },
-    {
-      id: '5',
-      title: 'Licencia aprobada',
-      message: 'Pedro Sánchez - Clase B',
-      type: 'success',
-      read: true,
-      createdAt: new Date(Date.now() - 172800000),
     },
   ]);
 

@@ -6,29 +6,23 @@
 
 /* Layouts */
 @use './styles/layout/bento-grid';
+@use './styles/layout/page-shell';
 
-/* Motion — View Transitions API (page transitions premium) */
+/* Motion — View Transitions API (page navigation) */
 @use './styles/motion/view-transitions';
 
-/* Typography Imports */
+/* Typography — Bricolage Grotesque (referenced in --font-display / --font-body) */
 @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap');
-/* Geist: CDN bloqueado por ORB; usar @fontsource si se necesita Geist:
-   npm i @fontsource/geist @fontsource/geist-mono
-   @import '@fontsource/geist'; @import '@fontsource/geist-mono';
-   Tokens usan fallbacks (SF Pro, Plus Jakarta, system-ui). */
 
-/* Bloqueo de scroll cuando drawer mobile está abierto */
-body.layout-drawer-open {
-  overflow: hidden;
-}
-
-/* Bloqueo de scroll cuando modal está abierto */
+/* Bloqueo de scroll (drawer mobile, modales) */
+body.layout-drawer-open,
 body.modal-open {
   overflow: hidden;
 }
 
-/* Modal overlay wrapper — estilos globales (el div se crea con document.createElement,
-   no recibe encapsulación de Angular). Bloquea fondo, scroll y recibe clics. */
+/* Modal overlay wrapper — estilos globales.
+   El div se crea via document.createElement (fuera de encapsulación Angular),
+   por lo que necesita !important para garantizar posicionamiento. */
 .modal-overlay__wrapper {
   position: fixed !important;
   inset: 0 !important;
@@ -38,7 +32,7 @@ body.modal-open {
   overflow: auto;
 }
 
-.modal-overlay__wrapper > * {
+.modal-overlay__wrapper>* {
   position: fixed !important;
   inset: 0 !important;
   width: 100% !important;

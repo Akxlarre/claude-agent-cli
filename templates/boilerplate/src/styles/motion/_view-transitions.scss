@@ -1,78 +1,63 @@
-/* ============================================
-   View Transitions API — Page & Theme Transitions
-   - Navegación: anima solo main-content (topbar/sidebar estáticos)
-   - Cambio de tema: reveal circular en main-content desde el clic
-   ============================================ */
+/* ============================================================
+   VIEW TRANSITIONS — Page Navigation
+   
+   Transiciones visuales para navegación de rutas usando la
+   View Transitions API nativa (activada por withViewTransitions).
+   
+   Sidebar + topbar permanecen estáticos.
+   Solo el área main-content anima: page-out ↑ / page-in ↓
+   
+   Cambio de tema: sin animación especial — el CSS transition
+   en body (background-color, color, border-color) ya provee
+   una transición suave de 220ms via tokens del design system.
+   
+   Requiere:
+     - `withViewTransitions()` en app.config.ts
+     - `view-transition-name: main-content` en .shell-content
+   ============================================================ */
 
-/* Root: topbar + sidebar — sin animación, permanecen estáticos */
+/* ── 1. ROOT — Sidebar y topbar estáticos ─────────────────── */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none;
 }
 
-/* Cambio de tema: reveal circular solo en main-content (types: ['theme']) */
-html:active-view-transition-type(theme) {
-  &::view-transition-old(main-content) {
-    animation: theme-main-fade-out var(--duration-theme) ease both;
-  }
-  &::view-transition-new(main-content) {
-    animation: theme-main-reveal var(--duration-theme) ease both;
-  }
-}
+/* ── 2. NAVEGACIÓN DE RUTAS — page-out / page-in ──────────── */
+/* Asimetría intencional: salida rápida (180ms), entrada suave (280ms).
+   Movimiento vertical sutil (6-8px) — premium sin distracción. */
 
-@keyframes theme-main-fade-out {
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes theme-main-reveal {
-  from {
-    clip-path: circle(0 at var(--theme-origin-x, 50%) var(--theme-origin-y, 0%));
-  }
-  to {
-    clip-path: circle(150vmax at var(--theme-origin-x, 50%) var(--theme-origin-y, 0%));
-  }
-}
-
-/* Main content: salida rápida (180ms), hacia arriba -6px (navegación rutas) */
 ::view-transition-old(main-content) {
-  animation: var(--duration-page-out) cubic-bezier(0.4, 0, 1, 1) both page-out;
+  animation: vt-page-out var(--duration-page-out, 180ms) cubic-bezier(0.4, 0, 1, 1) both;
 }
 
-/* Main content: entrada suave (280ms), desde abajo +8px (navegación rutas) */
 ::view-transition-new(main-content) {
-  animation: var(--duration-page-in) cubic-bezier(0, 0, 0.2, 1) both page-in;
+  animation: vt-page-in var(--duration-page-in, 280ms) cubic-bezier(0, 0, 0.2, 1) both;
 }
 
-@keyframes page-out {
+@keyframes vt-page-out {
   to {
     opacity: 0;
     transform: translateY(-6px);
   }
 }
 
-@keyframes page-in {
+@keyframes vt-page-in {
   from {
     opacity: 0;
     transform: translateY(8px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-/* Accesibilidad: respetar prefers-reduced-motion */
+/* ── 3. ACCESIBILIDAD ─────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
+
   ::view-transition-old(main-content),
   ::view-transition-new(main-content) {
-    animation: none;
-  }
-  html:active-view-transition-type(theme) {
-    &::view-transition-old(main-content),
-    &::view-transition-new(main-content) {
-      animation: none;
-    }
+    animation: none !important;
   }
 }

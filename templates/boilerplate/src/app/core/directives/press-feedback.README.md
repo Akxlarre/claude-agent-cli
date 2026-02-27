@@ -28,10 +28,10 @@ Añadir hover (scale 1.02, y: -1) y press (scale 0.98) a elementos interactivos.
 - **Usar `appPressFeedback="press"`** para botones PrimeNG que ya tienen estilos hover propios
 
 ## Cuándo NO usarlo
-- Cards (usar `GsapAnimationsService.addCardHover()` en ngAfterViewInit)
+- Cards → usar `[appCardHover]` en su lugar
 - Elementos no interactivos
-- Si el componente ya tiene su propio feedback completo (ej. PrimeNG button con hover + press propios)
+- Si el componente ya tiene su propio feedback completo
 
 ## Dependencias
 - `GsapAnimationsService` — inyectado en la directiva
-- Cleanup automático en `ngOnDestroy`
+- `DestroyRef` — cleanup automático cuando el elemento se destruye

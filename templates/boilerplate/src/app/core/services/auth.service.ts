@@ -45,7 +45,7 @@ export class AuthService {
   private async loadUserFromSession(authUser: { id: string; email?: string; user_metadata?: Record<string, unknown> }): Promise<void> {
     const { data: profile } = await this.supabase.client
       .from('profiles')
-      .select('display_name, avatar_url, role, household_id')
+      .select('display_name, avatar_url, role')
       .eq('id', authUser.id)
       .maybeSingle();
 

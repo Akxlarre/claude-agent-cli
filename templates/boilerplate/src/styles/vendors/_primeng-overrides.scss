@@ -1,6 +1,6 @@
 /* ============================================
    PrimeNG Theme Overrides
-   Mapping PrimeNG tokens to Auto Escuelas Design System
+   Mapping PrimeNG tokens to Design System
    ============================================ */
 
 :root {
@@ -492,7 +492,7 @@ app-main-layout p-toast.p-toast-top-center,
   font-size: var(--text-xs) !important;
 }
 
-/* Menu badge - success para contadores (ej: Transacciones pendientes) */
+/* Menu badge - success para contadores */
 .p-menu .p-badge,
 .p-menu .p-menuitem-badge {
   background: var(--state-success) !important;
@@ -553,12 +553,12 @@ app-main-layout p-toast.p-toast-top-center,
     background: var(--bg-surface) !important;
   }
 
-  .p-datatable-thead > tr > th {
+  .p-datatable-thead>tr>th {
     background: var(--bg-base) !important;
     color: var(--text-primary) !important;
   }
 
-  .p-datatable-tbody > tr > td {
+  .p-datatable-tbody>tr>td {
     background: var(--bg-surface) !important;
     color: var(--text-secondary) !important;
   }
@@ -747,6 +747,7 @@ i.pi {
    PrimeNG Aura puede inyectar fondos claros; estos overrides los corrigen.
    ============================================ */
 [data-mode='dark'] {
+
   /* Tailwind bg-surface: asegurar que se respete en dark */
   .bg-surface {
     background-color: var(--bg-surface) !important;
@@ -761,8 +762,8 @@ i.pi {
   .p-datatable-wrapper,
   .p-datatable .p-datatable-table-wrapper,
   .p-datatable .p-datatable-table,
-  .p-datatable-thead > tr > th,
-  .p-datatable-tbody > tr > td {
+  .p-datatable-thead>tr>th,
+  .p-datatable-tbody>tr>td {
     background-color: var(--bg-surface) !important;
   }
 

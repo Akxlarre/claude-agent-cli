@@ -31,3 +31,8 @@ Antes de crear un componente presentacional, consulta en este orden:
 - Todo esquema DDL va en la carpeta `supabase/migrations/` (Naming convention: `YYYYMMDDHHMMSS_<dominio>_<tipo>_<descripcion>.sql`).
 - SIEMPRE documentar en `indices/DATABASE.md` cada nueva tabla y su política de Row Level Security (RLS).
 - Si usas Supabase realtime, actualiza tus servicios usando RxJS `Observable` -> `toSignal()`.
+
+## 5. Testing y Validación Autónoma
+- **Testeo Obligatorio de Facades:** Toda lógica de negocio, transformación de datos o interacción con Supabase que resida en una `Facade` debe tener su respectivo archivo `.spec.ts` construido o actualizado de forma autónoma por el agente.
+- **Validación de Flujos:** Los tests deben enfocarse en aislar y validar el comportamiento de los `Signals` expuestos y de los flujos asíncronos (`RxJS`), garantizando que la UI reciba el estado correcto ante cada eventualidad.
+- **Evitar Over-Testing en UI pura:** No malgastes tokens ni recursos testeando exhaustivamente *Dumb Components* en el DOM a menos que contengan lógica muy compleja. El foco fundamental de validación garantizada es siempre el núcleo lógico (Facades) y la orquestación principal (Smart Components).

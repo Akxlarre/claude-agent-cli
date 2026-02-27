@@ -8,7 +8,7 @@ Gestión de autenticación con Supabase. Mantiene el usuario actual desde `auth.
 
 | Miembro | Tipo | Descripción |
 |---------|------|-------------|
-| `currentUser` | `Signal<User \| null>` | Usuario actual (null si no autenticado). Incluye id, name, email, role, initials, avatarUrl, householdId. |
+| `currentUser` | `Signal<User \| null>` | Usuario actual (null si no autenticado). Incluye id, name, email, role, initials, avatarUrl. |
 | `isAuthenticated` | `ComputedSignal<boolean>` | true si hay usuario logueado |
 
 | `whenReady` | `Promise<void>` | Resuelve cuando la comprobación inicial de sesión ha terminado. Usado por AuthGuard. |

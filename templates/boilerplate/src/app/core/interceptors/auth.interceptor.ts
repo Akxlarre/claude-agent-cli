@@ -1,45 +1,43 @@
-import { Injectable, inject } from '@angular/core';
+import { inject } from '@angular/core';
 import {
-  HttpInterceptor,
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
+  HttpInterceptorFn,
   HttpErrorResponse,
 } from '@angular/common/http';
-import { Observable, from, throwError } from 'rxjs';
+import { from, throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { SupabaseService } from '@core/services/supabase.service';
 
 /**
- * Interceptor de autenticación.
+ * Interceptor funcional de autenticación (Angular v15+).
  * - Añade Authorization: Bearer <token> a las peticiones HTTP.
- * - En 401: intenta refreshSession, retry con nuevo token.
+ * - En 401: intenta refreshSession y reintenta con el nuevo token.
+ *
+ * Registrar en app.config.ts vía provideCoreAuth().
  */
-@Injectable()
-export class AuthInterceptor implements HttpInterceptor {
-  private supabase = inject(SupabaseService);
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const supabase = inject(SupabaseService);
 
-  intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    const addToken = (request: HttpRequest<unknown>, token: string) =>
-      request.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
+  const addToken = (request: typeof req, token: string) =>
+    request.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
 
-    return from(this.supabase.getSession()).pipe(
-      switchMap(({ data: { session } }) =>
-        session?.access_token ? next.handle(addToken(req, session.access_token)) : next.handle(req)
-      ),
-      catchError((err: unknown) => {
-        if (err instanceof HttpErrorResponse && err.status === 401) {
-          return from(this.supabase.refreshSession()).pipe(
-            switchMap(({ data: { session } }) =>
-              session?.access_token
-                ? next.handle(addToken(req, session.access_token))
-                : throwError(() => err)
-            ),
-            catchError(() => throwError(() => err))
-          );
-        }
-        return throwError(() => err);
-      })
-    );
-  }
-}
+  return from(supabase.getSession()).pipe(
+    switchMap(({ data: { session } }) =>
+      session?.access_token
+        ? next(addToken(req, session.access_token))
+        : next(req)
+    ),
+    catchError((err: unknown) => {
+      if (err instanceof HttpErrorResponse && err.status === 401) {
+        return from(supabase.refreshSession()).pipe(
+          switchMap(({ data: { session } }) =>
+            session?.access_token
+              ? next(addToken(req, session.access_token))
+              : throwError(() => err)
+          ),
+          catchError(() => throwError(() => err))
+        );
+      }
+      return throwError(() => err);
+    })
+  );
+};

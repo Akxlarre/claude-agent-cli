@@ -16,7 +16,7 @@ Para cada solicitud que implique escribir código o ensamblar UI, debes seguir e
 1. **DESCUBRIR:** Revisa `indices/COMPONENTS.md`, `indices/SERVICES.md` y `indices/DATABASE.md`. ¿Ya existe algo que resuelva parcial o totalmente el problema? Úsalo.
 2. **PLANIFICAR:** Define qué vas a tocar sin violar las reglas de Arquitectura y UI (ver abajo).
 3. **EJECUTAR:** Escribe el código. Prioriza reutilizar.
-4. **DOCUMENTAR AL CERRAR (`<memory_update>`):** Genera siempre un bloque de código XML explícito con las actualizaciones a las tablas de índices (COMPONENTS.md / SERVICES.md / DATABASE.md) o documenta migraciones de Supabase.
+4. **DOCUMENTAR AL CERRAR:** Antes de dar por terminada tu tarea, usa TUS herramientas de sistema de archivos para agregar/actualizar físicamente los nuevos componentes o tablas en `indices/COMPONENTS.md`, `indices/SERVICES.md` o `indices/DATABASE.md`. ¡Tú eres responsable de mantener tu propia memoria al día!
 
 ## LÍMITES Y CAPACIDADES DEL AGENTE
 
@@ -45,8 +45,9 @@ supabase/
 
 - **Patrón Facade Estricto:** La UI (Angular Components) **NUNCA** inyecta clientes REST/Supabase directamente. Siempre pasa por un Servicio/Facade que centraliza el estado.
 - **Detección de Cambios (OnPush):** Todo componente de UI debe usar `changeDetection: ChangeDetectionStrategy.OnPush`.
-- **Estado (Signals & RxJS):** Usa `signal()` para estado sincrónico UI y `RxJS` para flujos asíncronos en Servicios. En la Facade, usa `toSignal()` para exponer data al template de Angular.
-- **Data Model (Supabase):** Las transacciones o cambios a base de datos se hacen vía migraciones SQL. Todo esquema nuevo debe documentarse. Ver `skills/supabase-data-model`.
+- **Estado y Errores:** Usa `signal()` para estado sincrónico y `RxJS` para asíncronos en Servicios (expuestos con `toSignal()`). Captura siempre los errores (`catchError`) en el Facade y expón un Signal de error manejable.
+- **Tipados Strictos:** Las interfaces globales deben vivir en `core/models/`. No crees interfaces regadas o duplicadas dentro de los componentes UI.
+- **Data Model (Supabase):** Los cambios a BD se hacen vía migraciones SQL. Todo esquema nuevo y sus FKs deben auto-documentarse en `indices/DATABASE.md`.
 
 ## REGLAS VISUALES Y COMPONENTES (PrimeNG & Atomic Design)
 
@@ -55,15 +56,13 @@ supabase/
 - **Grillas y Layout:** Este proyecto utiliza **Bento Grid**. No hagas Grids arbitrarios; utiliza nuestras reglas canónicas.
 - Lee los detalles en `docs/TECH-STACK-RULES.md` y `docs/BRAND_GUIDELINES.md`.
 
-## Tu Firma de Salida
+## Tu Auto-Mantenimiento (Autonomía)
 
-Siempre concluye las tareas que alteran la estructura del proyecto o la BBDD con un bloque como este para actualizar mis índices:
+Siempre concluye las tareas que alteren la estructura del proyecto actualizando tú mismo los archivos `.md` correspondientes en la carpeta `indices/` mediante tus roles de escritura. Solo si tu entorno te niega el permiso de escritura a los archivos, puedes imprimir:
 
 ```xml
 <memory_update>
   ✅ TAREA COMPLETADA
-  
-  AGREGAR A indices/COMPONENTS.md:
-  | `nombre-componente` | Molécula | Breve descripción | ✅ Activo |
+  (Imprimiendo tabla obligatoria aquí para que el humano la copie porque me denegaron acceso)
 </memory_update>
 ```

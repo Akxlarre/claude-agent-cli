@@ -9,12 +9,13 @@ Tu stack: **Angular 20 + PrimeNG + Supabase + GSAP**.
 - Lint: `ng lint`
 - Supabase local: `npx supabase start`
 
-## Flujo obligatorio (4 pasos)
+## Flujo obligatorio (5 pasos)
 
 1. **DESCUBRIR** — Lee `indices/COMPONENTS.md`, `indices/SERVICES.md`, `indices/DATABASE.md` antes de escribir código
 2. **PLANIFICAR** — Define qué vas a tocar sin violar las reglas de arquitectura
 3. **EJECUTAR** — Escribe el código; reutiliza siempre lo existente primero
-4. **SINCRONIZAR** — Al cerrar la sesión, ejecuta `/sync-indices`
+4. **VALIDAR** — Prohibido cerrar una feature sin actualizar/crear el `.spec.ts` o E2E para la Facade
+5. **SINCRONIZAR** — Al cerrar la sesión, ejecuta `/sync-indices`
 
 ## Reglas del proyecto
 

@@ -1,14 +1,19 @@
-# 🧠 Claude Agent CLI (Blueprint v3.0)
+# 🧠 Claude Agent CLI (Blueprint v5.0)
 
-Un orquestador CLI construido en Node.js para auto-generar ecosistemas de trabajo (Angular + Supabase) perfectamente diseñados para ser entendidos y mantenidos por Agentes de IA (Específicamente **Claude 3.7 Sonnet** y el ecosistema **Claude Pro / Claude Code**).
+**El orquestador definitivo para el Arquitecto de Sistemas Agénticos (AI Workflow Engineer).**
 
-## 🚀 ¿Qué hace?
+`claude-agent-cli` es un motor de scaffolding construido en Node.js diseñado para generar ecosistemas de trabajo (Angular + Supabase) optimizados específicamente para ser operados por Agentes de IA (específicamente **Claude 3.7 Sonnet** y **Claude Code**).
 
-A diferencia de un simple *template*, esta herramienta ejecuta comandos reales y deposita una arquitectura estricta:
+## 🎯 Nuestra Misión
+Empoderar al **Arquitecto Agéntico**. Cerrar la brecha entre el diseño humano y la ejecución de la IA. En lugar de generar código genérico, este CLI inyecta una **Arquitectura AI-Native** estricta que domina la ventana de contexto de la IA, transformando a Claude de un asistente que "adivina" a un teclado ultra-rápido que sigue tus convenciones exactas.
 
-1. **Scaffolds Reales:** Ejecuta `npx @angular/cli new` por debajo instalando Standalone components, Routing y SCSS.
-2. **Dependencias Críticas:** Instala y configura `primeng`, `gsap` y `@supabase/supabase-js`.
-3. **Inyección Cerebral (AI Blueprint):** Copia una estructura densa de Markdowns (`/docs`, `/indices`, `/skills`, y un `CLAUDE.md` maestro) directamente dictando las reglas arquitectónicas (Patrón Facade, Atomic Design, Skeletons) a cualquier IA que lea la carpeta.
+## 🚀 Arquitectura v5.0 (Los 4 Pilares)
+
+1.  **Context Engineering 2.0 (LSP vía MCP):** El proyecto se genera con conectividad nativa a `ts-lsp-mcp`. La IA ya no está ciega ni es dependiente de RAG plano; puede consultar el AST completo, inferir tipos, variables estáticas y referencias cruzadas en tiempo real.
+2.  **Tooling y Orquestación Avanzada:** Autoconfiguración de Angular CLI y Supabase a través de *Model Context Protocol* (`.mcp.json`). La IA puede generar estructuralmente módulos de código y bases de datos disparando herramientas oficiales en lugar de comandos Bash frágiles.
+3.  **Guardrails Programáticos (Shadow CI):** No bastaban las instrucciones en texto. v5.0 inyecta un Linter Arquitectónico (AST) en JavaScript (`architect.js`) capaz de bloquear y fallar la compilación si la IA intenta romper el Patrón Facade inyectando Supabase directamente a la UI.
+4.  **Testing Autónomo:** Obligación irrefutable para la IA de crear y actualizar tests unitarios antes de dar por cerrada cualquier iteración de código de negocio.
+
 
 ## 📦 Instalación Global (Opcional)
 
@@ -50,6 +55,6 @@ Cuando inyectas la "Memoria Claude", obtienes:
 
 ## 🤝 Filosofía
 
-> *"Eres el Arquitecto. Claude es tu Teclado Ultra-rápido."*
+> *"Eres el Arquitecto Agéntico. Claude es tu Maestro de Obra y Teclado Ultra-rápido."*
 
 Este boilerplate busca domar la ventana de 200k tokens de Claude para que en lugar de que improvise arquitecturas "Hola Mundo", siga tus convenciones maduras de nivel enterprise desde el segundo cero.

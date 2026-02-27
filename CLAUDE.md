@@ -9,14 +9,15 @@
 
 <!-- Reglas completas a continuación para compatibilidad con Claude.ai Projects -->
 
-## FLUJO DE TRABAJO OBLIGATORIO (4 PASOS)
+## FLUJO DE TRABAJO OBLIGATORIO (5 PASOS)
 
 Para cada solicitud que implique escribir código o ensamblar UI, debes seguir estos pasos mentalmente (`<thought_process>`):
 
-1. **DESCUBRIR:** Revisa `indices/COMPONENTS.md`, `indices/SERVICES.md` y `indices/DATABASE.md`. ¿Ya existe algo que resuelva parcial o totalmente el problema? Úsalo.
+1. **DESCUBRIR (LSP + Índices):** Usa de forma prioritaria las herramientas MCP del Language Server Protocol (ej: `find_references`, `get_type_at_position`) para navegar el código. Luego consulta `indices/COMPONENTS.md`, `indices/SERVICES.md` y `indices/DATABASE.md` como respaldo documental. ¿Ya existe algo que resuelva parcial o totalmente el problema? Úsalo.
 2. **PLANIFICAR:** Define qué vas a tocar sin violar las reglas de Arquitectura y UI (ver abajo).
 3. **EJECUTAR:** Escribe el código. Prioriza reutilizar.
-4. **DOCUMENTAR AL CERRAR (`<memory_update>`):** Genera siempre un bloque de código XML explícito con las actualizaciones a las tablas de índices (COMPONENTS.md / SERVICES.md / DATABASE.md) o documenta migraciones de Supabase.
+4. **VALIDAR (TESTING AUTÓNOMO):** Tienes **PROHIBIDO** dar por terminada una Feature sin actualizar o crear el test unitario (`.spec.ts`) o E2E correspondiente que valide la nueva lógica en la respectiva Facade.
+5. **DOCUMENTAR AL CERRAR (`<memory_update>`):** Genera siempre un bloque de código XML explícito con las actualizaciones a las tablas de índices (COMPONENTS.md / SERVICES.md / DATABASE.md) o documenta migraciones de Supabase.
 
 ## LÍMITES Y CAPACIDADES DEL AGENTE
 

@@ -1,38 +1,72 @@
 # Brand Guidelines y Theming
 
-> NUNCA usar colores Tailwind arbitrarios hardcodeados (`text-pink-500`, `bg-[#ff0000]`). SIEMPRE usar Tokens.
+> Este documento es la guía de alto nivel. Para detalles técnicos de cada
+> sistema, ver los READMEs correspondientes y `indices/STYLES.md`.
 
-## Grid y Layout (El Bento Grid)
+## Stack de Estilos
 
-En este proyecto maquetaremos usando el patrón exclusivo **Bento Grid**:
-- El contenedor padre lleva la clase `.bento-grid`.
-- Usa las clases de proporción sobre los hijos:
-  - `.bento-square` (1x1 normal)
-  - `.bento-wide` (2x1 ancho)
-  - `.bento-tall` (2x2 alto y ancho)
-  - `.bento-feature` (3x2 bloque grande)
-  - `.bento-hero` (Full width hero superior)
+| Capa | Tecnología | Responsabilidad |
+|---|---|---|
+| Design Tokens | SCSS (`_variables.scss`) | Colores, espaciado, tipografía, motion, dark mode |
+| Layouts | SCSS (`_bento-grid.scss`, `_page-shell.scss`) | Grid components y page patterns |
+| Vendors | SCSS (`_primeng-overrides.scss`) | Mapeo de PrimeNG a design system |
+| Utilidades | Tailwind CSS v4 (`tailwind.css`) | Clases utilitarias mapeadas a tokens |
+| Animaciones | GSAP (`GsapAnimationsService`) | Toda la motion via servicio centralizado |
 
-**Regla Canónica del Bento:** Solo puede haber **UN solo elemento de acento** (`.card-accent`) por sección bento grid.
+## Regla #1 — Siempre usar Tokens
 
-## Cards y Superficies
+```html
+<!-- ✅ Correcto: utility class mapeada a token -->
+<p class="text-text-secondary text-sm">Descripción</p>
+<div class="bg-surface rounded-lg shadow-md p-6">...</div>
 
-Si construyes un contenedor, modal o tarjeta usa las clases CSS permitidas del sistema:
-- `.card`: La base por default, con bordes y padding estándar.
-- `.card-accent`: Agrega un borde superior con `var(--ds-brand)`.
-- `.card-tinted`: Aplica color primario diluido al fondo, ideal para KPIs y Highlights.
+<!-- ✅ Correcto: CSS variable directo -->
+<p style="color: var(--text-secondary)">Descripción</p>
 
-## Tokens Tipográficos y Semántica de Color
+<!-- ❌ Prohibido: colores arbitrarios -->
+<p class="text-[#52525b]">Nunca hardcodear</p>
+<p style="color: #52525b">Nunca hardcodear</p>
+```
 
-Para textos e íconos SIEMPRE usa las clases correctas:
-- **`text-primary`**: Títulos grandes y legibles.
-- **`text-secondary`**: Subtítulos y descripciones.
-- **`text-muted`**: Información que no debe resaltar (timestamps, placeholders).
-- **`bg-base`**: Para el fondo general (fuera del card).
-- **`bg-surface`**: El background de tu componente principal interno.
+## Regla #2 — Cuándo usar Tailwind vs SCSS
 
-## Transiciones / Animación (GSAP Obligatorio)
+| Usar Tailwind (utilities) | Usar SCSS (custom) |
+|---|---|
+| Spacing: `p-4`, `mt-2`, `gap-3` | Layouts complejos: bento grid, page shell |
+| Colores semánticos: `text-text-muted`, `bg-surface` | Mixins y loops de SCSS |
+| Flexbox/grid simple: `flex items-center` | Componentes con animación GSAP |
+| Bordes y radios: `rounded-lg`, `border-border-default` | Overrides de PrimeNG |
+| Responsive rápido: `md:flex-row` | — |
 
-- **No uses CSS `@keyframes`** para animar vistas de entrada.
-- Inyecta `GsapAnimationsService` en el `ngAfterViewInit`.
-- Métodos clave: `this.gsap.animateBentoGrid(this.grid.nativeElement)`, `animateHero()`, `animateCounter()`.
+## Regla #3 — Jerarquía de Superficies
+
+```
+bg-base      → Fondo de la app
+bg-surface   → Cards, modales, sidebar
+bg-elevated  → Hover de filas, áreas diferenciadas
+bg-subtle    → Inputs, chips, separadores
+```
+
+Siempre respetar esta jerarquía. Un card (`bg-surface`) no va sobre otro card.
+
+## Regla #4 — Color de Texto ≠ Color de Acción
+
+- `text-primary / text-secondary / text-muted` → solo para texto
+- `brand / brand-hover` → solo para botones, links, CTAs
+
+**NUNCA** usar un color de acción como color de texto ni viceversa.
+
+## Regla #5 — Animación solo via GSAP
+
+No usar CSS `@keyframes` para animaciones de componentes.
+Inyectar `GsapAnimationsService` y usar sus métodos.
+
+**Excepción**: `_view-transitions.scss` usa `@keyframes` para las
+transiciones de página (View Transitions API), que son del navegador.
+
+## Referencias
+
+- **Tokens del design system**: `styles/tokens/_variables.scss`
+- **Layout patterns**: `_bento-grid.README.md`, `_page-shell.README.md`
+- **View Transitions**: `_view-transitions.README.md`
+- **Índice completo**: `indices/STYLES.md`

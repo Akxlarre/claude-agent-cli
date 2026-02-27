@@ -34,8 +34,8 @@ function printBanner() {
     console.log('');
     console.log(topBottom('╔══════════════════════════════════════════════╗'));
     console.log(`${border}                                              ${border}`);
-    console.log(`${border}   ${chalk.white.bold('🧠  Claude Agent CLI  ·  Blueprint v4.0')}   ${border}`);
-    console.log(`${border}       ${chalk.blue('Angular · Supabase · GSAP · PrimeNG')}   ${border}`);
+    console.log(`${border}   ${chalk.white.bold('🧠  Claude Agent CLI  ·  Blueprint v4.1')}   ${border}`);
+    console.log(`${border}   ${chalk.blue('Angular · Tailwind · Supabase · PrimeNG')}  ${border}`);
     console.log(`${border}                                              ${border}`);
     console.log(topBottom('╚══════════════════════════════════════════════╝'));
     console.log('');
@@ -45,7 +45,7 @@ function printSuccess(projectName, isFull, targetDir) {
     const line = chalk.blue('──────────────────────────────────────────────');
     console.log('');
     console.log(line);
-    console.log(`  ${chalk.green('✅')}  ${chalk.white.bold(projectName)} ${chalk.blue('·')} ${chalk.white('Blueprint v4.0 listo')}`);
+    console.log(`  ${chalk.green('✅')}  ${chalk.white.bold(projectName)} ${chalk.blue('·')} ${chalk.white('Blueprint v4.1 listo')}`);
     console.log(line);
     console.log('');
     console.log(chalk.white.bold('  Próximos pasos:'));
@@ -107,7 +107,7 @@ async function main() {
                 name: 'action',
                 message: '¿Qué deseas hacer?',
                 choices: [
-                    'Full Scaffold (Angular 20 + PrimeNG + Supabase + Boilerplate AI)',
+                    'Full Scaffold (Angular + Tailwind + PrimeNG + Supabase + Boilerplate AI)',
                     'Solo inyectar Memoria Claude en carpeta actual'
                 ]
             },
@@ -150,13 +150,13 @@ async function main() {
 
         // --- Spinner: npm install ---
         const spinnerNpm = ora({
-            text: chalk.yellow('Instalando dependencias (PrimeNG, GSAP, Supabase)...'),
+            text: chalk.yellow('Instalando dependencias (Tailwind, PrimeNG, GSAP, Supabase)...'),
             color: 'yellow'
         }).start();
 
         try {
             await run(
-                `npm install primeng @primeng/themes gsap @supabase/supabase-js`,
+                `npm install primeng @primeng/themes gsap @supabase/supabase-js tailwindcss @tailwindcss/postcss postcss`,
                 [], { cwd: targetDir }
             );
             spinnerNpm.succeed(chalk.green('Dependencias instaladas'));
@@ -169,7 +169,7 @@ async function main() {
 
     // --- Spinner: template injection ---
     const spinnerBlueprint = ora({
-        text: chalk.yellow('Inyectando Blueprint v4.0...'),
+        text: chalk.yellow('Inyectando Blueprint v4.1...'),
         color: 'blue'
     }).start();
 
@@ -219,9 +219,36 @@ async function main() {
 
         // 3. If Full Scaffold: inject code boilerplate + patch app.config.ts + add npm scripts
         if (isFull) {
-            const BOILERPLATE_SRC = path.join(TEMPLATES_DIR, 'boilerplate', 'src');
+            const BOILERPLATE_DIR = path.join(TEMPLATES_DIR, 'boilerplate');
+            const BOILERPLATE_SRC = path.join(BOILERPLATE_DIR, 'src');
             if (fs.existsSync(BOILERPLATE_SRC)) {
                 copyRecursiveSync(BOILERPLATE_SRC, path.join(targetDir, 'src'));
+
+                // Copy postcss.config.mjs to project root (Tailwind v4)
+                const postcssConfigSrc = path.join(BOILERPLATE_DIR, 'postcss.config.mjs');
+                if (fs.existsSync(postcssConfigSrc)) {
+                    fs.copyFileSync(postcssConfigSrc, path.join(targetDir, 'postcss.config.mjs'));
+                    console.log(chalk.green('   ✓ postcss.config.mjs copiado'));
+                }
+
+                // Patch angular.json: add tailwind.css to styles array
+                const angularJsonPath = path.join(targetDir, 'angular.json');
+                if (fs.existsSync(angularJsonPath)) {
+                    const angularJson = JSON.parse(fs.readFileSync(angularJsonPath, 'utf8'));
+                    const projectName = Object.keys(angularJson.projects)[0];
+                    const styles = angularJson.projects[projectName].architect.build.options.styles;
+                    if (styles && !styles.includes('src/tailwind.css')) {
+                        // Insert tailwind.css BEFORE styles.scss
+                        const scssIndex = styles.indexOf('src/styles.scss');
+                        if (scssIndex >= 0) {
+                            styles.splice(scssIndex, 0, 'src/tailwind.css');
+                        } else {
+                            styles.unshift('src/tailwind.css');
+                        }
+                        fs.writeFileSync(angularJsonPath, JSON.stringify(angularJson, null, 2));
+                        console.log(chalk.green('   ✓ angular.json parcheado (tailwind.css)'));
+                    }
+                }
 
                 // Patch app.config.ts with PrimeNG provider
                 const appConfigPath = path.join(targetDir, 'src', 'app', 'app.config.ts');
@@ -243,7 +270,7 @@ async function main() {
                     }
                 }
 
-                // 4. Inject claude headless scripts into package.json
+                // Inject claude headless scripts into package.json
                 const pkgPath = path.join(targetDir, 'package.json');
                 if (fs.existsSync(pkgPath)) {
                     const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
@@ -252,6 +279,8 @@ async function main() {
                         'claude:review': 'claude -p "Revisa el código de esta sesión y sugiere mejoras de arquitectura" --allowedTools Read,Glob,Grep',
                         'claude:sync': 'claude -p "Ejecuta /sync-indices para actualizar los índices del proyecto" --allowedTools Read,Edit,Glob,Grep',
                         'claude:fix': 'claude -p "Ejecuta ng lint, identifica los errores y corrígelos" --allowedTools Read,Edit,Bash',
+                        'claude:tdd': 'claude -p "Ejecuta las pruebas unitarias (ng test --watch=false). Si fallan, auto-corrige la lógica hasta que el compilador pase en verde." --allowedTools Read,Edit,Bash',
+                        'lint:arch': 'node scripts/architect.js'
                     };
                     fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
                     console.log(chalk.green('   ✓ Scripts claude:* agregados'));

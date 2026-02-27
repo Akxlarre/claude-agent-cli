@@ -1,6 +1,13 @@
 {
   "$schema": "https://json.schemastore.org/mcp.json",
   "mcpServers": {
+    "typescript": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "ts-lsp-mcp"
+      ]
+    },
     "supabase": {
       "command": "npx",
       "args": [

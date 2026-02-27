@@ -3,8 +3,8 @@ name: sync-indices
 description: >
   Sincronizar los índices del proyecto con el trabajo de la sesión actual.
   Invocar al final de cada sesión de trabajo para mantener la memoria institucional actualizada.
-  Actualiza COMPONENTS.md, SERVICES.md y DATABASE.md con componentes, servicios y migraciones
-  creados o modificados durante la sesión.
+  Actualiza COMPONENTS.md, SERVICES.md, DIRECTIVES.md y DATABASE.md con componentes, servicios,
+  directivas y migraciones creados o modificados durante la sesión.
 user-invocable: true
 disable-model-invocation: false
 allowed-tools: Read, Edit, Glob, Grep
@@ -16,15 +16,17 @@ Tu tarea es revisar el trabajo de esta sesión y mantener los índices del proye
 
 ## Proceso
 
-1. **Lee los tres índices actuales**:
+1. **Lee los cuatro índices actuales**:
    - `indices/COMPONENTS.md`
    - `indices/SERVICES.md`
+   - `indices/DIRECTIVES.md`
    - `indices/DATABASE.md`
 
 2. **Busca archivos creados o modificados** en:
    - `src/app/shared/` — nuevos Dumb Components
    - `src/app/features/` — nuevas páginas Smart Components
    - `src/app/core/services/` — nuevos servicios o facades
+   - `src/app/core/directives/` — nuevas directivas
    - `src/app/core/models/` — nuevos modelos o interfaces
    - `supabase/migrations/` — nuevas migraciones SQL
 
@@ -52,6 +54,11 @@ Tu tarea es revisar el trabajo de esta sesión y mantener los índices del proye
 ### SERVICES.md
 ```markdown
 | `NombreFacadeService` | Responsabilidad | `core/services/ruta.ts` | Dependencias | ✅ Estable |
+```
+
+### DIRECTIVES.md
+```markdown
+| `NombreDirective` | `[appSelector]` | Propósito en una línea | `input: tipo` | ✅ Estable |
 ```
 
 ### DATABASE.md
