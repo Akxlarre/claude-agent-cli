@@ -231,6 +231,32 @@ async function main() {
                     console.log(chalk.green('   ✓ postcss.config.mjs copiado'));
                 }
 
+                // Patch tsconfig.json: add path aliases for @core/*, @shared/*, etc.
+                const tsconfigPath = path.join(targetDir, 'tsconfig.json');
+                if (fs.existsSync(tsconfigPath)) {
+                    try {
+                        const tsconfig = JSON.parse(fs.readFileSync(tsconfigPath, 'utf8'));
+                        if (!tsconfig.compilerOptions) tsconfig.compilerOptions = {};
+                        // baseUrl is required for path aliases to resolve correctly
+                        if (!tsconfig.compilerOptions.baseUrl) {
+                            tsconfig.compilerOptions.baseUrl = './';
+                        }
+                        if (!tsconfig.compilerOptions.paths) {
+                            tsconfig.compilerOptions.paths = {};
+                        }
+                        Object.assign(tsconfig.compilerOptions.paths, {
+                            '@core/*': ['src/app/core/*'],
+                            '@shared/*': ['src/app/shared/*'],
+                            '@features/*': ['src/app/features/*'],
+                            '@layout/*': ['src/app/layout/*'],
+                        });
+                        fs.writeFileSync(tsconfigPath, JSON.stringify(tsconfig, null, 2));
+                        console.log(chalk.green('   ✓ tsconfig.json configurado (path aliases @core/*, @shared/*, @features/*, @layout/*)'));
+                    } catch (e) {
+                        console.warn(chalk.yellow('   ⚠ No se pudo parchear tsconfig.json:', e.message));
+                    }
+                }
+
                 // Patch angular.json: add tailwind.css to styles array
                 const angularJsonPath = path.join(targetDir, 'angular.json');
                 if (fs.existsSync(angularJsonPath)) {

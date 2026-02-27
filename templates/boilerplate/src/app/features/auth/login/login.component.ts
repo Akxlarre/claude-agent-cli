@@ -5,7 +5,7 @@ import {
   signal,
 } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { Router, RouterLink } from "@angular/router";
+import { Router } from "@angular/router";
 import { AuthFacade } from "@core/services/auth.facade";
 
 /**
@@ -20,7 +20,7 @@ import { AuthFacade } from "@core/services/auth.facade";
   selector: "app-login",
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule],
   template: `
     <div
       class="flex min-h-[100dvh] items-center justify-center bg-base bg-[image:var(--gradient-subtle)] p-4"

@@ -37,9 +37,9 @@ import { Avatar } from "primeng/avatar";
     >
       <!-- Brand -->
       <div class="px-5 pb-6 pt-2">
-        <!-- TODO: Reemplaza con el nombre de tu app o un logo -->
+        <!-- TODO: Replace appName with your project name -->
         <span class="font-display text-lg font-bold text-brand">{{
-          PROJECT_NAME
+          appName
         }}</span>
       </div>
 
@@ -95,6 +95,9 @@ import { Avatar } from "primeng/avatar";
   styles: [],
 })
 export class SidebarComponent {
+  /** TODO: Replace with your app name or read from environment */
+  protected readonly appName = "Mi App";
+
   protected readonly auth = inject(AuthFacade);
   protected readonly theme = inject(ThemeService);
   protected readonly layout = inject(LayoutService);
