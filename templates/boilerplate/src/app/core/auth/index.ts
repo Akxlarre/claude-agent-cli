@@ -14,5 +14,5 @@
 export { AuthFacade } from "@core/services/auth.facade";
 export { authGuard } from "@core/guards/auth.guard";
 export { HasRoleDirective } from "@core/directives/has-role.directive";
-export { AuthInterceptor } from "@core/interceptors/auth.interceptor";
+export { authInterceptor } from "@core/interceptors/auth.interceptor";
 export { provideCoreAuth } from "./provide-core-auth";

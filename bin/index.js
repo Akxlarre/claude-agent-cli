@@ -8,6 +8,14 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { spawn } from 'child_process';
 
+// Parse JSONC (JSON with comments) — strips // and /* */ comments before parsing
+function parseJsonc(text) {
+    const stripped = text
+        .replace(/\/\*[\s\S]*?\*\//g, '')   // block comments
+        .replace(/\/\/.*$/gm, '');           // line comments
+    return JSON.parse(stripped);
+}
+
 // Run a command asynchronously so ora can animate freely
 function run(cmd, args, opts = {}) {
     return new Promise((resolve, reject) => {
@@ -156,7 +164,7 @@ async function main() {
 
         try {
             await run(
-                `npm install primeng @primeng/themes gsap @supabase/supabase-js tailwindcss @tailwindcss/postcss postcss`,
+                `npm install primeng @primeng/themes gsap @supabase/supabase-js tailwindcss @tailwindcss/postcss postcss @angular/animations`,
                 [], { cwd: targetDir }
             );
             spinnerNpm.succeed(chalk.green('Dependencias instaladas'));
@@ -259,7 +267,7 @@ async function main() {
                 const tsconfigPath = path.join(targetDir, 'tsconfig.json');
                 if (fs.existsSync(tsconfigPath)) {
                     try {
-                        const tsconfig = JSON.parse(fs.readFileSync(tsconfigPath, 'utf8'));
+                        const tsconfig = parseJsonc(fs.readFileSync(tsconfigPath, 'utf8'));
                         if (!tsconfig.compilerOptions) tsconfig.compilerOptions = {};
                         // baseUrl is required for path aliases to resolve correctly
                         if (!tsconfig.compilerOptions.baseUrl) {
