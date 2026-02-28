@@ -26,12 +26,14 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./layout/app-shell.component').then((m) => m.AppShellComponent),
     children: [
+      // Ruta por defecto → dashboard
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./features/dashboard/dashboard.component').then((m) => m.DashboardComponent),
+      },
       // TODO: Añade tus feature routes aquí
-      // {
-      //   path: 'dashboard',
-      //   loadComponent: () =>
-      //     import('./features/dashboard/dashboard.component').then((m) => m.DashboardComponent),
-      // },
     ],
   },
 

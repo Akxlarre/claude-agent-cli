@@ -164,7 +164,7 @@ async function main() {
 
         try {
             await run(
-                `npm install primeng @primeng/themes gsap @supabase/supabase-js tailwindcss @tailwindcss/postcss postcss @angular/animations`,
+                `npm install primeng @primeng/themes gsap @supabase/supabase-js tailwindcss @tailwindcss/postcss postcss @angular/animations lucide-angular`,
                 [], { cwd: targetDir }
             );
             spinnerNpm.succeed(chalk.green('Dependencias instaladas'));
@@ -289,23 +289,36 @@ async function main() {
                     }
                 }
 
-                // Patch angular.json: add tailwind.css to styles array
+                // Patch angular.json: add tailwind.css to styles + disable inlineCritical
                 const angularJsonPath = path.join(targetDir, 'angular.json');
                 if (fs.existsSync(angularJsonPath)) {
                     const angularJson = JSON.parse(fs.readFileSync(angularJsonPath, 'utf8'));
-                    const projectName = Object.keys(angularJson.projects)[0];
-                    const styles = angularJson.projects[projectName].architect.build.options.styles;
+                    const projectKey = Object.keys(angularJson.projects)[0];
+                    const buildOptions = angularJson.projects[projectKey].architect.build.options;
+
+                    // 1. Add tailwind.css before styles.scss
+                    const styles = buildOptions.styles;
                     if (styles && !styles.includes('src/tailwind.css')) {
-                        // Insert tailwind.css BEFORE styles.scss
                         const scssIndex = styles.indexOf('src/styles.scss');
                         if (scssIndex >= 0) {
                             styles.splice(scssIndex, 0, 'src/tailwind.css');
                         } else {
                             styles.unshift('src/tailwind.css');
                         }
-                        fs.writeFileSync(angularJsonPath, JSON.stringify(angularJson, null, 2));
-                        console.log(chalk.green('   ✓ angular.json parcheado (tailwind.css)'));
                     }
+
+                    // 2. Disable inlineCritical — Beasties can't see inline-template classes
+                    //    and would silently strip Tailwind utilities from the final bundle.
+                    if (!buildOptions.optimization || typeof buildOptions.optimization !== 'object') {
+                        buildOptions.optimization = {};
+                    }
+                    if (!buildOptions.optimization.styles || typeof buildOptions.optimization.styles !== 'object') {
+                        buildOptions.optimization.styles = {};
+                    }
+                    buildOptions.optimization.styles.inlineCritical = false;
+
+                    fs.writeFileSync(angularJsonPath, JSON.stringify(angularJson, null, 2));
+                    console.log(chalk.green('   ✓ angular.json parcheado (tailwind.css + inlineCritical: false)'));
                 }
 
                 // Patch app.config.ts with PrimeNG provider

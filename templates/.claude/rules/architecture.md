@@ -43,3 +43,17 @@ supabase/
 - **Dumb (`shared/`)**: Solo `input()` y `output()`. Sin inyección de Facades.
 - **Smart (`features/`)**: Inyectan Facades. Coordinan Dumb Components.
 - **Skeleton colocated**: Cada Dumb que recibe data async tiene su `{nombre}-skeleton.component.ts` al lado
+
+## Clases Semánticas vs Tailwind Genérico
+
+En componentes de presentación (`shared/`), **preferir siempre** las clases semánticas del design system sobre la composición directa de utilities Tailwind:
+
+| Necesidad | CORRECTO | PROHIBIDO |
+|---|---|---|
+| Número KPI grande | `.kpi-value` | `text-4xl font-bold tracking-tight` |
+| Etiqueta de KPI | `.kpi-label` | `text-xs text-gray-500 uppercase` |
+| Banner/Hero section | `.surface-hero` | `bg-gradient-to-br from-blue-600 to-purple-600` |
+| Overlay glass | `.surface-glass` | `bg-white/90 backdrop-blur-md border` |
+| Estado activo/online | `.indicator-live` | `inline-flex gap-2 before:w-2 before:bg-green-500` |
+
+**Regla general**: Tailwind para spacing, sizing y layout (`p-4`, `flex`, `grid`, `w-full`, `gap-3`). Clases semánticas del DS para identidad visual, tipografía dramática y superficies.

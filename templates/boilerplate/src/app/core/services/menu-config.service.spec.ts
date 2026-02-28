@@ -17,24 +17,29 @@ describe("MenuConfigService", () => {
     expect(service.menuItems().length).toBeGreaterThan(0);
   });
 
-  it("menuItems() should include the home item with routerLink '/'", () => {
-    const home = service.menuItems().find((m) => m.routerLink === "/");
-    expect(home).toBeTruthy();
-    expect(home?.label).toBe("Inicio");
-  });
-
-  it("menuItems() should include the settings item with routerLink '/settings'", () => {
-    const settings = service
-      .menuItems()
-      .find((m) => m.routerLink === "/settings");
-    expect(settings).toBeTruthy();
-    expect(settings?.label).toBe("Configuración");
-  });
-
-  it("every item should have a label and an icon", () => {
+  it("every item should have label, icon, and routerLink", () => {
     service.menuItems().forEach((item) => {
       expect(item.label).toBeTruthy();
       expect(item.icon).toBeTruthy();
+      expect(item.routerLink).toBeTruthy();
+    });
+  });
+
+  it("no icon should use 'pi pi-' prefix — must be Lucide names", () => {
+    service.menuItems().forEach((item) => {
+      expect(item.icon.startsWith("pi ")).toBeFalse();
+    });
+  });
+
+  it("dashboard item should be the first item with path /app/dashboard", () => {
+    const first = service.menuItems()[0];
+    expect(first.routerLink).toBe("/app/dashboard");
+    expect(first.icon).toBe("layout-dashboard");
+  });
+
+  it("every routerLink should start with '/'", () => {
+    service.menuItems().forEach((item) => {
+      expect(item.routerLink.startsWith("/")).toBeTrue();
     });
   });
 });

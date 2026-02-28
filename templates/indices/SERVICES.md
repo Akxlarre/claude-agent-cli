@@ -11,7 +11,7 @@ Servicios estructurales compartidos que proveen funcionalidades base, autenticac
 | `ThemeService` | Modo claro/oscuro/sistema con `[data-mode='dark']` en documentElement; persiste en localStorage | `core/services/theme.service.ts` | GsapAnimationsService, MessageService | ✅ Estable |
 | `GsapAnimationsService` | Centraliza TODAS las animaciones GSAP: bento, counters, hover, page enter, reduced-motion | `core/services/gsap-animations.service.ts` | gsap, ScrollTrigger | ✅ Estable |
 | `LayoutService` | Estado responsive del sidebar drawer en mobile (`sidebarOpen` signal) | `core/services/layout.service.ts` | — | ✅ Estable |
-| `MenuConfigService` | Items de navegación del sidebar (PrimeNG MenuItem[]) — personalizar por proyecto | `core/services/menu-config.service.ts` | PrimeNG MenuItem | ✅ Estable |
+| `MenuConfigService` | Items de navegación del sidebar (`NavItem[]` — interfaz propia). `icon` es nombre Lucide kebab-case. Personalizar por proyecto agregando `NavItem` a la lista. | `core/services/menu-config.service.ts` | — | ✅ Estable |
 | `NotificationsService` | Estado signal de notificaciones en-app con filtros y `unreadCount` computed | `core/services/notifications.service.ts` | — | ✅ Estable |
 | `SearchPanelService` | Estado signal del panel de búsqueda global (open/close/toggle) para `[appSearchShortcut]` | `core/services/search-panel.service.ts` | — | ✅ Estable |
 | `BreadcrumbService` | Breadcrumb reactivo; soporta menús planos y jerárquicos; deriva el trail desde `MenuConfigService` | `core/services/breadcrumb.service.ts` | Router, MenuConfigService | ✅ Estable |

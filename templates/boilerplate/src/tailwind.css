@@ -13,6 +13,7 @@
    ============================================================ */
 
 @import "tailwindcss";
+@source ".."; /* Escanea archivos .ts con templates inline fuera de src/ */
 
 /* ── @theme: Mapeo de Design System → Tailwind ────────────── */
 /* Extiende las utilidades de Tailwind con los tokens del

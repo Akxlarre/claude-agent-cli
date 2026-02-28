@@ -149,8 +149,16 @@ process.stdin.on('end', () => {
 
     // --- SCSS / CSS checks (solo en src/) ---
     if (normalizedPath.includes('src/') && (normalizedPath.endsWith('.scss') || normalizedPath.endsWith('.css'))) {
-      if (/@keyframes\s/.test(newContent))
-        violations.push('No usar @keyframes. Usa GsapAnimationsService para animaciones.');
+      // @keyframes: BLOQUEADO en estilos de componente (src/app/).
+      // PERMITIDO en archivos del design system global (src/styles/) para loops de estado continuo
+      // como .indicator-live y .badge-pulse. Esos @keyframes ya viven en _variables.scss.
+      const isComponentStyle = normalizedPath.includes('src/app/');
+      if (isComponentStyle && /@keyframes\s/.test(newContent))
+        violations.push(
+          'No usar @keyframes en estilos de componente.\n' +
+          '     Para animaciones de entrada: GsapAnimationsService (animateBentoGrid, animateHero, animateCounter).\n' +
+          '     Para loops de estado continuo (pulso, spin): usar .indicator-live o .badge-pulse del design system.'
+        );
 
       const hardcodedColorRe =
         /(?:text|bg|border|ring)-(?:red|blue|green|yellow|purple|pink|orange|teal|cyan|indigo|emerald|rose|amber|lime|sky|violet|fuchsia)-\d{2,3}/;
@@ -205,7 +213,10 @@ process.stdin.on('end', () => {
           '  - OnPush obligatorio. Signals para estado, no BehaviorSubject.',
           '[REGLA visual-system.md] Prioridad UI: 1) indices/COMPONENTS.md 2) PrimeNG 3) Custom.',
           '  - Colores: solo tokens (text-primary, bg-surface, var(--ds-brand)).',
+          '  - Regla 3-2-1: max 3 elementos con var(--ds-brand) por viewport (2 interactivos, 1 decorativo).',
           '  - Layout: usar .bento-grid con clases de proporcion. Solo 1 .card-accent por seccion.',
+          '  - KPIs: usar <app-kpi-card> (ya existe en shared/). No recrear composicion KPI manualmente.',
+          '  - Iconos: <app-icon name="kebab-case" [size]="20" /> SIEMPRE. PROHIBIDO emojis en UI.',
           '  - Animaciones: GsapAnimationsService en ngAfterViewInit. No @angular/animations.',
           '[SKILL angular-component] Usa input(), output(), @if/@for, host bindings, ChangeDetectionStrategy.OnPush.',
           '[SKILL design-system] Consulta indices/STYLES.md para tokens disponibles.',
@@ -220,6 +231,10 @@ process.stdin.on('end', () => {
           '[REGLA visual-system.md] Colores: solo tokens semanticos. No hardcodear.',
           '  - Cards: .card (base), .card-accent (1 por seccion), .card-tinted (KPIs).',
           '  - Radios: var(--radius-lg) minimo en cards, var(--radius-full) en botones.',
+          '  - Iconos: <app-icon name="kebab-case" /> (shared/components/icon). PROHIBIDO emojis ni SVG inline.',
+          '  - KPIs: .kpi-value para el numero principal, .kpi-label para la etiqueta. NUNCA text-4xl plano.',
+          '  - Superficies: .surface-hero (banners/hero), .surface-glass (overlays flotantes).',
+          '  - Indicadores: .indicator-live (sistema activo/online), .badge-pulse (nuevos items/alertas).',
           '[SKILL angular-component] Usa input(), output(), host bindings. No decoradores legacy.',
           '[SKILL design-system] Checklist: OnPush, var(--*) colores, GSAP entrada, dark/light mode.'
         );
@@ -275,6 +290,10 @@ process.stdin.on('end', () => {
         '  - Bindings: [class.x]="expr", [style.x]="expr". No [ngClass]/[ngStyle].',
         '[REGLA visual-system.md] Colores: text-primary, text-muted, bg-surface, bg-base. No Tailwind hardcodeado.',
         '  - Bento Grid: .bento-grid + [appBentoGridLayout]. Hijos: .bento-square/.bento-wide/.bento-tall/.bento-feature/.bento-hero.',
+        '  - Iconos: <app-icon name="kebab-case" [size]="16" /> SIEMPRE. PROHIBIDO emojis en la UI.',
+        '  - KPIs: <span class="kpi-value">24K</span> + <span class="kpi-label">USUARIOS</span>. No text-4xl plano.',
+        '  - Superficies: class="surface-hero" en banners/hero sections. class="surface-glass" en overlays flotantes.',
+        '  - Indicadores: class="indicator-live" para estado en tiempo real. class="badge-pulse" en badges de conteo.',
         '[REGLA ai-readability.md] Botones de mutacion: data-llm-action="accion". Inputs criticos: data-llm-description="desc". Nav: data-llm-nav.',
         '[SKILL angular-primeng] Imports standalone: import { Button, Select, Table } no modules. Lazy loading para +1000 registros.'
       );
@@ -286,7 +305,9 @@ process.stdin.on('end', () => {
         '[REGLA visual-system.md] Estilos: usar var(--*) tokens de _variables.scss. No hex hardcodeados.',
         '  - Layouts: .page-centered, .page-narrow, .page-wide (no max-width ad-hoc).',
         '  - Grids: .bento-grid con clases de proporcion (no grids custom).',
-        '  - Motion: No @keyframes. GSAP para animaciones, View Transitions para rutas.',
+        '  - Motion en componentes (src/app/): NO @keyframes. GSAP para entradas, View Transitions para rutas.',
+        '  - Loops de estado continuo: usar .indicator-live o .badge-pulse — ya tienen @keyframes en el design system.',
+        '  - Clases semanticas disponibles: .kpi-value, .kpi-label, .surface-hero, .surface-glass, .indicator-live, .badge-pulse.',
         '  - PrimeNG overrides: ya estan en _primeng-overrides.scss. No sobrescribir en componentes.',
         '[SKILL design-system] Consulta indices/STYLES.md para la lista completa de tokens y layout helpers.'
       );

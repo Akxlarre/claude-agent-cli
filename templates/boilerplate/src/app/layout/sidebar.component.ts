@@ -15,6 +15,7 @@ import { MenuConfigService } from "@core/services/menu-config.service";
 import { GsapAnimationsService } from "@core/services/gsap-animations.service";
 import { Button } from "primeng/button";
 import { Avatar } from "primeng/avatar";
+import { IconComponent } from "@shared/components/icon/icon.component";
 
 /**
  * SidebarComponent — navegación lateral principal.
@@ -28,7 +29,7 @@ import { Avatar } from "primeng/avatar";
   selector: "app-sidebar",
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, RouterLinkActive, Button, Avatar],
+  imports: [RouterLink, RouterLinkActive, Button, Avatar, IconComponent],
   template: `
     <nav
       #sidebarEl
@@ -54,7 +55,7 @@ import { Avatar } from "primeng/avatar";
               [attr.aria-label]="item.label"
               [attr.data-llm-nav]="item.routerLink"
             >
-              <i [class]="item.icon" aria-hidden="true"></i>
+              <app-icon [name]="item.icon" [size]="18" />
               <span>{{ item.label }}</span>
             </a>
           </li>

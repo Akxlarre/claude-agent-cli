@@ -8,6 +8,17 @@ import { provideAnimationsAsync } from "@angular/platform-browser/animations/asy
 import { providePrimeNG } from "primeng/config";
 import Aura from "@primeng/themes/aura";
 import { MessageService, ConfirmationService } from "primeng/api";
+import { provideIcons } from "lucide-angular";
+import {
+  // ── Usados por el boilerplate (dashboard, kpi-card, sidebar) ──
+  Activity, AlertCircle, AlertTriangle, ArrowRight, BarChart2, CheckCircle,
+  ChevronRight, Download, LayoutDashboard, Plus, Settings,
+  TrendingDown, TrendingUp, User, Users,
+  // ── Shell support (topbar, login, mobile drawer) ──
+  Bell, LogOut, Menu, Search, X,
+  // ── Acciones comunes (ampliar según el proyecto — ver lucide.dev) ──
+  Check, Edit, Info, Trash2,
+} from "lucide-angular";
 
 import { routes } from "./app.routes";
 import { provideCoreAuth } from "@core/auth/provide-core-auth";
@@ -37,5 +48,23 @@ export const appConfig: ApplicationConfig = {
     provideCoreAuth(),
     MessageService,
     ConfirmationService,
+    /**
+     * Lucide Icons — Set mínimo del shell (23 íconos).
+     *
+     * Solo se incluyen los íconos activamente usados por el boilerplate.
+     * Para añadir más: importar de 'lucide-angular' y agregar al objeto.
+     * Referencia: https://lucide.dev/icons
+     * Guía de iconos del DS: skills/design-system/SKILL.md
+     */
+    provideIcons({
+      // Boilerplate (dashboard, kpi-card, sidebar, alert-card)
+      Activity, AlertCircle, AlertTriangle, ArrowRight, BarChart2, CheckCircle,
+      ChevronRight, Download, LayoutDashboard, Plus, Settings,
+      TrendingDown, TrendingUp, User, Users,
+      // Shell support
+      Bell, LogOut, Menu, Search, X,
+      // Acciones comunes
+      Check, Edit, Info, Trash2,
+    }),
   ],
 };
