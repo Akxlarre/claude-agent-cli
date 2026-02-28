@@ -127,6 +127,10 @@ function analyzeTypeScript(filePath) {
     }
 
     // ── Regla 2: Sin inject(*Service) en componentes vista ──────────────────
+    // Servicios de infraestructura permitidos en componentes (no son Facades pero
+    // son parte del design system y no acceden a datos externos directamente).
+    const ALLOWED_SERVICES_IN_COMPONENTS = ['GsapAnimationsService'];
+
     if (isViewComponent) {
         walkAst(sourceFile, node => {
             if (!ts.isCallExpression(node)) return;
@@ -138,7 +142,12 @@ function analyzeTypeScript(filePath) {
             const argText = node.arguments[0].getText(sourceFile);
 
             // Dispara si el argumento termina en 'Service' pero NO en 'FacadeService'
-            if (argText.endsWith('Service') && !argText.endsWith('FacadeService')) {
+            // y no está en la whitelist de servicios de infraestructura permitidos.
+            if (
+                argText.endsWith('Service') &&
+                !argText.endsWith('FacadeService') &&
+                !ALLOWED_SERVICES_IN_COMPONENTS.includes(argText)
+            ) {
                 reportError(
                     2, filePath,
                     `Inyección directa de '${argText}' en componente vista`,
