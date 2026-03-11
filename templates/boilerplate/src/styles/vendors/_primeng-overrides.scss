@@ -164,7 +164,9 @@
   margin-bottom: var(--space-3) !important;
   border-width: 1px;
   overflow: visible !important;
-  transition: transform var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
+  transition:
+    transform var(--duration-fast) ease,
+    box-shadow var(--duration-fast) ease;
 }
 
 /* Barra de progreso vía pseudo-elemento (solo cuando NO hay headless) */
@@ -181,34 +183,42 @@
   background: rgba(0, 0, 0, 0.4) !important;
   border-radius: 0 0 var(--radius-md) var(--radius-md) !important;
   transform-origin: left !important;
-  animation: toast-progress-shrink 4s linear forwards !important;
+  animation: toast-progress-shrink var(--duration-toast-life, 3s) linear forwards !important;
   z-index: 10 !important;
   pointer-events: none !important;
 }
 
 /* Colores de barra por severidad (pseudo-elemento) — tonos oscuros para contraste profesional */
 .p-toast-message-success:not(:has(.toast-headless-wrapper))::after {
-  background: linear-gradient(90deg,
-      var(--state-success) 0%,
-      color-mix(in srgb, var(--state-success) 72%, black) 100%) !important;
+  background: linear-gradient(
+    90deg,
+    var(--state-success) 0%,
+    color-mix(in srgb, var(--state-success) 72%, black) 100%
+  ) !important;
 }
 
 .p-toast-message-error:not(:has(.toast-headless-wrapper))::after {
-  background: linear-gradient(90deg,
-      var(--state-error) 0%,
-      color-mix(in srgb, var(--state-error) 72%, black) 100%) !important;
+  background: linear-gradient(
+    90deg,
+    var(--state-error) 0%,
+    color-mix(in srgb, var(--state-error) 72%, black) 100%
+  ) !important;
 }
 
 .p-toast-message-warn:not(:has(.toast-headless-wrapper))::after {
-  background: linear-gradient(90deg,
-      var(--state-warning) 0%,
-      color-mix(in srgb, var(--state-warning) 72%, black) 100%) !important;
+  background: linear-gradient(
+    90deg,
+    var(--state-warning) 0%,
+    color-mix(in srgb, var(--state-warning) 72%, black) 100%
+  ) !important;
 }
 
 .p-toast-message-info:not(:has(.toast-headless-wrapper))::after {
-  background: linear-gradient(90deg,
-      var(--state-info) 0%,
-      color-mix(in srgb, var(--state-info) 72%, black) 100%) !important;
+  background: linear-gradient(
+    90deg,
+    var(--state-info) 0%,
+    color-mix(in srgb, var(--state-info) 72%, black) 100%
+  ) !important;
 }
 
 .p-toast-message:hover {
@@ -261,34 +271,42 @@
   background: rgba(0, 0, 0, 0.35);
   border-radius: 0 0 var(--radius-md) var(--radius-md);
   transform-origin: left;
-  animation: toast-progress-shrink 4s linear forwards;
+  animation: toast-progress-shrink var(--duration-toast-life, 3s) linear forwards;
   z-index: 1;
   pointer-events: none;
 }
 
 /* Colores de barra por severidad (headless) — tonos oscuros para contraste profesional */
 .p-toast-message-success .toast-progress-bar {
-  background: linear-gradient(90deg,
-      var(--state-success) 0%,
-      color-mix(in srgb, var(--state-success) 72%, black) 100%);
+  background: linear-gradient(
+    90deg,
+    var(--state-success) 0%,
+    color-mix(in srgb, var(--state-success) 72%, black) 100%
+  );
 }
 
 .p-toast-message-error .toast-progress-bar {
-  background: linear-gradient(90deg,
-      var(--state-error) 0%,
-      color-mix(in srgb, var(--state-error) 72%, black) 100%);
+  background: linear-gradient(
+    90deg,
+    var(--state-error) 0%,
+    color-mix(in srgb, var(--state-error) 72%, black) 100%
+  );
 }
 
 .p-toast-message-warn .toast-progress-bar {
-  background: linear-gradient(90deg,
-      var(--state-warning) 0%,
-      color-mix(in srgb, var(--state-warning) 72%, black) 100%);
+  background: linear-gradient(
+    90deg,
+    var(--state-warning) 0%,
+    color-mix(in srgb, var(--state-warning) 72%, black) 100%
+  );
 }
 
 .p-toast-message-info .toast-progress-bar {
-  background: linear-gradient(90deg,
-      var(--state-info) 0%,
-      color-mix(in srgb, var(--state-info) 72%, black) 100%);
+  background: linear-gradient(
+    90deg,
+    var(--state-info) 0%,
+    color-mix(in srgb, var(--state-info) 72%, black) 100%
+  );
 }
 
 @keyframes toast-progress-shrink {
@@ -301,8 +319,20 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
+/* Toast tema: duración rápida (1.5s) sincronizada con life: 1500 */
+.p-toast-message.toast-theme::after,
+.p-toast-message.toast-theme .toast-headless-wrapper .toast-progress-bar {
+  animation-duration: 1.5s !important;
+}
 
+/* Toast: clases vacías para motion — la animación real es GSAP (AppComponent motionOptions) */
+.toast-gsap-from,
+.toast-gsap-active,
+.toast-gsap-to {
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
   .p-toast-message::after,
   .toast-headless-wrapper .toast-progress-bar {
     animation: none !important;
@@ -327,7 +357,7 @@
 }
 
 /* Botón cerrar: PrimeNG (template) o headless */
-.p-toast-message-content>div:last-of-type,
+.p-toast-message-content > div:last-of-type,
 .toast-headless-content .p-toast-close-button {
   flex-shrink: 0 !important;
   display: flex !important;
@@ -365,7 +395,9 @@
   cursor: pointer !important;
   opacity: 1 !important;
   color: inherit !important;
-  transition: opacity var(--duration-fast) ease, background var(--duration-fast) ease !important;
+  transition:
+    opacity var(--duration-fast) ease,
+    background var(--duration-fast) ease !important;
 }
 
 .p-toast-message-content .p-toast-close-button:hover {
@@ -463,6 +495,37 @@ app-main-layout p-toast.p-toast-top-center,
   border-color: color-mix(in srgb, var(--state-error) 85%, black) !important;
 }
 
+/* ── Toolbar actions (topbar): neutro / hover / abierto ───────────────────────
+   Neutro: sin fondo, sin borde, sin sombra.
+   Hover: aparición de sombra.
+   Abierto: gradiente/azul, permanece hasta cerrar. */
+.toolbar-actions .p-button.p-button-secondary {
+  background: transparent !important;
+  border-color: transparent !important;
+  color: var(--text-secondary) !important;
+  box-shadow: none !important;
+}
+
+.toolbar-actions .p-button.p-button-secondary:hover {
+  background: var(--color-primary-muted) !important;
+  border-color: transparent !important;
+  color: var(--ds-brand) !important;
+  box-shadow: 0 4px 12px var(--accent-glow) !important;
+}
+
+.toolbar-actions .p-button.p-button-primary {
+  background: var(--gradient-primary) !important;
+  border-color: transparent !important;
+  color: var(--color-primary-text) !important;
+  box-shadow: 0 4px 12px var(--accent-glow) !important;
+}
+
+.toolbar-actions .p-button.p-button-primary:hover {
+  background: var(--gradient-primary) !important;
+  filter: brightness(1.08);
+  box-shadow: 0 4px 12px var(--accent-glow) !important;
+}
+
 /* Breadcrumb - design system tokens (global) */
 .p-breadcrumb {
   background: transparent !important;
@@ -524,6 +587,51 @@ app-main-layout p-toast.p-toast-top-center,
   font-size: var(--text-sm);
 }
 
+/* Select (Dropdown) Centering Fix & Premium Overlay */
+.p-select {
+  align-items: center;
+}
+
+.p-select .p-select-label {
+  display: flex !important;
+  align-items: center;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  height: 100%;
+}
+
+/* Premium Dropdown Options Overlay */
+.p-select-panel {
+  padding: var(--space-1) !important;
+}
+
+.p-select-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 !important;
+}
+
+.p-select-option {
+  border-radius: var(--radius-md) !important;
+  padding: var(--space-2) var(--space-3) !important;
+  margin: 0 !important;
+  transition: all var(--motion-duration-fast) var(--motion-ease-standard) !important;
+}
+
+/* El estado "focus" al navegar con teclado o hover suave */
+.p-select-option:not(.p-select-option-selected):hover,
+.p-select-option.p-select-option-focus:not(.p-select-option-selected) {
+  background-color: var(--bg-elevated) !important;
+  color: var(--text-primary) !important;
+}
+
+/* El estado seleccionado con highlight de color brand */
+.p-select-option.p-select-option-selected {
+  background-color: var(--color-primary-muted) !important;
+  color: var(--ds-brand) !important;
+  font-weight: var(--font-medium) !important;
+}
 /* DatePicker — trigger (dropdown button) e input */
 .p-datepicker,
 .p-datepicker.p-inputwrapper {
@@ -553,12 +661,12 @@ app-main-layout p-toast.p-toast-top-center,
     background: var(--bg-surface) !important;
   }
 
-  .p-datatable-thead>tr>th {
+  .p-datatable-thead > tr > th {
     background: var(--bg-base) !important;
     color: var(--text-primary) !important;
   }
 
-  .p-datatable-tbody>tr>td {
+  .p-datatable-tbody > tr > td {
     background: var(--bg-surface) !important;
     color: var(--text-secondary) !important;
   }
@@ -579,11 +687,11 @@ app-main-layout p-toast.p-toast-top-center,
   }
 
   /* Aumentar padding incluso con p-datatable-sm */
-  &.p-datatable-sm .p-datatable-thead>tr>th {
+  &.p-datatable-sm .p-datatable-thead > tr > th {
     padding: var(--space-3) var(--space-4) !important;
   }
 
-  &.p-datatable-sm .p-datatable-tbody>tr>td {
+  &.p-datatable-sm .p-datatable-tbody > tr > td {
     padding: var(--space-3) var(--space-4) !important;
   }
 }
@@ -611,8 +719,8 @@ app-main-layout p-toast.p-toast-top-center,
     display: flex;
     align-items: center;
     gap: 0;
-    padding-bottom: var(--space-4);
-    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-3);
+    margin-bottom: var(--space-2);
     border-bottom: 1px solid var(--border-default);
   }
 
@@ -630,13 +738,15 @@ app-main-layout p-toast.p-toast-top-center,
   .p-step-header {
     display: flex;
     align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-2) var(--space-3);
+    gap: var(--space-1-5, 0.375rem);
+    padding: var(--space-1) var(--space-2);
     border: none;
     background: transparent;
     border-radius: var(--radius-md);
     cursor: pointer;
-    transition: background var(--stepper-transition), color var(--stepper-transition);
+    transition:
+      background var(--stepper-transition),
+      color var(--stepper-transition);
     font-family: var(--font-body);
     font-size: var(--text-sm);
     color: var(--text-muted);
@@ -671,7 +781,10 @@ app-main-layout p-toast.p-toast-top-center,
     color: var(--text-muted);
     font-weight: var(--font-semibold);
     font-size: var(--text-xs);
-    transition: background var(--stepper-transition), color var(--stepper-transition), transform var(--stepper-transition);
+    transition:
+      background var(--stepper-transition),
+      color var(--stepper-transition),
+      transform var(--stepper-transition);
   }
 
   .p-step-title {
@@ -691,26 +804,32 @@ app-main-layout p-toast.p-toast-top-center,
     transform: scale(1.05);
   }
 
-  &.stepper-premium--step-2 .p-step:nth-child(1) .p-step-number,
-  &.stepper-premium--step-3 .p-step:nth-child(1) .p-step-number,
-  &.stepper-premium--step-3 .p-step:nth-child(2) .p-step-number {
-    font-size: 0;
-    position: relative;
-    background: var(--state-success) !important;
-    color: white !important;
-  }
+  /* Completed steps: green checkmark indicator + green separator
+     Generated for steps 2–6 (each marks all previous steps as completed) */
+  @for $step from 2 through 6 {
+    @for $prev from 1 through ($step - 1) {
+      &.stepper-premium--step-#{$step} .p-step:nth-child(#{$prev}) .p-step-number {
+        font-size: 0;
+        position: relative;
+        background: var(--state-success) !important;
+        color: white !important;
+      }
 
-  &.stepper-premium--step-2 .p-step:nth-child(1) .p-step-number::after,
-  &.stepper-premium--step-3 .p-step:nth-child(1) .p-step-number::after,
-  &.stepper-premium--step-3 .p-step:nth-child(2) .p-step-number::after {
-    content: '✓';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 0.75rem;
-    font-weight: 700;
-    line-height: 1;
+      &.stepper-premium--step-#{$step} .p-step:nth-child(#{$prev}) .p-step-number::after {
+        content: '✓';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 0.75rem;
+        font-weight: 700;
+        line-height: 1;
+      }
+
+      &.stepper-premium--step-#{$step} .p-step:nth-child(#{$prev}) .p-stepper-separator {
+        background: var(--state-success);
+      }
+    }
   }
 
   .p-stepper-separator {
@@ -723,15 +842,29 @@ app-main-layout p-toast.p-toast-top-center,
     transition: background var(--stepper-transition);
   }
 
-  &.stepper-premium--step-2 .p-step:nth-child(1) .p-stepper-separator,
-  &.stepper-premium--step-3 .p-step:nth-child(1) .p-stepper-separator,
-  &.stepper-premium--step-3 .p-step:nth-child(2) .p-stepper-separator {
-    background: var(--state-success);
-  }
-
   .p-steppanel-content {
     position: relative;
     pointer-events: auto;
+  }
+
+  /* Layout del stepper en modo wizard de pantalla completa */
+  &.p-stepper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .p-stepper-panels {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+    padding: 0;
+  }
+
+  /* Ocultar la nav nativa — usamos el tracker custom del header */
+  .p-stepper-nav {
+    display: none !important;
   }
 }
 
@@ -747,7 +880,6 @@ i.pi {
    PrimeNG Aura puede inyectar fondos claros; estos overrides los corrigen.
    ============================================ */
 [data-mode='dark'] {
-
   /* Tailwind bg-surface: asegurar que se respete en dark */
   .bg-surface {
     background-color: var(--bg-surface) !important;
@@ -762,8 +894,8 @@ i.pi {
   .p-datatable-wrapper,
   .p-datatable .p-datatable-table-wrapper,
   .p-datatable .p-datatable-table,
-  .p-datatable-thead>tr>th,
-  .p-datatable-tbody>tr>td {
+  .p-datatable-thead > tr > th,
+  .p-datatable-tbody > tr > td {
     background-color: var(--bg-surface) !important;
   }
 
@@ -803,10 +935,19 @@ i.pi {
     color: var(--text-secondary) !important;
   }
 
-  .p-select-option.p-select-option-focus,
+  /* Hover & Focus (Not selected) */
+  .p-select-option:not(.p-select-option-selected):hover,
+  .p-select-option.p-select-option-focus:not(.p-select-option-selected),
   .p-select-item.p-select-item-focus {
     background-color: var(--bg-elevated) !important;
     color: var(--text-primary) !important;
+  }
+
+  /* Selected state */
+  .p-select-option.p-select-option-selected {
+    background-color: var(--color-primary-muted) !important;
+    color: var(--ds-brand) !important;
+    font-weight: var(--font-medium) !important;
   }
 
   /* p-dialog — contenido y overlay */

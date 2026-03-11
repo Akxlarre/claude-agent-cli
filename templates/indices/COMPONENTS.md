@@ -1,6 +1,7 @@
 # Registro de Componentes (Atomic Design)
 
-> **Regla de Actualización (OBLIGATORIA):** El Agente DEBE usar sus herramientas de sistema (escritura de archivos) para agregar los nuevos componentes a estas tablas. Solo si el entorno no los soporta, usa el bloque `<memory_update>` para que el humano lo copie.
+> **Regla de Actualización (CRÍTICA - SINGLE SOURCE OF TRUTH):** El Agente DEBE usar sus herramientas de sistema (escritura de archivos) para agregar incondicionalmente todos los nuevos componentes creados a estas tablas. 
+> Esta tabla es tu ÚNICA fuente de la verdad para conocer qué átomos y moléculas existen. Antes de crear un componente UI, verifica aquí si ya existe uno que resuelva el problema. Si ignoras mantener esta tabla actualizada, fallarás en la tarea gravemente por provocar duplicación de código e inconsistencia de UI.
 
 ## Átomos (Atoms)
 *Elementos UI básicos e indivisibles (botones, inputs, badges).*
