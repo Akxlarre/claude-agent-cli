@@ -1,4 +1,4 @@
-import { ApplicationConfig } from "@angular/core";
+import { ApplicationConfig, importProvidersFrom } from "@angular/core";
 import {
   provideRouter,
   withComponentInputBinding,
@@ -8,16 +8,75 @@ import { provideAnimationsAsync } from "@angular/platform-browser/animations/asy
 import { providePrimeNG } from "primeng/config";
 import Aura from "@primeng/themes/aura";
 import { MessageService, ConfirmationService } from "primeng/api";
-import { provideIcons } from "lucide-angular";
 import {
-  // ── Usados por el boilerplate (dashboard, kpi-card, sidebar) ──
-  Activity, AlertCircle, AlertTriangle, ArrowRight, BarChart2, CheckCircle,
-  ChevronRight, Download, LayoutDashboard, Plus, Settings,
-  TrendingDown, TrendingUp, User, Users,
+  LucideAngularModule,
+  // ── Boilerplate (dashboard, kpi-card, sidebar, alert-card) ──
+  Activity,
+  AlertCircle,
+  AlertTriangle,
+  ArrowRight,
+  BarChart2,
+  CheckCircle,
+  ChevronRight,
+  Download,
+  LayoutDashboard,
+  Plus,
+  Settings,
+  TrendingDown,
+  TrendingUp,
+  User,
+  Users,
   // ── Shell support (topbar, login, mobile drawer) ──
-  Bell, LogOut, Menu, Search, X,
-  // ── Acciones comunes (ampliar según el proyecto — ver lucide.dev) ──
-  Check, Edit, Info, Trash2,
+  Bell,
+  LogOut,
+  Menu,
+  Search,
+  X,
+  // ── Acciones comunes ──
+  Check,
+  Edit,
+  Info,
+  Trash2,
+  // ── Navegación ──
+  ArrowLeft,
+  ChevronDown,
+  ChevronLeft,
+  ChevronUp,
+  Home,
+  Layers,
+  // ── Contenido ──
+  Calendar,
+  Clock,
+  FileText,
+  FolderOpen,
+  Image,
+  Upload,
+  // ── Acciones extendidas ──
+  Copy,
+  Eye,
+  EyeOff,
+  Filter,
+  MoreHorizontal,
+  MoreVertical,
+  RefreshCw,
+  Save,
+  Share2,
+  // ── Comunicación ──
+  Mail,
+  MessageCircle,
+  Send,
+  // ── Estado ──
+  Ban,
+  Circle,
+  HelpCircle,
+  Loader,
+  ShieldCheck,
+  Star,
+  Tag,
+  XCircle,
+  // ── Tema ──
+  Moon,
+  Sun,
 } from "lucide-angular";
 
 import { routes } from "./app.routes";
@@ -49,22 +108,83 @@ export const appConfig: ApplicationConfig = {
     MessageService,
     ConfirmationService,
     /**
-     * Lucide Icons — Set mínimo del shell (23 íconos).
+     * Lucide Icons — Set curado SaaS (~48 íconos).
      *
-     * Solo se incluyen los íconos activamente usados por el boilerplate.
+     * Incluye los íconos del boilerplate + un set genérico para features SaaS.
      * Para añadir más: importar de 'lucide-angular' y agregar al objeto.
      * Referencia: https://lucide.dev/icons
      * Guía de iconos del DS: skills/design-system/SKILL.md
      */
-    provideIcons({
-      // Boilerplate (dashboard, kpi-card, sidebar, alert-card)
-      Activity, AlertCircle, AlertTriangle, ArrowRight, BarChart2, CheckCircle,
-      ChevronRight, Download, LayoutDashboard, Plus, Settings,
-      TrendingDown, TrendingUp, User, Users,
-      // Shell support
-      Bell, LogOut, Menu, Search, X,
-      // Acciones comunes
-      Check, Edit, Info, Trash2,
-    }),
+    importProvidersFrom(
+      LucideAngularModule.pick({
+        // Boilerplate (dashboard, kpi-card, sidebar, alert-card)
+        Activity,
+        AlertCircle,
+        AlertTriangle,
+        ArrowRight,
+        BarChart2,
+        CheckCircle,
+        ChevronRight,
+        Download,
+        LayoutDashboard,
+        Plus,
+        Settings,
+        TrendingDown,
+        TrendingUp,
+        User,
+        Users,
+        // Shell support
+        Bell,
+        LogOut,
+        Menu,
+        Search,
+        X,
+        // Acciones comunes
+        Check,
+        Edit,
+        Info,
+        Trash2,
+        // Navegación
+        ArrowLeft,
+        ChevronDown,
+        ChevronLeft,
+        ChevronUp,
+        Home,
+        Layers,
+        // Contenido
+        Calendar,
+        Clock,
+        FileText,
+        FolderOpen,
+        Image,
+        Upload,
+        // Acciones extendidas
+        Copy,
+        Eye,
+        EyeOff,
+        Filter,
+        MoreHorizontal,
+        MoreVertical,
+        RefreshCw,
+        Save,
+        Share2,
+        // Comunicación
+        Mail,
+        MessageCircle,
+        Send,
+        // Estado
+        Ban,
+        Circle,
+        HelpCircle,
+        Loader,
+        ShieldCheck,
+        Star,
+        Tag,
+        XCircle,
+        // Tema
+        Moon,
+        Sun,
+      }),
+    ),
   ],
 };

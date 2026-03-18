@@ -69,6 +69,8 @@ process.stdin.on('end', () => {
           `Lee al menos uno de estos archivos primero:\n` +
           `  - indices/COMPONENTS.md\n` +
           `  - indices/SERVICES.md\n` +
+          `  - indices/FACADES.md\n` +
+          `  - indices/MODELS.md\n` +
           `  - indices/DATABASE.md\n` +
           `  - indices/DIRECTIVES.md\n` +
           `  - indices/STYLES.md\n` +
@@ -145,6 +147,18 @@ process.stdin.on('end', () => {
             '     Solo usan input() y output(). Mueve la logica a un Smart component en features/.'
           );
       }
+
+      // MessageService directo en componentes UI
+      if (
+        (normalizedPath.includes('features/') || normalizedPath.includes('shared/') || normalizedPath.includes('layout/')) &&
+        normalizedPath.endsWith('.component.ts') &&
+        /inject\s*\(\s*MessageService\s*\)/.test(newContent)
+      )
+        violations.push(
+          'No inyectar MessageService de PrimeNG directamente en componentes.\n' +
+          '     Usa ToastService (core/services/toast.service.ts) para toasts efimeros.\n' +
+          '     Ver: .claude/rules/notifications.md'
+        );
     }
 
     // --- SCSS / CSS checks (solo en src/) ---
@@ -218,6 +232,8 @@ process.stdin.on('end', () => {
           '  - KPIs: usar <app-kpi-card> (ya existe en shared/). No recrear composicion KPI manualmente.',
           '  - Iconos: <app-icon name="kebab-case" [size]="20" /> SIEMPRE. PROHIBIDO emojis en UI.',
           '  - Animaciones: GsapAnimationsService en ngAfterViewInit. No @angular/animations.',
+          '  - Toasts: inject(ToastService) para feedback efimero. NUNCA inject(MessageService) directo.',
+          '  - Botones: class="btn-primary", "btn-secondary", "btn-ghost" (3 tiers en tailwind.css).',
           '[SKILL angular-component] Usa input(), output(), @if/@for, host bindings, ChangeDetectionStrategy.OnPush.',
           '[SKILL design-system] Consulta indices/STYLES.md para tokens disponibles.',
           '[SKILL angular-signals] signal() para estado UI, computed() para derivados, effect() para side-effects.'
@@ -256,6 +272,7 @@ process.stdin.on('end', () => {
           '  - Media entre UI (features/) y APIs de datos (SupabaseService/HttpClient).',
           '  - Expone estado al template con toSignal().',
           '  - Captura errores con catchError y expone signal de error.',
+          '  - Para feedback al usuario tras mutaciones, usa inject(ToastService): toast.success(), toast.error().',
           '  - DEBE tener .spec.ts companero (Agentic TDD).',
           '[SKILL angular-signals] Usa signal() para estado, computed() para derivados, toSignal() para RxJS->template.'
         );
@@ -292,6 +309,7 @@ process.stdin.on('end', () => {
         '  - Bento Grid: .bento-grid + [appBentoGridLayout]. Hijos: .bento-square/.bento-wide/.bento-tall/.bento-feature/.bento-hero.',
         '  - Iconos: <app-icon name="kebab-case" [size]="16" /> SIEMPRE. PROHIBIDO emojis en la UI.',
         '  - KPIs: <span class="kpi-value">24K</span> + <span class="kpi-label">USUARIOS</span>. No text-4xl plano.',
+        '  - Botones: class="btn-primary" (CTA), class="btn-secondary" (secundario), class="btn-ghost" (terciario). Definidos en tailwind.css.',
         '  - Superficies: class="surface-hero" en banners/hero sections. class="surface-glass" en overlays flotantes.',
         '  - Indicadores: class="indicator-live" para estado en tiempo real. class="badge-pulse" en badges de conteo.',
         '[REGLA ai-readability.md] Botones de mutacion: data-llm-action="accion". Inputs criticos: data-llm-description="desc". Nav: data-llm-nav.',

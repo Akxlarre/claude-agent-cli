@@ -1,7 +1,7 @@
 import { Injectable, inject, signal, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { GsapAnimationsService } from './gsap-animations.service';
-import { MessageService } from 'primeng/api';
+import { ToastService } from './toast.service';
 
 export type ColorMode = 'light' | 'dark' | 'system';
 
@@ -28,7 +28,7 @@ export type ColorMode = 'light' | 'dark' | 'system';
 export class ThemeService {
     private platformId = inject(PLATFORM_ID);
     private gsap = inject(GsapAnimationsService);
-    private messageService = inject(MessageService);
+    private toast = inject(ToastService);
 
     private readonly STORAGE_KEY_MODE = 'app-color-mode';
 
@@ -172,12 +172,7 @@ export class ThemeService {
             : isDark
               ? 'Modo oscuro activado'
               : 'Modo claro activado';
-        this.messageService.add({
-            severity: 'info',
-            summary: msg,
-            detail: '',
-            life: 1500,
-        });
+        this.toast.info(msg);
     }
 
     private applyDarkModeToDOM(isDark: boolean): void {

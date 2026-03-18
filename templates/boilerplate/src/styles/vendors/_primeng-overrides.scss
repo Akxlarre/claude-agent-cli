@@ -1,10 +1,15 @@
 /* ============================================
    PrimeNG Theme Overrides
    Mapping PrimeNG tokens to Design System
+
+   Todas las variables --p-* referencian tokens de
+   _variables.scss que auto-switch en [data-mode='dark'].
+   El bloque dark mode al final solo cubre edge-cases
+   donde PrimeNG inyecta valores hardcodeados.
    ============================================ */
 
 :root {
-  /* Colors — usar --ds-brand para evitar conflicto con DaisyUI (--color-primary = texto legible) */
+  /* Colors — Brand */
   --p-primary-color: var(--ds-brand);
   --p-primary-contrast-color: var(--color-primary-text);
   --p-primary-hover-color: var(--color-primary-hover);
@@ -16,30 +21,38 @@
   --p-content-border-color: var(--border-default);
   --p-content-color: var(--text-primary);
 
-  /* Form Inputs */
-  --p-inputtext-background: var(--bg-surface);
-  --p-inputtext-color: var(--text-primary);
-  --p-inputtext-border-color: var(--border-default);
-  --p-inputtext-hover-border-color: var(--ds-brand);
-  --p-inputtext-focus-border-color: var(--ds-brand);
+  /* Form Inputs — aligned with --input-* tokens from _variables.scss */
+  --p-inputtext-background: var(--input-bg);
+  --p-inputtext-color: var(--input-text);
+  --p-inputtext-border-color: var(--input-border-default);
+  --p-inputtext-hover-border-color: var(--input-border-focus);
+  --p-inputtext-focus-border-color: var(--input-border-focus);
   --p-inputtext-focus-ring-color: var(--accent-glow);
-  --p-inputtext-focus-ring-shadow: var(--shadow-focus);
-  --p-inputtext-border-radius: var(--radius-md);
+  --p-inputtext-focus-ring-shadow: var(--input-shadow-focus-neutral);
+  --p-inputtext-border-radius: var(--input-radius);
 
-  /* Buttons */
-  --p-button-primary-background: var(--ds-brand);
-  --p-button-primary-border-color: var(--ds-brand);
-  --p-button-primary-hover-background: var(--color-primary-hover);
-  --p-button-primary-hover-border-color: var(--color-primary-hover);
-  --p-button-border-radius: var(--radius-full);
+  /* Buttons — radius aligned with DS btn tokens */
+  --p-button-primary-background: var(--btn-primary-bg);
+  --p-button-primary-border-color: var(--btn-primary-bg);
+  --p-button-primary-hover-background: var(--btn-primary-bg-hover);
+  --p-button-primary-hover-border-color: var(--btn-primary-bg-hover);
+  --p-button-border-radius: var(--btn-primary-radius);
 
-  /* Button success - design system tokens */
+  /* Button success */
   --p-button-success-background: var(--state-success);
   --p-button-success-border-color: var(--state-success);
-  --p-button-success-hover-background: color-mix(in srgb, var(--state-success) 85%, black);
-  --p-button-success-hover-border-color: color-mix(in srgb, var(--state-success) 85%, black);
+  --p-button-success-hover-background: color-mix(
+    in srgb,
+    var(--state-success) 85%,
+    black
+  );
+  --p-button-success-hover-border-color: color-mix(
+    in srgb,
+    var(--state-success) 85%,
+    black
+  );
 
-  /* Button secondary - design system tokens */
+  /* Button secondary */
   --p-button-secondary-background: var(--bg-elevated);
   --p-button-secondary-border-color: var(--border-default);
   --p-button-secondary-color: var(--text-secondary);
@@ -47,17 +60,17 @@
   --p-button-secondary-hover-border-color: var(--accent-border);
   --p-button-secondary-hover-color: var(--ds-brand);
 
-  /* Breadcrumb - design system tokens */
+  /* Breadcrumb */
   --p-breadcrumb-color: var(--text-secondary);
   --p-breadcrumb-separator-color: var(--text-muted);
   --p-breadcrumb-item-hover-color: var(--ds-brand);
   --p-breadcrumb-item-active-color: var(--text-primary);
 
   /* Cards & Panels */
-  --p-card-background: var(--bg-surface);
+  --p-card-background: var(--card-bg);
   --p-card-color: var(--text-primary);
-  --p-card-shadow: var(--shadow-md);
-  --p-card-border-radius: var(--radius-xl);
+  --p-card-shadow: var(--card-shadow);
+  --p-card-border-radius: var(--card-radius);
 
   /* Tables */
   --p-datatable-header-background: var(--bg-base);
@@ -153,25 +166,26 @@
   --p-radiobutton-hover-border-color: var(--ds-brand);
 }
 
-/* Toast: diseño compacto y alineado (design system) */
+/* ============================================
+   Toast — Design System Compact Layout
+   ============================================ */
 .p-toast-message {
   position: relative !important;
   padding: var(--space-3) var(--space-4) !important;
   padding-bottom: calc(var(--space-3) + 6px) !important;
-  /* Espacio para barra de progreso */
   border-radius: var(--radius-md) !important;
   box-shadow: var(--shadow-md) !important;
   margin-bottom: var(--space-3) !important;
   border-width: 1px;
   overflow: visible !important;
   transition:
-    transform var(--duration-fast) ease,
-    box-shadow var(--duration-fast) ease;
+    transform var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard);
 }
 
-/* Barra de progreso vía pseudo-elemento (solo cuando NO hay headless) */
-.p-toast-message:not(:has(.toast-headless-wrapper))::after {
-  content: '' !important;
+/* Progress bar via pseudo-element */
+.p-toast-message::after {
+  content: "" !important;
   display: block !important;
   position: absolute !important;
   bottom: 0 !important;
@@ -183,13 +197,14 @@
   background: rgba(0, 0, 0, 0.4) !important;
   border-radius: 0 0 var(--radius-md) var(--radius-md) !important;
   transform-origin: left !important;
-  animation: toast-progress-shrink var(--duration-toast-life, 3s) linear forwards !important;
+  animation: toast-progress-shrink var(--duration-toast-life, 3s) linear
+    forwards !important;
   z-index: 10 !important;
   pointer-events: none !important;
 }
 
-/* Colores de barra por severidad (pseudo-elemento) — tonos oscuros para contraste profesional */
-.p-toast-message-success:not(:has(.toast-headless-wrapper))::after {
+/* Progress bar colors by severity */
+.p-toast-message-success::after {
   background: linear-gradient(
     90deg,
     var(--state-success) 0%,
@@ -197,7 +212,7 @@
   ) !important;
 }
 
-.p-toast-message-error:not(:has(.toast-headless-wrapper))::after {
+.p-toast-message-error::after {
   background: linear-gradient(
     90deg,
     var(--state-error) 0%,
@@ -205,7 +220,7 @@
   ) !important;
 }
 
-.p-toast-message-warn:not(:has(.toast-headless-wrapper))::after {
+.p-toast-message-warn::after {
   background: linear-gradient(
     90deg,
     var(--state-warning) 0%,
@@ -213,7 +228,7 @@
   ) !important;
 }
 
-.p-toast-message-info:not(:has(.toast-headless-wrapper))::after {
+.p-toast-message-info::after {
   background: linear-gradient(
     90deg,
     var(--state-info) 0%,
@@ -222,119 +237,21 @@
 }
 
 .p-toast-message:hover {
-  transform: translateY(-2px);
+  transform: translateY(var(--card-hover-lift-y));
   box-shadow: var(--shadow-lg);
-}
-
-/* Toast headless: wrapper cubre TODO el toast para capturar hover; barra en borde inferior */
-.toast-headless-wrapper {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  flex: 1;
-  /* Extiende al área de padding para capturar hover y que la barra llegue al borde */
-  margin: calc(-1 * var(--space-3)) calc(-1 * var(--space-4));
-  margin-bottom: calc(-1 * (var(--space-3) + 6px));
-  padding: var(--space-3) var(--space-4);
-  padding-bottom: calc(var(--space-2) + 4px);
-}
-
-.toast-headless-content {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--space-3);
-  flex: 1 1 auto;
-  min-width: 0;
-}
-
-.toast-headless-content .p-toast-message-icon {
-  flex-shrink: 0;
-}
-
-.toast-headless-content .p-toast-message-text {
-  flex: 1 1 auto;
-  min-width: 0;
-}
-
-.toast-headless-content .p-toast-close-button {
-  flex-shrink: 0;
-}
-
-/* Barra de progreso pegada al borde inferior del toast */
-.toast-headless-wrapper .toast-progress-bar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: rgba(0, 0, 0, 0.35);
-  border-radius: 0 0 var(--radius-md) var(--radius-md);
-  transform-origin: left;
-  animation: toast-progress-shrink var(--duration-toast-life, 3s) linear forwards;
-  z-index: 1;
-  pointer-events: none;
-}
-
-/* Colores de barra por severidad (headless) — tonos oscuros para contraste profesional */
-.p-toast-message-success .toast-progress-bar {
-  background: linear-gradient(
-    90deg,
-    var(--state-success) 0%,
-    color-mix(in srgb, var(--state-success) 72%, black) 100%
-  );
-}
-
-.p-toast-message-error .toast-progress-bar {
-  background: linear-gradient(
-    90deg,
-    var(--state-error) 0%,
-    color-mix(in srgb, var(--state-error) 72%, black) 100%
-  );
-}
-
-.p-toast-message-warn .toast-progress-bar {
-  background: linear-gradient(
-    90deg,
-    var(--state-warning) 0%,
-    color-mix(in srgb, var(--state-warning) 72%, black) 100%
-  );
-}
-
-.p-toast-message-info .toast-progress-bar {
-  background: linear-gradient(
-    90deg,
-    var(--state-info) 0%,
-    color-mix(in srgb, var(--state-info) 72%, black) 100%
-  );
 }
 
 @keyframes toast-progress-shrink {
   from {
     transform: scaleX(1);
   }
-
   to {
     transform: scaleX(0);
   }
 }
 
-/* Toast tema: duración rápida (1.5s) sincronizada con life: 1500 */
-.p-toast-message.toast-theme::after,
-.p-toast-message.toast-theme .toast-headless-wrapper .toast-progress-bar {
-  animation-duration: 1.5s !important;
-}
-
-/* Toast: clases vacías para motion — la animación real es GSAP (AppComponent motionOptions) */
-.toast-gsap-from,
-.toast-gsap-active,
-.toast-gsap-to {
-  animation: none !important;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .p-toast-message::after,
-  .toast-headless-wrapper .toast-progress-bar {
+  .p-toast-message::after {
     animation: none !important;
     opacity: 0.25 !important;
   }
@@ -348,26 +265,15 @@
   }
 }
 
-/* Toast: content flex (template message) y headless */
-.p-toast-message-content,
-.toast-headless-content {
+.p-toast-message-content {
   display: flex !important;
   align-items: flex-start !important;
   gap: var(--space-3) !important;
 }
 
-/* Botón cerrar: PrimeNG (template) o headless */
-.p-toast-message-content > div:last-of-type,
-.toast-headless-content .p-toast-close-button {
-  flex-shrink: 0 !important;
-  display: flex !important;
-  align-items: center !important;
-}
-
 .p-toast-message-icon {
   flex-shrink: 0;
   margin-top: 2px;
-  /* Alinea con baseline del summary */
   line-height: 1;
 }
 
@@ -376,9 +282,8 @@
   min-width: 0;
 }
 
-/* Toast: botón cerrar visible (template o headless) */
-.p-toast-message-content .p-toast-close-button,
-.toast-headless-content .p-toast-close-button {
+/* Toast close button */
+.p-toast-message-content .p-toast-close-button {
   flex-shrink: 0 !important;
   display: flex !important;
   align-items: center !important;
@@ -388,16 +293,14 @@
   min-width: 2rem !important;
   padding: 0 !important;
   margin: 0 !important;
-  right: 0 !important;
   border: none !important;
   background: rgba(0, 0, 0, 0.06) !important;
   border-radius: var(--radius-full) !important;
   cursor: pointer !important;
-  opacity: 1 !important;
   color: inherit !important;
   transition:
-    opacity var(--duration-fast) ease,
-    background var(--duration-fast) ease !important;
+    opacity var(--duration-fast) var(--ease-standard),
+    background var(--duration-fast) var(--ease-standard) !important;
 }
 
 .p-toast-message-content .p-toast-close-button:hover {
@@ -405,12 +308,11 @@
 }
 
 .p-toast-message-content .p-toast-close-icon {
-  font-size: 0.875rem !important;
+  font-size: var(--text-sm) !important;
   opacity: 1 !important;
 }
 
-/* Toast: debajo del topbar (h-16 = 4rem). Evita solapamiento.
-   Selector específico para superar estilos inline de PrimeNG. */
+/* Toast: below topbar (h-16 = 4rem) */
 app-main-layout p-toast.p-toast-top-right,
 app-main-layout p-toast.p-toast-top-left,
 app-main-layout p-toast.p-toast-top-center,
@@ -421,33 +323,31 @@ app-main-layout p-toast.p-toast-top-center,
 }
 
 /* ============================================
-   Skeleton — Design System Tokens
+   Skeleton
    ============================================ */
 .p-skeleton {
   background: var(--bg-subtle) !important;
 }
 
-/* Specific Component Tweaks */
-
-/* Remove ripple effect if not desired, or style it */
+/* ============================================
+   Buttons — Design System Aligned
+   ============================================ */
 .p-ink {
   background: rgba(255, 255, 255, 0.3);
 }
 
-/* Rounded buttons everywhere */
 .p-button {
-  border-radius: var(--radius-full) !important;
+  border-radius: var(--btn-primary-radius) !important;
   font-weight: var(--font-semibold);
-  padding: var(--space-3) var(--space-6);
-  transition: all 0.2s ease;
+  padding: var(--btn-primary-padding-y) var(--btn-primary-padding-x);
+  transition: var(--transition-btn);
 }
 
 .p-button:hover {
-  transform: translateY(-1px);
+  transform: translateY(var(--card-hover-lift-y));
   box-shadow: 0 4px 12px var(--accent-glow);
 }
 
-/* Button success - design system tokens */
 .p-button.p-button-success {
   background: var(--state-success) !important;
   border-color: var(--state-success) !important;
@@ -458,7 +358,6 @@ app-main-layout p-toast.p-toast-top-center,
   border-color: color-mix(in srgb, var(--state-success) 85%, black) !important;
 }
 
-/* Button secondary - design system tokens */
 .p-button.p-button-secondary {
   background: var(--bg-elevated) !important;
   border: 1px solid var(--border-default) !important;
@@ -471,7 +370,6 @@ app-main-layout p-toast.p-toast-top-center,
   color: var(--ds-brand) !important;
 }
 
-/* Button outlined - design system tokens */
 .p-button.p-button-outlined {
   background: transparent !important;
   border: 1px solid var(--border-default) !important;
@@ -484,7 +382,6 @@ app-main-layout p-toast.p-toast-top-center,
   color: var(--ds-brand) !important;
 }
 
-/* Button danger - design system tokens (solo validación/acciones destructivas) */
 .p-button.p-button-danger {
   background: var(--state-error) !important;
   border-color: var(--state-error) !important;
@@ -495,10 +392,7 @@ app-main-layout p-toast.p-toast-top-center,
   border-color: color-mix(in srgb, var(--state-error) 85%, black) !important;
 }
 
-/* ── Toolbar actions (topbar): neutro / hover / abierto ───────────────────────
-   Neutro: sin fondo, sin borde, sin sombra.
-   Hover: aparición de sombra.
-   Abierto: gradiente/azul, permanece hasta cerrar. */
+/* ── Toolbar actions (topbar): neutral / hover / active ── */
 .toolbar-actions .p-button.p-button-secondary {
   background: transparent !important;
   border-color: transparent !important;
@@ -526,7 +420,9 @@ app-main-layout p-toast.p-toast-top-center,
   box-shadow: 0 4px 12px var(--accent-glow) !important;
 }
 
-/* Breadcrumb - design system tokens (global) */
+/* ============================================
+   Breadcrumb
+   ============================================ */
 .p-breadcrumb {
   background: transparent !important;
   border: none !important;
@@ -555,7 +451,9 @@ app-main-layout p-toast.p-toast-top-center,
   font-size: var(--text-xs) !important;
 }
 
-/* Menu badge - success para contadores */
+/* ============================================
+   Menu
+   ============================================ */
 .p-menu .p-badge,
 .p-menu .p-menuitem-badge {
   background: var(--state-success) !important;
@@ -564,30 +462,35 @@ app-main-layout p-toast.p-toast-top-center,
   font-weight: var(--font-semibold) !important;
 }
 
-/* p-menu: foco visible en la lista raíz (teclado) */
 .p-menu .p-menu-list:focus-visible {
   outline: 2px solid var(--accent-border);
   outline-offset: 2px;
 }
 
-/* Card overrides to match Frosted Card */
+/* ============================================
+   Card
+   ============================================ */
 .p-card {
   border: 1px solid var(--border-default);
   box-shadow: var(--shadow-md);
   border-radius: var(--radius-xl);
   transition:
-    background-color var(--motion-duration-fast) var(--motion-ease-standard),
-    border-color var(--motion-duration-fast) var(--motion-ease-standard),
-    box-shadow var(--motion-duration-fast) var(--motion-ease-standard);
+    background-color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard);
 }
 
-/* Input Fields */
+/* ============================================
+   Input Fields
+   ============================================ */
 .p-inputtext {
-  padding: var(--space-3) var(--space-4);
+  padding: var(--input-padding-y) var(--input-padding-x);
   font-size: var(--text-sm);
 }
 
-/* Select (Dropdown) Centering Fix & Premium Overlay */
+/* ============================================
+   Select (Dropdown)
+   ============================================ */
 .p-select {
   align-items: center;
 }
@@ -600,7 +503,6 @@ app-main-layout p-toast.p-toast-top-center,
   height: 100%;
 }
 
-/* Premium Dropdown Options Overlay */
 .p-select-panel {
   padding: var(--space-1) !important;
 }
@@ -616,23 +518,24 @@ app-main-layout p-toast.p-toast-top-center,
   border-radius: var(--radius-md) !important;
   padding: var(--space-2) var(--space-3) !important;
   margin: 0 !important;
-  transition: all var(--motion-duration-fast) var(--motion-ease-standard) !important;
+  transition: all var(--duration-fast) var(--ease-standard) !important;
 }
 
-/* El estado "focus" al navegar con teclado o hover suave */
 .p-select-option:not(.p-select-option-selected):hover,
 .p-select-option.p-select-option-focus:not(.p-select-option-selected) {
   background-color: var(--bg-elevated) !important;
   color: var(--text-primary) !important;
 }
 
-/* El estado seleccionado con highlight de color brand */
 .p-select-option.p-select-option-selected {
   background-color: var(--color-primary-muted) !important;
   color: var(--ds-brand) !important;
   font-weight: var(--font-medium) !important;
 }
-/* DatePicker — trigger (dropdown button) e input */
+
+/* ============================================
+   DatePicker
+   ============================================ */
 .p-datepicker,
 .p-datepicker.p-inputwrapper {
   background: var(--bg-surface) !important;
@@ -651,7 +554,9 @@ app-main-layout p-toast.p-toast-top-center,
   color: var(--ds-brand) !important;
 }
 
-/* Tables - Overrides adicionales */
+/* ============================================
+   Tables
+   ============================================ */
 .p-datatable {
   background: var(--bg-surface) !important;
 
@@ -676,17 +581,23 @@ app-main-layout p-toast.p-toast-top-center,
     color: var(--text-primary) !important;
   }
 
-  /* Resaltado de ordenación más sutil */
   .p-sortable-column.p-highlight {
-    background: color-mix(in srgb, var(--color-primary-muted) 30%, transparent) !important;
+    background: color-mix(
+      in srgb,
+      var(--color-primary-muted) 30%,
+      transparent
+    ) !important;
     color: var(--text-primary) !important;
   }
 
   .p-sortable-column.p-highlight:hover {
-    background: color-mix(in srgb, var(--color-primary-muted) 40%, transparent) !important;
+    background: color-mix(
+      in srgb,
+      var(--color-primary-muted) 40%,
+      transparent
+    ) !important;
   }
 
-  /* Aumentar padding incluso con p-datatable-sm */
   &.p-datatable-sm .p-datatable-thead > tr > th {
     padding: var(--space-3) var(--space-4) !important;
   }
@@ -697,21 +608,21 @@ app-main-layout p-toast.p-toast-top-center,
 }
 
 /* ============================================
-   Stepper — Design System Premium 2026
+   Stepper — Design System
+   Base styling for PrimeNG Stepper component.
+   Add .stepper-premium class to p-stepper for
+   this custom look. Projects can extend with
+   completed-step indicators as needed.
    ============================================ */
 .stepper-premium {
-  --stepper-transition: var(--duration-fast) ease;
-
-  .p-step-number::after {
-    pointer-events: none;
-  }
+  --stepper-transition: var(--duration-fast) var(--ease-standard);
 
   .p-steppanels {
     position: relative;
     z-index: 1;
   }
 
-  .p-steppanel:not([data-p-active='true']) {
+  .p-steppanel:not([data-p-active="true"]) {
     display: none;
   }
 
@@ -794,42 +705,14 @@ app-main-layout p-toast.p-toast-top-center,
     text-overflow: ellipsis;
   }
 
-  .p-step[data-p-active='true'] .p-step-header {
+  .p-step[data-p-active="true"] .p-step-header {
     color: var(--text-primary);
   }
 
-  .p-step[data-p-active='true'] .p-step-number {
+  .p-step[data-p-active="true"] .p-step-number {
     background: var(--ds-brand);
     color: var(--color-primary-text);
     transform: scale(1.05);
-  }
-
-  /* Completed steps: green checkmark indicator + green separator
-     Generated for steps 2–6 (each marks all previous steps as completed) */
-  @for $step from 2 through 6 {
-    @for $prev from 1 through ($step - 1) {
-      &.stepper-premium--step-#{$step} .p-step:nth-child(#{$prev}) .p-step-number {
-        font-size: 0;
-        position: relative;
-        background: var(--state-success) !important;
-        color: white !important;
-      }
-
-      &.stepper-premium--step-#{$step} .p-step:nth-child(#{$prev}) .p-step-number::after {
-        content: '✓';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 0.75rem;
-        font-weight: 700;
-        line-height: 1;
-      }
-
-      &.stepper-premium--step-#{$step} .p-step:nth-child(#{$prev}) .p-stepper-separator {
-        background: var(--state-success);
-      }
-    }
   }
 
   .p-stepper-separator {
@@ -847,7 +730,6 @@ app-main-layout p-toast.p-toast-top-center,
     pointer-events: auto;
   }
 
-  /* Layout del stepper en modo wizard de pantalla completa */
   &.p-stepper {
     display: flex;
     flex-direction: column;
@@ -862,13 +744,12 @@ app-main-layout p-toast.p-toast-top-center,
     padding: 0;
   }
 
-  /* Ocultar la nav nativa — usamos el tracker custom del header */
   .p-stepper-nav {
     display: none !important;
   }
 }
 
-/* PrimeIcons: asegurar que los iconos usen la fuente correcta (evitar herencia de font-body) */
+/* PrimeIcons: font-family override to prevent font-body inheritance */
 .pi,
 i.pi {
   font-family: primeicons !important;
@@ -876,246 +757,47 @@ i.pi {
 }
 
 /* ============================================
-   Dark Mode — Forzar tokens en componentes que ignoran variables
-   PrimeNG Aura puede inyectar fondos claros; estos overrides los corrigen.
+   Dark Mode — Minimal overrides
+   Most components auto-switch via --p-* tokens
+   that reference _variables.scss tokens. Only
+   override here when PrimeNG ignores its own
+   token system (portals, inline styles, etc).
    ============================================ */
-[data-mode='dark'] {
-  /* Tailwind bg-surface: asegurar que se respete en dark */
-  .bg-surface {
-    background-color: var(--bg-surface) !important;
-  }
-
-  .bg-base {
-    background-color: var(--bg-base) !important;
-  }
-
-  /* Tables PrimeNG — fondos explícitos */
-  .p-datatable,
-  .p-datatable-wrapper,
-  .p-datatable .p-datatable-table-wrapper,
-  .p-datatable .p-datatable-table,
-  .p-datatable-thead > tr > th,
-  .p-datatable-tbody > tr > td {
-    background-color: var(--bg-surface) !important;
-  }
-
-  .p-datatable-header {
-    background-color: var(--bg-base) !important;
-  }
-
-  /* Empty state dentro de tabla */
-  .p-datatable-tbody .empty-state,
-  .p-datatable-tbody td {
-    background-color: var(--bg-surface) !important;
-    color: var(--text-secondary) !important;
-  }
-
-  .p-datatable-tbody .empty-state__message {
-    color: var(--text-secondary) !important;
-  }
-
-  .p-datatable-tbody .empty-state__subtitle {
-    color: var(--text-muted) !important;
-  }
-
-  /* p-select / p-dropdown — trigger y overlay */
-  .p-select,
-  .p-inputwrapper,
-  .p-select-trigger,
-  .p-select-panel,
-  .p-select-overlay {
-    background-color: var(--bg-surface) !important;
-    border-color: var(--border-default) !important;
-    color: var(--text-primary) !important;
-  }
-
-  .p-select-option,
-  .p-select-item {
-    background-color: transparent !important;
-    color: var(--text-secondary) !important;
-  }
-
-  /* Hover & Focus (Not selected) */
-  .p-select-option:not(.p-select-option-selected):hover,
-  .p-select-option.p-select-option-focus:not(.p-select-option-selected),
-  .p-select-item.p-select-item-focus {
-    background-color: var(--bg-elevated) !important;
-    color: var(--text-primary) !important;
-  }
-
-  /* Selected state */
-  .p-select-option.p-select-option-selected {
-    background-color: var(--color-primary-muted) !important;
-    color: var(--ds-brand) !important;
-    font-weight: var(--font-medium) !important;
-  }
-
-  /* p-dialog — contenido y overlay */
-  .p-dialog,
-  .p-dialog-content,
-  .p-dialog-header {
-    background-color: var(--bg-surface) !important;
-    color: var(--text-primary) !important;
-    border-color: var(--border-default) !important;
-    transition:
-      background-color var(--motion-duration-fast) var(--motion-ease-standard),
-      border-color var(--motion-duration-fast) var(--motion-ease-standard),
-      box-shadow var(--motion-duration-fast) var(--motion-ease-standard);
-  }
-
+[data-mode="dark"] {
+  /* Overlay masks — PrimeNG may inject hardcoded rgba */
   .p-dialog-mask,
   .p-overlay-mask {
     background-color: var(--overlay-backdrop) !important;
-    transition:
-      background-color var(--motion-duration-fast) var(--motion-ease-standard),
-      opacity var(--duration-fast) var(--motion-ease-standard),
-      visibility var(--duration-fast) var(--motion-ease-standard);
   }
 
-  /* p-menu (sidebar) — fondo y items */
-  .p-menu,
-  .p-menu-list {
-    background-color: transparent !important;
-  }
-
-  .p-menu-item-content,
-  .p-menu-item-link {
-    background-color: transparent !important;
-    color: var(--text-secondary) !important;
-  }
-
-  .p-menu-item-content:hover,
-  .p-menu-item-link:hover {
-    background-color: var(--color-primary-muted) !important;
-    color: var(--text-primary) !important;
-  }
-
-  .p-menu-item-link-active,
-  .p-menu-item-link.p-menu-item-link-active {
-    background-color: transparent !important;
-    color: var(--ds-brand) !important;
-  }
-
-  .p-menu-submenu-label {
-    color: var(--text-muted) !important;
-  }
-
-  /* p-inputnumber, p-inputtext — inputs */
-  .p-inputnumber,
-  .p-inputnumber-input,
-  .p-inputtext {
-    background-color: var(--bg-surface) !important;
-    border-color: var(--border-default) !important;
-    color: var(--text-primary) !important;
-  }
-
-  /* p-togglebutton, p-toggleswitch */
-  .p-togglebutton,
-  .p-toggleswitch {
-    background-color: var(--bg-elevated) !important;
-    border-color: var(--border-default) !important;
-  }
-
-  .p-togglebutton.p-togglebutton-checked,
-  .p-toggleswitch.p-toggleswitch-checked {
-    background-color: var(--ds-brand) !important;
-    border-color: var(--ds-brand) !important;
-  }
-
-  /* p-checkbox */
-  .p-checkbox,
-  .p-checkbox-box {
-    background-color: var(--bg-surface) !important;
-    border-color: var(--border-default) !important;
-  }
-
-  .p-checkbox-box.p-highlight {
-    background-color: var(--ds-brand) !important;
-    border-color: var(--ds-brand) !important;
-  }
-
-  /* p-skeleton */
-  .p-skeleton {
-    background-color: var(--bg-subtle) !important;
-  }
-
-  /* p-avatar */
-  .p-avatar {
-    background-color: var(--color-primary-muted) !important;
-    color: var(--ds-brand) !important;
-  }
-
-  /* p-progressbar */
-  .p-progressbar {
-    background-color: var(--bg-subtle) !important;
-  }
-
-  .p-progressbar-value {
-    background-color: var(--ds-brand) !important;
-  }
-
-  /* p-tabs */
-  .p-tabs,
-  .p-tablist,
-  .p-tabpanel {
-    background-color: transparent !important;
-    color: var(--text-primary) !important;
-  }
-
-  .p-tab {
-    color: var(--text-secondary) !important;
-  }
-
-  .p-tab.p-tab-active {
-    color: var(--ds-brand) !important;
-  }
-
-  /* p-multiselect overlay */
-  .p-multiselect,
-  .p-multiselect-panel {
-    background-color: var(--bg-surface) !important;
-    border-color: var(--border-default) !important;
-    color: var(--text-primary) !important;
-  }
-
-  /* p-datepicker — wrapper, trigger y panel */
-  .p-datepicker,
-  .p-datepicker.p-inputwrapper,
+  /* Portal overlays — created outside Angular component tree */
+  .p-select-panel,
+  .p-select-overlay,
+  .p-multiselect-panel,
   .p-datepicker-panel {
     background-color: var(--bg-surface) !important;
     border-color: var(--border-default) !important;
     color: var(--text-primary) !important;
   }
 
-  .p-datepicker-dropdown {
-    background-color: transparent !important;
-    color: var(--text-secondary) !important;
-  }
-
-  .p-datepicker-dropdown:hover {
-    background-color: var(--color-primary-muted) !important;
-    color: var(--ds-brand) !important;
-  }
-
-  /* p-colorpicker */
-  .p-colorpicker,
-  .p-colorpicker-panel {
+  /* Dialog — may use inline backgrounds */
+  .p-dialog,
+  .p-dialog-content,
+  .p-dialog-header {
     background-color: var(--bg-surface) !important;
+    color: var(--text-primary) !important;
     border-color: var(--border-default) !important;
   }
 
-  /* page-header (usa bg-surface) */
-  .page-header__container {
-    background-color: var(--bg-surface) !important;
-    border-color: var(--border-default) !important;
-    color: var(--text-primary) !important;
+  /* Toggle controls — checked state needs brand color enforcement */
+  .p-togglebutton.p-togglebutton-checked,
+  .p-toggleswitch.p-toggleswitch-checked {
+    background-color: var(--ds-brand) !important;
+    border-color: var(--ds-brand) !important;
   }
 
-  .page-header__title {
-    color: var(--text-primary) !important;
-  }
-
-  .page-header__description {
-    color: var(--text-secondary) !important;
+  .p-checkbox-box.p-highlight {
+    background-color: var(--ds-brand) !important;
+    border-color: var(--ds-brand) !important;
   }
 }

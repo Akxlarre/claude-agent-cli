@@ -12,7 +12,7 @@
 
 | Archivo | Responsabilidad | Ubicación | Estado |
 |---------|----------------|-----------|--------|
-| `tailwind.css` | Capa de utilidades Tailwind v4. Mapea tokens del design system vía `@theme` para clases como `text-text-secondary`, `bg-surface`, `rounded-lg`. No usa Preflight (PrimeNG tiene su propio reset). | `src/tailwind.css` | ✅ Estable |
+| `tailwind.css` | Capa de utilidades Tailwind v4. Mapea tokens del design system vía `@theme` para clases como `text-text-secondary`, `bg-surface`, `rounded-lg`. Incluye `@utility btn-primary`, `@utility btn-secondary` y `@utility btn-ghost` (3 tiers de botones del DS). No usa Preflight (PrimeNG tiene su propio reset). | `src/tailwind.css` | ✅ Estable |
 | `postcss.config.mjs` | Configuración PostCSS para Tailwind v4 (`@tailwindcss/postcss` plugin). | `postcss.config.mjs` (root) | ✅ Estable |
 
 ## Layout

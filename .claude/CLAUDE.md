@@ -1,65 +1,53 @@
-# koa-agent-cli — CLI Development Instructions
+# claude-agent-cli — Koa Agent Blueprint v5.1
 
-Este es un **CLI de Node.js** (`create-koa-agent`) que genera proyectos Angular pre-configurados
-para ser operados por Claude Code como agente principal de desarrollo.
+Tu stack: **Angular + Tailwind v4 + PrimeNG + Supabase + GSAP**.
 
-## Stack del CLI
+## Sistema de Hooks Activo
 
-- **Runtime**: Node.js 20+ con ES Modules (`"type": "module"`)
-- **Dependencias**: inquirer (prompts), chalk (colores), ora (spinners)
-- **Entry point**: `bin/index.js` (shebang `#!/usr/bin/env node`)
-- **Comando global**: `create-koa-agent` (via `npm link`)
+Este proyecto tiene guardrails automáticos que se ejecutan sin intervención humana:
 
-## Estructura del repositorio
+- **Discovery Gate** — NO puedes escribir código en `src/app/` sin antes leer al menos un archivo de `indices/`. Serás bloqueado automáticamente.
+- **Architect Guard** — Cada Edit/Write es validado en tiempo real. Se bloquean: `*ngIf`, `@Input()`, colores hardcodeados, imports de Supabase en UI, `@angular/animations`, `@keyframes`.
+- **File Protector** — No puedes modificar los archivos del sistema de hooks (`.claude/hooks/`, `settings.json`, `architect.js`).
+- **Bash Guard** — No puedes crear archivos `.ts/.html/.scss` via Bash. Usa Edit/Write.
+- **Compact Recovery** — Si el contexto se compacta, los índices se re-inyectan automáticamente.
+- **Sync Check** — Al terminar de responder, se verifica si los índices necesitan actualización.
+- **Prettier** — Cada archivo editado se formatea automáticamente.
 
-```text
-koa-agent-cli/
-├── bin/
-│   └── index.js              # CLI principal — inquirer prompts, scaffolding logic
-├── templates/                 # TODO lo que se copia al proyecto generado
-│   ├── .claude/               # Hooks, rules, skills, settings para el proyecto generado
-│   │   ├── hooks/             # Pre/Post hooks de Claude Code (guardrails automáticos)
-│   │   ├── rules/             # Reglas arquitectónicas (architecture, visual-system, etc.)
-│   │   ├── skills/            # Skills invocables por Claude (/sync-indices, etc.)
-│   │   ├── scripts/           # Post-edit prettier, etc.
-│   │   ├── CLAUDE.md          # Instrucciones de Claude para el proyecto generado
-│   │   └── settings.json      # Configuración de hooks del proyecto generado
-│   ├── docs/                  # Documentación para humanos
-│   ├── indices/               # Memoria viva del proyecto (Components, Services, DB, etc.)
-│   ├── boilerplate/           # Código fuente Angular (solo se copia en Full Scaffold)
-│   │   ├── src/               # app/, styles/, assets/
-│   │   └── scripts/           # architect.js (linter AST)
-│   ├── CLAUDE.md              # Stub raíz con @import (compatibilidad Claude.ai Projects)
-│   ├── .mcp.json              # Supabase MCP server template
-│   └── gitignore.template     # Se renombra a .gitignore al copiar
-├── CLAUDE.md                  # ESTE archivo (instrucciones para desarrollar el CLI)
-├── README.md                  # Docs públicos del CLI
-└── package.json               # ESM, bin: create-koa-agent
-```
+Detalle completo: @docs/HOOKS-SYSTEM.md
 
-## Regla fundamental
+## Comandos del proyecto
 
-**`templates/` es la fuente de verdad.** Los archivos en la raíz del repo (`CLAUDE.md`, `.claude/`, `README.md`)
-son para desarrollar el CLI. Los archivos en `templates/` son los que se copian al proyecto generado.
-**Nunca duplicar** archivos de templates/ en la raíz.
+- Dev: `ng serve`
+- Build: `ng build`
+- Lint: `ng lint`
+- Lint arquitectónico: `npm run lint:arch`
+- Supabase local: `npx supabase start`
 
-## Convenciones de desarrollo
+## Flujo obligatorio (5 pasos)
 
-1. **ESM puro**: Usar `import`/`export`, no `require()`. El package.json tiene `"type": "module"`.
-2. **Template variables**: Usar `{{PROJECT_NAME}}` en templates — `bin/index.js` los reemplaza con `injectVars()`.
-3. **Dos modos de scaffolding**:
-   - **Full Scaffold**: `ng new` + dependencias + todo de `templates/` + `templates/boilerplate/`
-   - **Inject Only**: Solo copia `templates/` (sin boilerplate/) a la carpeta actual
-4. **No tocar templates manualmente para probar**: Usa `node bin/index.js` o `create-koa-agent` para testear.
+1. **DESCUBRIR** — Lee `indices/COMPONENTS.md`, `indices/SERVICES.md`, `indices/FACADES.md`, `indices/MODELS.md`, `indices/DIRECTIVES.md`, `indices/STYLES.md`, `indices/DATABASE.md` antes de escribir código. **El Discovery Gate te bloqueará si no lo haces.**
+2. **PLANIFICAR** — Define qué vas a tocar sin violar las reglas de arquitectura.
+3. **EJECUTAR** — Escribe el código. Reutiliza siempre lo existente primero. Los hooks validarán cada escritura en tiempo real.
+4. **VALIDAR** — Corre `npm run lint:arch` para una auditoría completa del proyecto.
+5. **SINCRONIZAR** — Actualiza `indices/*.md` con los componentes/servicios creados. El Stop hook te lo recordará si lo olvidas.
 
-## Comandos
+## Reglas del proyecto
 
-- Ejecutar CLI: `node bin/index.js`
-- Instalar globalmente (dev): `npm link`
-- Test mode: `TEST_MODE=inject node bin/index.js` o `TEST_MODE=full TEST_PROJECT_NAME=test node bin/index.js`
+@.claude/rules/architecture.md
+@.claude/rules/models.md
+@.claude/rules/facades.md
+@.claude/rules/visual-system.md
+@.claude/rules/notifications.md
+@.claude/rules/swr-pattern.md
+@.claude/rules/testing-tdd.md
+@.claude/rules/ai-readability.md
+@.claude/rules/database.md
 
-## Qué NO es este repo
+## Referencias
 
-Este repo **NO es** un proyecto Angular. No tiene `src/app/`, `ng serve`, ni componentes.
-Las reglas de Angular, PrimeNG, Supabase, GSAP, OnPush, Facades, etc. aplican solo
-dentro de `templates/` (que se copian a los proyectos generados).
+- Stack completo: @docs/TECH-STACK-RULES.md
+- Brand & UI: @docs/BRAND_GUIDELINES.md
+- Sistema de Hooks: @docs/HOOKS-SYSTEM.md
+- Visión del producto: @docs/PRODUCT-VISION.md
+- Guía de usuario: @docs/CLAUDE-USER-GUIDE.md

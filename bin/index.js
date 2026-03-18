@@ -42,7 +42,7 @@ function printBanner() {
     console.log('');
     console.log(topBottom('╔══════════════════════════════════════════════╗'));
     console.log(`${border}                                              ${border}`);
-    console.log(`${border}   ${chalk.white.bold('🧠  Koa Agent CLI  ·  Blueprint v5.0')}   ${border}`);
+    console.log(`${border}   ${chalk.white.bold('🧠  Koa Agent CLI  ·  Blueprint v5.1')}   ${border}`);
     console.log(`${border}   ${chalk.blue('Angular · Tails · Supabase · AI-Native')}  ${border}`);
     console.log(`${border}                                              ${border}`);
     console.log(topBottom('╚══════════════════════════════════════════════╝'));
@@ -53,7 +53,7 @@ function printSuccess(projectName, isFull, targetDir) {
     const line = chalk.blue('──────────────────────────────────────────────');
     console.log('');
     console.log(line);
-    console.log(`  ${chalk.green('✅')}  ${chalk.white.bold(projectName)} ${chalk.blue('·')} ${chalk.white('Koa Blueprint v5.0 inyectado')}`);
+    console.log(`  ${chalk.green('✅')}  ${chalk.white.bold(projectName)} ${chalk.blue('·')} ${chalk.white('Koa Blueprint v5.1 inyectado')}`);
     console.log(line);
     console.log('');
     console.log(chalk.white.bold('  Próximos pasos:'));
@@ -190,7 +190,7 @@ async function main() {
 
     // --- Spinner: template injection ---
     const spinnerBlueprint = ora({
-        text: chalk.yellow('Inyectando Koa Blueprint v5.0...'),
+        text: chalk.yellow('Inyectando Koa Blueprint v5.1...'),
         color: 'blue'
     }).start();
 
@@ -256,11 +256,12 @@ async function main() {
                     console.log(chalk.green('   ✓ scripts/ copiado'));
                 }
 
-                // Copy postcss.config.mjs to project root (Tailwind v4)
-                const postcssConfigSrc = path.join(BOILERPLATE_DIR, 'postcss.config.mjs');
+                // Copy postcss.config.json to project root (Tailwind v4)
+                // NOTA: Angular @angular/build:application solo acepta .json, ignora .js/.mjs/.cjs
+                const postcssConfigSrc = path.join(BOILERPLATE_DIR, 'postcss.config.json');
                 if (fs.existsSync(postcssConfigSrc)) {
-                    fs.copyFileSync(postcssConfigSrc, path.join(targetDir, 'postcss.config.mjs'));
-                    console.log(chalk.green('   ✓ postcss.config.mjs copiado'));
+                    fs.copyFileSync(postcssConfigSrc, path.join(targetDir, 'postcss.config.json'));
+                    console.log(chalk.green('   ✓ postcss.config.json copiado'));
                 }
 
                 // Patch tsconfig.json: add path aliases for @core/*, @shared/*, etc.
@@ -319,6 +320,21 @@ async function main() {
 
                     fs.writeFileSync(angularJsonPath, JSON.stringify(angularJson, null, 2));
                     console.log(chalk.green('   ✓ angular.json parcheado (tailwind.css + inlineCritical: false)'));
+                }
+
+                // Patch index.html: add Google Fonts <link preconnect> (avoids render-blocking @import)
+                const indexHtmlPath = path.join(targetDir, 'src', 'index.html');
+                if (fs.existsSync(indexHtmlPath)) {
+                    let indexHtml = fs.readFileSync(indexHtmlPath, 'utf8');
+                    if (!indexHtml.includes('fonts.googleapis.com')) {
+                        const fontLinks =
+                            `\n    <link rel="preconnect" href="https://fonts.googleapis.com">` +
+                            `\n    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>` +
+                            `\n    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap">`;
+                        indexHtml = indexHtml.replace('</head>', `${fontLinks}\n  </head>`);
+                        fs.writeFileSync(indexHtmlPath, indexHtml);
+                        console.log(chalk.green('   ✓ index.html parcheado (Google Fonts preconnect)'));
+                    }
                 }
 
                 // Patch app.config.ts with PrimeNG provider

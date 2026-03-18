@@ -8,18 +8,18 @@ import {
   signal,
   viewChild,
   viewChildren,
-} from '@angular/core';
-import { DatePipe } from '@angular/common';
-import { RouterLink } from '@angular/router';
-import { AuthFacade } from '@core/services/auth.facade';
-import { GsapAnimationsService } from '@core/services/gsap-animations.service';
-import { BentoGridLayoutDirective } from '@core/directives/bento-grid-layout.directive';
-import { CardHoverDirective } from '@core/directives/card-hover.directive';
-import { AnimateInDirective } from '@core/directives/animate-in.directive';
-import { IconComponent } from '@shared/components/icon/icon.component';
-import { KpiCardComponent } from '@shared/components/kpi-card/kpi-card.component';
-import { KpiCardSkeletonComponent } from '@shared/components/kpi-card/kpi-card-skeleton.component';
-import { SkeletonBlockComponent } from '@shared/components/skeleton-block/skeleton-block.component';
+} from "@angular/core";
+import { DatePipe } from "@angular/common";
+import { RouterLink } from "@angular/router";
+import { AuthFacade } from "@core/services/auth.facade";
+import { GsapAnimationsService } from "@core/services/gsap-animations.service";
+import { BentoGridLayoutDirective } from "@core/directives/bento-grid-layout.directive";
+import { CardHoverDirective } from "@core/directives/card-hover.directive";
+import { AnimateInDirective } from "@core/directives/animate-in.directive";
+import { IconComponent } from "@shared/components/icon/icon.component";
+import { KpiCardComponent } from "@shared/components/kpi-card/kpi-card.component";
+import { KpiCardSkeletonComponent } from "@shared/components/kpi-card/kpi-card-skeleton.component";
+import { SkeletonBlockComponent } from "@shared/components/skeleton-block/skeleton-block.component";
 
 /**
  * DashboardComponent — Página principal de la aplicación.
@@ -32,12 +32,12 @@ import { SkeletonBlockComponent } from '@shared/components/skeleton-block/skelet
  * │  app-kpi-card      → métricas con contador GSAP animado            │
  * │  indicator-live    → dot pulsante de estado en tiempo real         │
  * │  app-icon          → iconos Lucide (cero emojis)                   │
- * │  [appCardHover]    → hover GSAP en todas las cards                 │
+ * │  appCardHover    → hover GSAP en todas las cards                 │
  * │  [appBentoGridLayout] → grid con FLIP animation en reflow          │
  * │  animateBentoGrid  → stagger de entrada de las celdas              │
  * │  animateHero       → blur + scale en el banner principal           │
  * │  staggerListItems  → entrada escalonada en listas de actividad     │
- * │  skeleton → content → [appAnimateIn] en transición de carga        │
+ * │  skeleton → content → appAnimateIn en transición de carga        │
  * └─────────────────────────────────────────────────────────────────────┘
  *
  * CÓMO ADAPTAR AL PROYECTO:
@@ -53,7 +53,7 @@ import { SkeletonBlockComponent } from '@shared/components/skeleton-block/skelet
  * }
  */
 @Component({
-  selector: 'app-dashboard',
+  selector: "app-dashboard",
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
@@ -75,10 +75,9 @@ import { SkeletonBlockComponent } from '@shared/components/skeleton-block/skelet
     <section
       #gridEl
       class="bento-grid"
-      [appBentoGridLayout]
+      appBentoGridLayout
       aria-label="Panel de control"
     >
-
       <!-- ── HERO — Banner principal con surface-hero ────────────────
            surface-hero aplica el gradiente de marca + radial glow.
            El texto SIEMPRE en var(--color-primary-text) (blanco).
@@ -92,10 +91,16 @@ import { SkeletonBlockComponent } from '@shared/components/skeleton-block/skelet
         <!-- Fila superior: saludo + indicador de estado -->
         <div class="flex items-start justify-between gap-4">
           <div class="flex flex-col gap-1">
-            <p class="m-0 text-sm font-medium" style="color: rgba(255,255,255,0.7)">
-              {{ today | date:'EEEE, d MMMM y':'':'es' }}
+            <p
+              class="m-0 text-sm font-medium"
+              style="color: rgba(255,255,255,0.7)"
+            >
+              {{ today | date: "EEEE, d MMMM y" : "" : "es" }}
             </p>
-            <h1 class="m-0 text-3xl font-bold" style="color: var(--color-primary-text)">
+            <h1
+              class="m-0 text-3xl font-bold"
+              style="color: var(--color-primary-text)"
+            >
               Hola, {{ userName() }}
             </h1>
             <p class="m-0 text-base" style="color: rgba(255,255,255,0.8)">
@@ -138,7 +143,7 @@ import { SkeletonBlockComponent } from '@shared/components/skeleton-block/skelet
            Solo 1 card-accent por sección bento → va en la primera KPI.
       ──────────────────────────────────────────────────────────── -->
       @for (kpi of kpis(); track kpi.id) {
-        <div class="bento-square" [appCardHover]>
+        <div class="bento-square" appCardHover>
           @if (loading()) {
             <app-kpi-card-skeleton />
           } @else {
@@ -150,7 +155,7 @@ import { SkeletonBlockComponent } from '@shared/components/skeleton-block/skelet
               [trend]="kpi.trend"
               [trendLabel]="kpi.trendLabel ?? ''"
               [accent]="kpi.accent ?? false"
-              [appAnimateIn]
+              appAnimateIn
             />
           }
         </div>
@@ -160,12 +165,18 @@ import { SkeletonBlockComponent } from '@shared/components/skeleton-block/skelet
            bento-feature: 8 columnas de ancho, 2 filas de alto.
            Lista con stagger GSAP al montar.
       ──────────────────────────────────────────────────────────── -->
-      <div class="bento-feature card" [appCardHover]>
+      <div class="bento-feature card" appCardHover>
         <!-- Header de sección -->
         <div class="flex items-center justify-between mb-4">
           <div class="flex items-center gap-2">
-            <app-icon name="activity" [size]="16" style="color: var(--ds-brand)" />
-            <h2 class="m-0 text-base font-semibold text-text-primary">Actividad reciente</h2>
+            <app-icon
+              name="activity"
+              [size]="16"
+              style="color: var(--ds-brand)"
+            />
+            <h2 class="m-0 text-base font-semibold text-text-primary">
+              Actividad reciente
+            </h2>
           </div>
           <button
             class="text-xs font-medium cursor-pointer border-none bg-transparent p-0"
@@ -179,7 +190,10 @@ import { SkeletonBlockComponent } from '@shared/components/skeleton-block/skelet
         <!-- Lista de actividad con stagger -->
         <ul #activityList class="m-0 p-0 list-none flex flex-col gap-1">
           @for (item of activities(); track item.id) {
-            <li class="flex items-start gap-3 py-2.5 border-b last:border-b-0" style="border-color: var(--border-subtle)">
+            <li
+              class="flex items-start gap-3 py-2.5 border-b last:border-b-0"
+              style="border-color: var(--border-subtle)"
+            >
               <!-- Ícono del evento -->
               <div
                 class="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full"
@@ -191,12 +205,18 @@ import { SkeletonBlockComponent } from '@shared/components/skeleton-block/skelet
 
               <!-- Contenido del evento -->
               <div class="flex-1 min-w-0">
-                <p class="m-0 text-sm font-medium text-text-primary truncate">{{ item.title }}</p>
-                <p class="m-0 text-xs text-text-muted">{{ item.description }}</p>
+                <p class="m-0 text-sm font-medium text-text-primary truncate">
+                  {{ item.title }}
+                </p>
+                <p class="m-0 text-xs text-text-muted">
+                  {{ item.description }}
+                </p>
               </div>
 
               <!-- Timestamp -->
-              <span class="flex-shrink-0 text-xs text-text-muted self-center">{{ item.time }}</span>
+              <span class="flex-shrink-0 text-xs text-text-muted self-center">{{
+                item.time
+              }}</span>
             </li>
           }
         </ul>
@@ -205,10 +225,12 @@ import { SkeletonBlockComponent } from '@shared/components/skeleton-block/skelet
       <!-- ── TALL — Acciones rápidas ─────────────────────────────────
            bento-tall: 3 columnas, 2 filas. Panel de acciones frecuentes.
       ──────────────────────────────────────────────────────────── -->
-      <div class="bento-tall card flex flex-col gap-3" [appCardHover]>
+      <div class="bento-tall card flex flex-col gap-3" appCardHover>
         <div class="flex items-center gap-2 mb-1">
           <app-icon name="plus" [size]="16" style="color: var(--ds-brand)" />
-          <h2 class="m-0 text-base font-semibold text-text-primary">Acciones rápidas</h2>
+          <h2 class="m-0 text-base font-semibold text-text-primary">
+            Acciones rápidas
+          </h2>
         </div>
 
         @for (action of quickActions(); track action.id) {
@@ -225,7 +247,12 @@ import { SkeletonBlockComponent } from '@shared/components/skeleton-block/skelet
               <app-icon [name]="action.icon" [size]="14" />
             </div>
             {{ action.label }}
-            <app-icon name="chevron-right" [size]="14" class="ml-auto" style="color: var(--text-muted)" />
+            <app-icon
+              name="chevron-right"
+              [size]="14"
+              class="ml-auto"
+              style="color: var(--text-muted)"
+            />
           </button>
         }
       </div>
@@ -234,7 +261,10 @@ import { SkeletonBlockComponent } from '@shared/components/skeleton-block/skelet
            bento-wide: ancho completo de media pantalla, 1 fila.
            Muestra el estado de servicios con indicator-live.
       ──────────────────────────────────────────────────────────── -->
-      <div class="bento-wide card flex items-center justify-between gap-4" [appCardHover]>
+      <div
+        class="bento-wide card flex items-center justify-between gap-4"
+        appCardHover
+      >
         <div class="flex items-center gap-3">
           <div class="indicator-live text-sm font-medium text-text-secondary">
             Todos los sistemas operativos
@@ -246,7 +276,9 @@ import { SkeletonBlockComponent } from '@shared/components/skeleton-block/skelet
             <div class="flex items-center gap-1.5">
               <div
                 class="w-2 h-2 rounded-full flex-shrink-0"
-                [style.background]="service.ok ? 'var(--state-success)' : 'var(--state-error)'"
+                [style.background]="
+                  service.ok ? 'var(--state-success)' : 'var(--state-error)'
+                "
               ></div>
               <span class="text-xs text-text-muted">{{ service.name }}</span>
             </div>
@@ -257,20 +289,21 @@ import { SkeletonBlockComponent } from '@shared/components/skeleton-block/skelet
           Actualizado hace 2 min
         </div>
       </div>
-
     </section>
   `,
 })
 export class DashboardComponent implements AfterViewInit {
-
   // ── Servicios ─────────────────────────────────────────────────────────────
   private readonly auth = inject(AuthFacade);
   private readonly gsap = inject(GsapAnimationsService);
 
   // ── ViewChildren para GSAP ────────────────────────────────────────────────
-  private readonly gridEl  = viewChild.required<ElementRef<HTMLElement>>('gridEl');
-  private readonly heroEl  = viewChild.required<ElementRef<HTMLElement>>('heroEl');
-  private readonly activityList = viewChild<ElementRef<HTMLElement>>('activityList');
+  private readonly gridEl =
+    viewChild.required<ElementRef<HTMLElement>>("gridEl");
+  private readonly heroEl =
+    viewChild.required<ElementRef<HTMLElement>>("heroEl");
+  private readonly activityList =
+    viewChild<ElementRef<HTMLElement>>("activityList");
 
   // ── Estado ────────────────────────────────────────────────────────────────
 
@@ -279,8 +312,8 @@ export class DashboardComponent implements AfterViewInit {
 
   readonly today = new Date();
 
-  readonly userName = computed(() =>
-    this.auth.currentUser()?.displayName?.split(' ')[0] ?? 'Equipo'
+  readonly userName = computed(
+    () => this.auth.currentUser()?.displayName?.split(" ")[0] ?? "Equipo",
   );
 
   // ── Datos de ejemplo — reemplazar con señales del DashboardFacade ─────────
@@ -291,32 +324,32 @@ export class DashboardComponent implements AfterViewInit {
    */
   readonly kpis = signal([
     {
-      id: 'users',
-      label: 'Usuarios totales',
+      id: "users",
+      label: "Usuarios totales",
       value: 24819,
       trend: 12.4,
-      trendLabel: 'vs. mes anterior',
+      trendLabel: "vs. mes anterior",
       accent: true,
     },
     {
-      id: 'revenue',
-      label: 'Ingresos del mes',
+      id: "revenue",
+      label: "Ingresos del mes",
       value: 84320,
-      prefix: '$',
+      prefix: "$",
       trend: 8.1,
-      trendLabel: 'vs. mes anterior',
+      trendLabel: "vs. mes anterior",
     },
     {
-      id: 'conversion',
-      label: 'Tasa de conversión',
-      value: 4,        // 4.7% — animateCounter usa Math.round()
-      suffix: '%',
+      id: "conversion",
+      label: "Tasa de conversión",
+      value: 4, // 4.7% — animateCounter usa Math.round()
+      suffix: "%",
       trend: -0.3,
-      trendLabel: 'vs. mes anterior',
+      trendLabel: "vs. mes anterior",
     },
     {
-      id: 'sessions',
-      label: 'Sesiones activas',
+      id: "sessions",
+      label: "Sesiones activas",
       value: 1204,
       trend: 22.5,
     },
@@ -324,93 +357,93 @@ export class DashboardComponent implements AfterViewInit {
 
   readonly activities = signal([
     {
-      id: 'a1',
-      icon: 'user',
-      title: 'Nuevo usuario registrado',
-      description: 'carlos.mendez@empresa.com se unió al plan Pro',
-      time: 'hace 5 min',
-      iconBg: 'var(--color-primary-muted)',
-      iconColor: 'var(--color-primary)',
+      id: "a1",
+      icon: "user",
+      title: "Nuevo usuario registrado",
+      description: "carlos.mendez@empresa.com se unió al plan Pro",
+      time: "hace 5 min",
+      iconBg: "var(--color-primary-muted)",
+      iconColor: "var(--color-primary)",
     },
     {
-      id: 'a2',
-      icon: 'check-circle',
-      title: 'Pago procesado correctamente',
-      description: 'Factura #1042 por $840 — Plan Enterprise',
-      time: 'hace 18 min',
-      iconBg: 'var(--state-success-bg)',
-      iconColor: 'var(--state-success)',
+      id: "a2",
+      icon: "check-circle",
+      title: "Pago procesado correctamente",
+      description: "Factura #1042 por $840 — Plan Enterprise",
+      time: "hace 18 min",
+      iconBg: "var(--state-success-bg)",
+      iconColor: "var(--state-success)",
     },
     {
-      id: 'a3',
-      icon: 'alert-circle',
-      title: 'Alerta de uso elevado',
+      id: "a3",
+      icon: "alert-circle",
+      title: "Alerta de uso elevado",
       description: 'El equipo "Desarrollo" superó el 85% de su cuota',
-      time: 'hace 1 h',
-      iconBg: 'var(--state-warning-bg)',
-      iconColor: 'var(--state-warning)',
+      time: "hace 1 h",
+      iconBg: "var(--state-warning-bg)",
+      iconColor: "var(--state-warning)",
     },
     {
-      id: 'a4',
-      icon: 'download',
-      title: 'Exportación completada',
-      description: 'Reporte mensual de usuarios descargado',
-      time: 'hace 2 h',
-      iconBg: 'var(--bg-subtle)',
-      iconColor: 'var(--text-secondary)',
+      id: "a4",
+      icon: "download",
+      title: "Exportación completada",
+      description: "Reporte mensual de usuarios descargado",
+      time: "hace 2 h",
+      iconBg: "var(--bg-subtle)",
+      iconColor: "var(--text-secondary)",
     },
     {
-      id: 'a5',
-      icon: 'settings',
-      title: 'Configuración actualizada',
-      description: 'Política de retención de datos ajustada a 90 días',
-      time: 'hace 3 h',
-      iconBg: 'var(--bg-subtle)',
-      iconColor: 'var(--text-secondary)',
+      id: "a5",
+      icon: "settings",
+      title: "Configuración actualizada",
+      description: "Política de retención de datos ajustada a 90 días",
+      time: "hace 3 h",
+      iconBg: "var(--bg-subtle)",
+      iconColor: "var(--text-secondary)",
     },
   ]);
 
   readonly quickActions = signal([
     {
-      id: 'qa1',
-      icon: 'users',
-      label: 'Invitar usuario',
-      llmAction: 'invite-user',
-      iconBg: 'var(--color-primary-muted)',
-      iconColor: 'var(--color-primary)',
+      id: "qa1",
+      icon: "users",
+      label: "Invitar usuario",
+      llmAction: "invite-user",
+      iconBg: "var(--color-primary-muted)",
+      iconColor: "var(--color-primary)",
     },
     {
-      id: 'qa2',
-      icon: 'download',
-      label: 'Exportar datos',
-      llmAction: 'export-data',
-      iconBg: 'var(--bg-subtle)',
-      iconColor: 'var(--text-secondary)',
+      id: "qa2",
+      icon: "download",
+      label: "Exportar datos",
+      llmAction: "export-data",
+      iconBg: "var(--bg-subtle)",
+      iconColor: "var(--text-secondary)",
     },
     {
-      id: 'qa3',
-      icon: 'bar-chart-2',
-      label: 'Ver analíticas',
-      llmAction: 'view-analytics',
-      iconBg: 'var(--bg-subtle)',
-      iconColor: 'var(--text-secondary)',
+      id: "qa3",
+      icon: "bar-chart-2",
+      label: "Ver analíticas",
+      llmAction: "view-analytics",
+      iconBg: "var(--bg-subtle)",
+      iconColor: "var(--text-secondary)",
     },
     {
-      id: 'qa4',
-      icon: 'settings',
-      label: 'Configuración',
-      llmAction: 'open-settings',
-      iconBg: 'var(--bg-subtle)',
-      iconColor: 'var(--text-secondary)',
+      id: "qa4",
+      icon: "settings",
+      label: "Configuración",
+      llmAction: "open-settings",
+      iconBg: "var(--bg-subtle)",
+      iconColor: "var(--text-secondary)",
     },
   ]);
 
   readonly systemStatus = signal([
-    { name: 'API',        ok: true },
-    { name: 'Base de datos', ok: true },
-    { name: 'Auth',       ok: true },
-    { name: 'Storage',    ok: true },
-    { name: 'Realtime',   ok: true },
+    { name: "API", ok: true },
+    { name: "Base de datos", ok: true },
+    { name: "Auth", ok: true },
+    { name: "Storage", ok: true },
+    { name: "Realtime", ok: true },
   ]);
 
   // ── Animaciones de entrada (GSAP) ─────────────────────────────────────────
@@ -425,7 +458,7 @@ export class DashboardComponent implements AfterViewInit {
     // 3. Lista de actividad — slide desde la izquierda con stagger
     const list = this.activityList()?.nativeElement;
     if (list) {
-      this.gsap.staggerListItems(list.querySelectorAll('li'));
+      this.gsap.staggerListItems(list.querySelectorAll("li"));
     }
   }
 }

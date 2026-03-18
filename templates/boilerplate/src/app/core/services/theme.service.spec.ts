@@ -1,12 +1,12 @@
 import { TestBed } from "@angular/core/testing";
 import { ThemeService } from "./theme.service";
 import { GsapAnimationsService } from "./gsap-animations.service";
-import { MessageService } from "primeng/api";
+import { ToastService } from "./toast.service";
 
 describe("ThemeService", () => {
   let service: ThemeService;
   let gsapSpy: jasmine.SpyObj<GsapAnimationsService>;
-  let messageSpy: jasmine.SpyObj<MessageService>;
+  let toastSpy: jasmine.SpyObj<ToastService>;
 
   beforeEach(() => {
     // Ensure clean state before each test
@@ -23,14 +23,17 @@ describe("ThemeService", () => {
       return Promise.resolve();
     });
 
-    messageSpy = jasmine.createSpyObj<MessageService>("MessageService", [
-      "add",
+    toastSpy = jasmine.createSpyObj<ToastService>("ToastService", [
+      "success",
+      "error",
+      "warning",
+      "info",
     ]);
 
     TestBed.configureTestingModule({
       providers: [
         { provide: GsapAnimationsService, useValue: gsapSpy },
-        { provide: MessageService, useValue: messageSpy },
+        { provide: ToastService, useValue: toastSpy },
       ],
     });
 
