@@ -2,6 +2,56 @@
 
 > **Importante para Agentes:** NUNCA rompas estas reglas de arquitectura.
 
+## ARCH (Deep links del linter)
+
+<a id="arch-01"></a>
+### ARCH-01: No Supabase in UI
+- Prohibido importar `@supabase/supabase-js` en `src/app/features/**` y `src/app/shared/**`.
+- Solución: mover acceso a datos a un `*FacadeService` (o services core) y exponer estado por Signals.
+
+<a id="arch-02"></a>
+### ARCH-02: Facade-only injection (en componentes vista)
+- Prohibido inyectar `*Service` directo en `*.component.ts` de `features/` y `shared/` (excepto servicios de infraestructura explícitos).
+- Solución: inyecta un `*FacadeService` y deja los services internos en `core/`.
+
+<a id="arch-03"></a>
+### ARCH-03: TDD required (core)
+- Todo `*.facade.ts` y `*.service.ts` en `src/app/core/**` debe tener su `*.spec.ts`.
+
+<a id="arch-04"></a>
+### ARCH-04: OnPush required
+- Todo componente debe usar `ChangeDetectionStrategy.OnPush`.
+
+<a id="arch-05"></a>
+### ARCH-05: No `@angular/animations`
+- Prohibido importar `@angular/animations*`.
+- Solución: usar **GSAP** vía `GsapAnimationsService`.
+
+<a id="arch-06"></a>
+### ARCH-06: No legacy template directives
+- Prohibido `*ngIf`, `*ngFor`, `[ngClass]`, `[ngStyle]`.
+- Solución: `@if/@for` y bindings directos `[class.x]`, `[style.prop]`.
+
+<a id="arch-07"></a>
+### ARCH-07: No `@keyframes` en estilos de app
+- Prohibido `@keyframes` en estilos dentro de `src/app/**`.
+- Solución: usar GSAP.
+
+<a id="arch-08"></a>
+### ARCH-08: No hardcoded Tailwind colors
+- Prohibido `text-red-500`, `bg-blue-200`, etc. en `.ts` y `.html`.
+- Solución: tokens semánticos (`text-primary`, `text-muted`, `bg-surface`, `bg-base`, `var(--ds-brand)`).
+
+<a id="arch-09"></a>
+### ARCH-09: Complexity warning (shared components)
+- Warning si un `shared/**/*.component.ts` tiene una clase muy grande (recomendación: \(\le 200\) líneas de clase).
+- Solución: dividir en subcomponentes, extraer helpers y mantener `shared/` como UI presentacional.
+
+<a id="arch-10"></a>
+### ARCH-10: Complexity warning (facades)
+- Warning si un `*.facade.ts` es demasiado complejo (recomendación: \(\le 5\) `inject()` y métodos \(\le 50\) líneas).
+- Solución: extraer lógica a services/helpers y mantener la Facade como orquestador de estado/errores.
+
 ## 1. Patrones de Diseño Arquitectónico Obligatorios
 
 ### A. Patrón Facade Estricto

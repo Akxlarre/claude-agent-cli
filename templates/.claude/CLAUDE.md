@@ -1,4 +1,4 @@
-# {{PROJECT_NAME}} — Koa Agent Blueprint v5.1
+# {{PROJECT_NAME}} — Koa Agent Blueprint v{{BLUEPRINT_VERSION}}
 
 Tu stack: **Angular + Tailwind v4 + PrimeNG + Supabase + GSAP**.
 

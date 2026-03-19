@@ -8,6 +8,11 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { spawn } from 'child_process';
 
+const BLUEPRINT_VERSION = '6.0.0';
+const MIN_NODE_MAJOR = 20;
+const NPM = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+const NPX = process.platform === 'win32' ? 'npx.cmd' : 'npx';
+
 // Parse JSONC (JSON with comments) — strips // and /* */ comments before parsing
 function parseJsonc(text) {
     const stripped = text
@@ -16,10 +21,134 @@ function parseJsonc(text) {
     return JSON.parse(stripped);
 }
 
+function validateProjectName(name) {
+    const trimmed = String(name ?? '').trim();
+    if (!trimmed) return { ok: false, reason: 'El nombre no puede estar vacío.' };
+    if (trimmed.length > 214) return { ok: false, reason: 'Máximo 214 caracteres.' };
+    if (!/^[a-z][a-z0-9-]*$/.test(trimmed)) {
+        return { ok: false, reason: 'Usa minúsculas, números y guiones. Debe empezar con letra.' };
+    }
+    if (trimmed.includes('--')) return { ok: false, reason: 'No se permiten guiones consecutivos ("--").' };
+
+    const lower = trimmed.toLowerCase();
+    const windowsReserved = new Set([
+        'con', 'prn', 'aux', 'nul',
+        'com1', 'com2', 'com3', 'com4', 'com5', 'com6', 'com7', 'com8', 'com9',
+        'lpt1', 'lpt2', 'lpt3', 'lpt4', 'lpt5', 'lpt6', 'lpt7', 'lpt8', 'lpt9',
+    ]);
+    if (process.platform === 'win32' && windowsReserved.has(lower)) {
+        return { ok: false, reason: 'Nombre reservado en Windows (CON/PRN/AUX/NUL/COM1…/LPT1…).'}; 
+    }
+
+    return { ok: true, name: trimmed };
+}
+
+function parseMajor(versionLike) {
+    const m = String(versionLike ?? '').trim().match(/^v?(\d+)\./);
+    return m ? Number(m[1]) : null;
+}
+
+/**
+ * Parse --no-supabase / --no-gsap / --no-primeng flags from process.argv.
+ * Returns { supabase, gsap, primeng } — all default to true.
+ */
+function parseCliFlags() {
+    const args = process.argv.slice(2);
+    return {
+        supabase: !args.includes('--no-supabase'),
+        gsap:     !args.includes('--no-gsap'),
+        primeng:  !args.includes('--no-primeng'),
+    };
+}
+
+/**
+ * Read optional koa-config.json from cwd and merge with cliFlags.
+ * koa-config.json can contain: { "stack": { "supabase": false, "gsap": false, "primeng": false } }
+ */
+function readKoaConfig(cliFlags) {
+    const configPath = path.join(process.cwd(), 'koa-config.json');
+    let fileFlags = {};
+    if (fs.existsSync(configPath)) {
+        try {
+            const raw = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+            if (raw.stack && typeof raw.stack === 'object') fileFlags = raw.stack;
+        } catch {
+            console.warn(chalk.yellow('⚠ No se pudo parsear koa-config.json — usando valores por defecto.'));
+        }
+    }
+    return {
+        supabase: (fileFlags.supabase ?? true) && cliFlags.supabase,
+        gsap:     (fileFlags.gsap     ?? true) && cliFlags.gsap,
+        primeng:  (fileFlags.primeng  ?? true) && cliFlags.primeng,
+    };
+}
+
+function checkCommand(cmd, args = [], { fatal = false, label = cmd, timeoutMs } = {}) {
+    return new Promise((resolve) => {
+        const proc = spawn(cmd, args, {
+            stdio: ['ignore', 'pipe', 'pipe'],
+            shell: process.platform === 'win32',
+        });
+        let stdout = '';
+        let stderr = '';
+
+        proc.stdout.on('data', d => { stdout += d.toString(); });
+        proc.stderr.on('data', d => { stderr += d.toString(); });
+
+        let timeout;
+        if (timeoutMs) {
+            timeout = setTimeout(() => {
+                proc.kill();
+                resolve({ ok: !fatal, label, stdout: stdout.trim(), stderr: (stderr || 'timeout').trim(), timedOut: true });
+            }, timeoutMs);
+        }
+
+        proc.on('close', (code) => {
+            if (timeout) clearTimeout(timeout);
+            const ok = code === 0;
+            resolve({ ok: ok || !fatal, label, stdout: stdout.trim(), stderr: stderr.trim(), exitCode: code });
+        });
+        proc.on('error', (err) => {
+            if (timeout) clearTimeout(timeout);
+            resolve({ ok: !fatal, label, stdout: stdout.trim(), stderr: String(err?.message || err).trim(), error: err });
+        });
+    });
+}
+
+async function preflight() {
+    const major = parseMajor(process.versions.node);
+    if (!major || major < MIN_NODE_MAJOR) {
+        console.error(chalk.red(`Node.js ${MIN_NODE_MAJOR}+ requerido. Detectado: ${process.versions.node}`));
+        process.exit(1);
+    }
+
+    const npmRes = await checkCommand(NPM, ['--version'], { fatal: true, label: 'npm --version' });
+    if (!npmRes.ok) {
+        console.error(chalk.red(`Falta npm o no es ejecutable. Detalle: ${npmRes.stderr || 'desconocido'}`));
+        process.exit(1);
+    }
+
+    const npxRes = await checkCommand(NPX, ['--version'], { fatal: true, label: 'npx --version' });
+    if (!npxRes.ok) {
+        console.error(chalk.red(`Falta npx o no es ejecutable. Detalle: ${npxRes.stderr || 'desconocido'}`));
+        process.exit(1);
+    }
+
+    const gitRes = await checkCommand('git', ['--version'], { fatal: false, label: 'git --version' });
+    if (!gitRes.ok) {
+        console.warn(chalk.yellow('⚠ git no está disponible. Se recomienda instalarlo para versionar tu proyecto.'));
+    }
+
+    const dockerRes = await checkCommand('docker', ['info'], { fatal: false, label: 'docker info', timeoutMs: 3000 });
+    if (!dockerRes.ok) {
+        console.warn(chalk.yellow('⚠ docker no está disponible o no responde (ok si no usarás contenedores).'));
+    }
+}
+
 // Run a command asynchronously so ora can animate freely
 function run(cmd, args, opts = {}) {
     return new Promise((resolve, reject) => {
-        const proc = spawn(cmd, args, { ...opts, stdio: 'pipe', shell: true });
+        const proc = spawn(cmd, args, { ...opts, stdio: 'pipe', shell: process.platform === 'win32' });
         let stderr = '';
         proc.stderr.on('data', d => { stderr += d.toString(); });
         proc.on('close', code => {
@@ -42,7 +171,7 @@ function printBanner() {
     console.log('');
     console.log(topBottom('╔══════════════════════════════════════════════╗'));
     console.log(`${border}                                              ${border}`);
-    console.log(`${border}   ${chalk.white.bold('🧠  Koa Agent CLI  ·  Blueprint v5.1')}   ${border}`);
+    console.log(`${border}   ${chalk.white.bold(`🧠  Koa Agent CLI  ·  Blueprint v${BLUEPRINT_VERSION}`)}   ${border}`);
     console.log(`${border}   ${chalk.blue('Angular · Tails · Supabase · AI-Native')}  ${border}`);
     console.log(`${border}                                              ${border}`);
     console.log(topBottom('╚══════════════════════════════════════════════╝'));
@@ -53,7 +182,7 @@ function printSuccess(projectName, isFull, targetDir) {
     const line = chalk.blue('──────────────────────────────────────────────');
     console.log('');
     console.log(line);
-    console.log(`  ${chalk.green('✅')}  ${chalk.white.bold(projectName)} ${chalk.blue('·')} ${chalk.white('Koa Blueprint v5.1 inyectado')}`);
+    console.log(`  ${chalk.green('✅')}  ${chalk.white.bold(projectName)} ${chalk.blue('·')} ${chalk.white(`Koa Blueprint v${BLUEPRINT_VERSION} inyectado`)}`);
     console.log(line);
     console.log('');
     console.log(chalk.white.bold('  Próximos pasos:'));
@@ -98,7 +227,20 @@ function printSuccess(projectName, isFull, targetDir) {
 }
 
 async function main() {
+    // Resolve stack flags (CLI args + optional koa-config.json)
+    const stack = readKoaConfig(parseCliFlags());
+
+    await preflight();
     printBanner();
+
+    if (!stack.supabase || !stack.gsap || !stack.primeng) {
+        const disabled = Object.entries(stack)
+            .filter(([, v]) => !v)
+            .map(([k]) => `--no-${k}`)
+            .join(' ');
+        console.log(chalk.yellow(`ℹ Modo parcial activo: ${disabled}`));
+        console.log('');
+    }
 
     let answers;
     if (process.env.TEST_MODE === 'inject') {
@@ -124,16 +266,39 @@ async function main() {
                 name: 'projectName',
                 message: '¿Cuál es el nombre del proyecto?',
                 default: path.basename(process.cwd()),
-                when: (ans) => ans.action.includes('Full Scaffold')
+                when: (ans) => ans.action.includes('Full Scaffold'),
+                validate: (input) => {
+                    const res = validateProjectName(input);
+                    return res.ok ? true : res.reason;
+                },
+                filter: (input) => String(input ?? '').trim()
             }
         ]);
     }
 
     const isFull = answers.action && answers.action.includes('Full Scaffold');
     let targetDir = process.cwd();
+    let finalDir = null;
+    let tempDir = null;
 
     if (isFull) {
-        targetDir = path.join(process.cwd(), answers.projectName);
+        const validation = validateProjectName(answers.projectName);
+        if (!validation.ok) {
+            console.error(chalk.red(`Nombre de proyecto inválido: ${validation.reason}`));
+            process.exit(1);
+        }
+        answers.projectName = validation.name;
+
+        finalDir = path.join(process.cwd(), answers.projectName);
+        if (fs.existsSync(finalDir)) {
+            console.error(chalk.red(`El directorio ya existe: ${finalDir}`));
+            process.exit(1);
+        }
+
+        const tmpName =
+            `.koa-tmp-${answers.projectName}-${Date.now().toString(36)}-${Math.random().toString(16).slice(2, 8)}`;
+        tempDir = path.join(process.cwd(), tmpName);
+        targetDir = tempDir;
 
         // --- Spinner: ng new ---
         const spinnerNg = ora({
@@ -142,10 +307,19 @@ async function main() {
         }).start();
 
         try {
-            await run(
-                `npx @angular/cli@latest new ${answers.projectName} --standalone=true --routing=true --style=scss --skip-tests --skip-git=true`,
-                [], {}
-            );
+            await run(NPX, [
+                '-y',
+                '@angular/cli@latest',
+                'new',
+                tmpName,
+                '--name',
+                answers.projectName,
+                '--standalone=true',
+                '--routing=true',
+                '--style=scss',
+                '--skip-tests',
+                '--skip-git=true',
+            ]);
             spinnerNg.succeed(chalk.green('Proyecto Angular creado'));
         } catch (e) {
             spinnerNg.fail(chalk.red('Error al ejecutar ng new'));
@@ -153,6 +327,7 @@ async function main() {
             console.error(chalk.yellow('💡 Si el error dice "not available inside a workspace", significa que estás'));
             console.error(chalk.yellow('   intentando crear el proyecto DENTRO de otro workspace de Angular.'));
             console.error(chalk.yellow('   👉 Abre una nueva terminal en tu Escritorio o raíz del disco e inténtalo allí.'));
+            try { if (tempDir) fs.rmSync(tempDir, { recursive: true, force: true }); } catch { /* ignore */ }
             process.exit(1);
         }
 
@@ -163,34 +338,43 @@ async function main() {
         }).start();
 
         try {
-            await run(
-                `npm install primeng @primeng/themes gsap @supabase/supabase-js tailwindcss @tailwindcss/postcss postcss @angular/animations lucide-angular`,
-                [], { cwd: targetDir }
-            );
+            const installPkgs = [
+                'tailwindcss',
+                '@tailwindcss/postcss',
+                'postcss',
+                '@angular/animations',
+                'lucide-angular',
+                ...(stack.primeng  ? ['primeng', '@primeng/themes'] : []),
+                ...(stack.gsap     ? ['gsap'] : []),
+                ...(stack.supabase ? ['@supabase/supabase-js'] : []),
+            ];
+            await run(NPM, ['install', ...installPkgs], { cwd: targetDir });
             spinnerNpm.succeed(chalk.green('Dependencias instaladas'));
 
-            // Initialize Supabase
-            const spinnerSupabase = ora({
-                text: chalk.yellow('Inicializando Supabase...'),
-                color: 'yellow'
-            }).start();
-            try {
-                await run('npx supabase init', [], { cwd: targetDir });
-                spinnerSupabase.succeed(chalk.green('Supabase inicializado'));
-            } catch (e) {
-                // Ignore error if supabase CLI not found, just warn
-                spinnerSupabase.warn(chalk.yellow('No se pudo inicializar Supabase (¿CLI no instalada?)'));
+            // Initialize Supabase (only if supabase is enabled)
+            if (stack.supabase) {
+                const spinnerSupabase = ora({
+                    text: chalk.yellow('Inicializando Supabase...'),
+                    color: 'yellow'
+                }).start();
+                try {
+                    await run(NPX, ['-y', 'supabase', 'init'], { cwd: targetDir });
+                    spinnerSupabase.succeed(chalk.green('Supabase inicializado'));
+                } catch (e) {
+                    spinnerSupabase.warn(chalk.yellow('No se pudo inicializar Supabase (¿CLI no instalada?)'));
+                }
             }
         } catch (e) {
             spinnerNpm.fail(chalk.red('Error al instalar dependencias'));
             console.error(chalk.gray(e.message));
+            try { if (tempDir) fs.rmSync(tempDir, { recursive: true, force: true }); } catch { /* ignore */ }
             process.exit(1);
         }
     }
 
     // --- Spinner: template injection ---
     const spinnerBlueprint = ora({
-        text: chalk.yellow('Inyectando Koa Blueprint v5.1...'),
+        text: chalk.yellow(`Inyectando Koa Blueprint v${BLUEPRINT_VERSION}...`),
         color: 'blue'
     }).start();
 
@@ -217,6 +401,7 @@ async function main() {
         if (fs.existsSync(filePath)) {
             let content = fs.readFileSync(filePath, 'utf8');
             content = content.replace(/\{\{PROJECT_NAME\}\}/g, projectName);
+            content = content.replace(/\{\{BLUEPRINT_VERSION\}\}/g, BLUEPRINT_VERSION);
             fs.writeFileSync(filePath, content);
         }
     };
@@ -337,9 +522,9 @@ async function main() {
                     }
                 }
 
-                // Patch app.config.ts with PrimeNG provider
+                // Patch app.config.ts with PrimeNG provider (only if primeng is enabled)
                 const appConfigPath = path.join(targetDir, 'src', 'app', 'app.config.ts');
-                if (fs.existsSync(appConfigPath)) {
+                if (stack.primeng && fs.existsSync(appConfigPath)) {
                     let configStr = fs.readFileSync(appConfigPath, 'utf8');
                     if (!configStr.includes('providePrimeNG')) {
                         const importsToAdd =
@@ -367,7 +552,8 @@ async function main() {
                         'claude:sync': 'claude -p "Ejecuta /sync-indices para actualizar los índices del proyecto" --allowedTools Read,Edit,Glob,Grep',
                         'claude:fix': 'claude -p "Ejecuta ng lint, identifica los errores y corrígelos" --allowedTools Read,Edit,Bash',
                         'claude:tdd': 'claude -p "Ejecuta las pruebas unitarias (ng test --watch=false). Si fallan, auto-corrige la lógica hasta que el compilador pase en verde." --allowedTools Read,Edit,Bash',
-                        'lint:arch': 'node scripts/architect.js'
+                        'lint:arch': 'node scripts/lint-arch-wrapper.js',
+                        'indices:sync': 'node scripts/indices-sync.js'
                     };
                     fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
                     console.log(chalk.green('   ✓ Scripts claude:* agregados'));
@@ -375,11 +561,43 @@ async function main() {
             }
         }
 
+        if (isFull && tempDir && finalDir) {
+            try {
+                fs.renameSync(tempDir, finalDir);
+                targetDir = finalDir;
+            } catch (e) {
+                throw new Error(`No se pudo mover el proyecto temporal al destino final: ${e.message}`);
+            }
+        }
+
+        // 4. Write blueprint.json for traceability/versioning
+        try {
+            const blueprintPath = path.join(targetDir, 'blueprint.json');
+            const blueprint = {
+                name: 'koa-agent-blueprint',
+                version: BLUEPRINT_VERSION,
+                generatedAt: new Date().toISOString(),
+                mode: isFull ? 'full-scaffold' : 'inject-only',
+                managedPaths: [
+                    '.claude/**',
+                    'docs/**',
+                    'indices/**',
+                    'scripts/architect.js',
+                    '.mcp.json',
+                ],
+                stack: { angular: true, tailwind: true, primeng: stack.primeng, gsap: stack.gsap, supabase: stack.supabase },
+            };
+            fs.writeFileSync(blueprintPath, JSON.stringify(blueprint, null, 2));
+        } catch (e) {
+            console.warn(chalk.yellow(`   ⚠ No se pudo escribir blueprint.json: ${e.message}`));
+        }
+
         printSuccess(answers.projectName || path.basename(targetDir), isFull, targetDir);
 
     } catch (err) {
         spinnerBlueprint.fail(chalk.red('Error al inyectar Blueprint'));
         console.error(chalk.gray(err.message));
+        try { if (tempDir) fs.rmSync(tempDir, { recursive: true, force: true }); } catch { /* ignore */ }
         process.exit(1);
     }
 }

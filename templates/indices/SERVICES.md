@@ -34,3 +34,9 @@ Funciones puras sin estado ni dependencias Angular. Importar desde `@core/utils`
 | `date.utils` | `toISODate()`, `formatDate()`, `capitalize()` | `core/utils/date.utils.ts` | ✅ Estable |
 | `validation.utils` | `validateEmail()` | `core/utils/validation.utils.ts` | ✅ Estable |
 | Barrel | `export *` de todos los utils | `core/utils/index.ts` | ✅ Estable |
+
+## Auto-Index — Servicios detectados por AST (generado automáticamente)
+
+<!-- AUTO-GENERATED:BEGIN -->
+_Sin servicios auto-detectados aún. Ejecuta `npm run indices:sync` para poblar._
+<!-- AUTO-GENERATED:END -->

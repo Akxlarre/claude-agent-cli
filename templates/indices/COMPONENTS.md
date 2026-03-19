@@ -52,3 +52,8 @@
 | `/login` — `LoginComponent` | Login, registro y reset de contraseña | `AuthService` | `features/auth/login.component.ts` | ✅ Estable |
 | `/**` — `NotFoundComponent` | Página 404 | — | `features/not-found/not-found.component.ts` | ✅ Estable |
 
+## Auto-Index — Componentes detectados por AST (generado automáticamente)
+
+<!-- AUTO-GENERATED:BEGIN -->
+_Sin componentes auto-detectados aún. Ejecuta `npm run indices:sync` para poblar._
+<!-- AUTO-GENERATED:END -->
