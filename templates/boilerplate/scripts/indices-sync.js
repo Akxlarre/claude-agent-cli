@@ -31,6 +31,36 @@ const dim    = (s) => `\x1b[2m${s}\x1b[0m`;
 const ROOT        = process.cwd();
 const INDICES_DIR = path.join(ROOT, 'indices');
 const SRC_APP     = path.join(ROOT, 'src', 'app');
+const CACHE_DIR   = path.join(ROOT, '.claude', 'temp');
+const CACHE_FILE  = path.join(CACHE_DIR, 'indices-cache.json');
+
+// ─── mtime Cache ────────────────────────────────────────────────────────────
+
+function loadCache() {
+  try {
+    return JSON.parse(fs.readFileSync(CACHE_FILE, 'utf-8'));
+  } catch {
+    return {};
+  }
+}
+
+function saveCache(cache) {
+  fs.mkdirSync(CACHE_DIR, { recursive: true });
+  fs.writeFileSync(CACHE_FILE, JSON.stringify(cache), 'utf-8');
+}
+
+/**
+ * Reads a file only if it changed since last run (by mtime).
+ * Returns { content, changed } or { content: null, changed: false } if cached.
+ */
+function readIfChanged(filePath, cache) {
+  const mtimeMs = fs.statSync(filePath).mtimeMs;
+  if (cache[filePath] && cache[filePath] >= mtimeMs) {
+    return { content: null, changed: false };
+  }
+  cache[filePath] = mtimeMs;
+  return { content: fs.readFileSync(filePath, 'utf-8'), changed: true };
+}
 
 // ─── AST Utilities ───────────────────────────────────────────────────────────
 
@@ -99,83 +129,92 @@ function* walkDir(dir) {
 
 // ─── Data Collection ──────────────────────────────────────────────────────────
 
-function collectComponents() {
+function collectComponents(cache, prevResults) {
   const results = [];
+  const prevMap = new Map((prevResults ?? []).map(r => [r.filePath, r]));
+  let skipped = 0;
   const sharedDir = path.join(SRC_APP, 'shared');
   for (const filePath of walkDir(sharedDir)) {
     if (!filePath.endsWith('.component.ts') || filePath.endsWith('.spec.ts')) continue;
     if (filePath.endsWith('-skeleton.component.ts')) continue;
+    const relPath = path.relative(ROOT, filePath).replace(/\\/g, '/');
     try {
-      const content = fs.readFileSync(filePath, 'utf-8');
-      const sf = ts.createSourceFile(filePath, content, ts.ScriptTarget.Latest, true);
+      const { content, changed } = readIfChanged(filePath, cache);
+      if (!changed && prevMap.has(relPath)) { results.push(prevMap.get(relPath)); skipped++; continue; }
+      const src = content ?? fs.readFileSync(filePath, 'utf-8');
+      const sf = ts.createSourceFile(filePath, src, ts.ScriptTarget.Latest, true);
       const selector = extractSelector(sf);
-      const { inputs, outputs } = extractSignalInputsOutputs(content);
-      results.push({
-        selector: selector ?? path.basename(filePath, '.component.ts'),
-        inputs,
-        outputs,
-        filePath: path.relative(ROOT, filePath).replace(/\\/g, '/'),
-      });
+      const { inputs, outputs } = extractSignalInputsOutputs(src);
+      results.push({ selector: selector ?? path.basename(filePath, '.component.ts'), inputs, outputs, filePath: relPath });
     } catch { /* skip unparseable */ }
   }
+  if (skipped > 0) process.stdout.write(dim(` (${skipped} cached)`));
   return results;
 }
 
-function collectServices() {
+function collectServices(cache, prevResults) {
   const results = [];
+  const prevMap = new Map((prevResults ?? []).map(r => [r.filePath, r]));
+  let skipped = 0;
   const coreDir = path.join(SRC_APP, 'core');
   for (const filePath of walkDir(coreDir)) {
     if (!filePath.endsWith('.service.ts') || filePath.endsWith('.spec.ts')) continue;
     if (filePath.endsWith('.facade.ts')) continue;
+    const relPath = path.relative(ROOT, filePath).replace(/\\/g, '/');
     try {
-      const content = fs.readFileSync(filePath, 'utf-8');
-      const classMatch = content.match(/export\s+class\s+(\w+)/);
+      const { content, changed } = readIfChanged(filePath, cache);
+      if (!changed && prevMap.has(relPath)) { results.push(prevMap.get(relPath)); skipped++; continue; }
+      const src = content ?? fs.readFileSync(filePath, 'utf-8');
+      const classMatch = src.match(/export\s+class\s+(\w+)/);
       const className = classMatch?.[1] ?? path.basename(filePath, '.ts');
-      results.push({
-        className,
-        deps: extractInjected(content),
-        filePath: path.relative(ROOT, filePath).replace(/\\/g, '/'),
-      });
+      results.push({ className, deps: extractInjected(src), filePath: relPath });
     } catch { /* skip */ }
   }
+  if (skipped > 0) process.stdout.write(dim(` (${skipped} cached)`));
   return results;
 }
 
-function collectFacades() {
+function collectFacades(cache, prevResults) {
   const results = [];
+  const prevMap = new Map((prevResults ?? []).map(r => [r.filePath, r]));
+  let skipped = 0;
   const coreDir = path.join(SRC_APP, 'core');
   for (const filePath of walkDir(coreDir)) {
     if (!filePath.endsWith('.facade.ts') || filePath.endsWith('.spec.ts')) continue;
+    const relPath = path.relative(ROOT, filePath).replace(/\\/g, '/');
     try {
-      const content = fs.readFileSync(filePath, 'utf-8');
-      const classMatch = content.match(/export\s+class\s+(\w+)/);
+      const { content, changed } = readIfChanged(filePath, cache);
+      if (!changed && prevMap.has(relPath)) { results.push(prevMap.get(relPath)); skipped++; continue; }
+      const src = content ?? fs.readFileSync(filePath, 'utf-8');
+      const classMatch = src.match(/export\s+class\s+(\w+)/);
       const className = classMatch?.[1] ?? path.basename(filePath, '.ts');
-      results.push({
-        className,
-        deps: extractInjected(content),
-        signals: extractPublicSignals(content),
-        filePath: path.relative(ROOT, filePath).replace(/\\/g, '/'),
-      });
+      results.push({ className, deps: extractInjected(src), signals: extractPublicSignals(src), filePath: relPath });
     } catch { /* skip */ }
   }
+  if (skipped > 0) process.stdout.write(dim(` (${skipped} cached)`));
   return results;
 }
 
-function collectModels() {
+function collectModels(cache, prevResults) {
   const results = [];
+  const prevMap = new Map((prevResults ?? []).map(r => [r.filePath, r]));
+  let skipped = 0;
   const modelsDir = path.join(SRC_APP, 'core', 'models');
   for (const filePath of walkDir(modelsDir)) {
     if (!filePath.endsWith('.model.ts') || filePath.endsWith('.spec.ts')) continue;
+    const relPath = path.relative(ROOT, filePath).replace(/\\/g, '/');
     try {
-      const content = fs.readFileSync(filePath, 'utf-8');
-      const sf = ts.createSourceFile(filePath, content, ts.ScriptTarget.Latest, true);
+      const { content, changed } = readIfChanged(filePath, cache);
+      if (!changed && prevMap.has(relPath)) { results.push(prevMap.get(relPath)); skipped++; continue; }
+      const src = content ?? fs.readFileSync(filePath, 'utf-8');
+      const sf = ts.createSourceFile(filePath, src, ts.ScriptTarget.Latest, true);
       const interfaces = extractInterfaces(sf);
       if (interfaces.length === 0) continue;
-      const rel = path.relative(ROOT, filePath).replace(/\\/g, '/');
-      const category = rel.includes('/dto/') ? 'dto' : rel.includes('/ui/') ? 'ui' : 'other';
-      results.push({ interfaces, filePath: rel, category });
+      const category = relPath.includes('/dto/') ? 'dto' : relPath.includes('/ui/') ? 'ui' : 'other';
+      results.push({ interfaces, filePath: relPath, category });
     } catch { /* skip */ }
   }
+  if (skipped > 0) process.stdout.write(dim(` (${skipped} cached)`));
   return results;
 }
 
@@ -255,18 +294,31 @@ function injectGenerated(filePath, generatedContent) {
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 async function main() {
-  console.log(bold(cyan('🔄  indices:sync — Auto-indexer (AST Mode)\n')));
+  console.log(bold(cyan('🔄  indices:sync — Auto-indexer (AST Mode + Incremental Cache)\n')));
 
   if (!fs.existsSync(INDICES_DIR)) {
     console.error(`\x1b[31mNo se encontró el directorio indices/ en ${ROOT}\x1b[0m`);
     process.exit(1);
   }
 
+  // Load mtime cache and previous results from last run
+  const cacheData = loadCache();
+  const cache = cacheData.mtimes ?? {};
+  const prev  = cacheData.results ?? {};
+
+  // Invalidate cache if this script itself changed
+  const selfPath = new URL(import.meta.url).pathname.replace(/^\/([A-Z]:)/, '$1');
+  const selfMtime = fs.statSync(selfPath).mtimeMs;
+  if (cacheData.scriptMtime && cacheData.scriptMtime !== selfMtime) {
+    console.log(dim('  Cache invalidado (script modificado)\n'));
+    Object.keys(cache).forEach(k => delete cache[k]);
+  }
+
   const changes = [];
 
   // ── COMPONENTS.md ──────────────────────────────────────────────────────────
   process.stdout.write(dim('  Escaneando shared/components/**/*.component.ts...'));
-  const components  = collectComponents();
+  const components  = collectComponents(cache, prev.components);
   const compChanged = injectGenerated(
     path.join(INDICES_DIR, 'COMPONENTS.md'),
     generateComponentsTable(components),
@@ -280,7 +332,7 @@ async function main() {
 
   // ── SERVICES.md ────────────────────────────────────────────────────────────
   process.stdout.write(dim('  Escaneando core/services/**/*.service.ts...'));
-  const services  = collectServices();
+  const services  = collectServices(cache, prev.services);
   const svcChanged = injectGenerated(
     path.join(INDICES_DIR, 'SERVICES.md'),
     generateServicesTable(services),
@@ -294,7 +346,7 @@ async function main() {
 
   // ── FACADES.md ─────────────────────────────────────────────────────────────
   process.stdout.write(dim('  Escaneando core/**/*.facade.ts...'));
-  const facades  = collectFacades();
+  const facades  = collectFacades(cache, prev.facades);
   const facChanged = injectGenerated(
     path.join(INDICES_DIR, 'FACADES.md'),
     generateFacadesTable(facades),
@@ -308,7 +360,7 @@ async function main() {
 
   // ── MODELS.md ──────────────────────────────────────────────────────────────
   process.stdout.write(dim('  Escaneando core/models/**/*.model.ts...'));
-  const models  = collectModels();
+  const models  = collectModels(cache, prev.models);
   const modChanged = injectGenerated(
     path.join(INDICES_DIR, 'MODELS.md'),
     generateModelsTable(models),
@@ -319,6 +371,13 @@ async function main() {
     : dim(`  — MODELS.md sin cambios    (${models.length} modelos detectados)`),
   );
   if (modChanged) changes.push('MODELS.md');
+
+  // Persist cache for next run
+  saveCache({
+    scriptMtime: selfMtime,
+    mtimes: cache,
+    results: { components, services, facades, models },
+  });
 
   console.log('');
   if (changes.length > 0) {

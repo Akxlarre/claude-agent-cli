@@ -38,6 +38,7 @@ Detalle completo: @docs/HOOKS-SYSTEM.md
 @.claude/rules/models.md
 @.claude/rules/facades.md
 @.claude/rules/visual-system.md
+@.claude/rules/component-selection.md
 @.claude/rules/notifications.md
 @.claude/rules/swr-pattern.md
 @.claude/rules/testing-tdd.md

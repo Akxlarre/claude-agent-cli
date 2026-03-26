@@ -8,7 +8,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { spawn } from 'child_process';
 
-const BLUEPRINT_VERSION = '6.0.0';
+const BLUEPRINT_VERSION = '6.1.0';
 const MIN_NODE_MAJOR = 20;
 const NPM = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 const NPX = process.platform === 'win32' ? 'npx.cmd' : 'npx';

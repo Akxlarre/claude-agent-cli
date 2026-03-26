@@ -251,6 +251,7 @@ process.stdin.on('end', () => {
           '[SKILL angular-component] Usa input(), output(), @if/@for, host bindings, ChangeDetectionStrategy.OnPush.',
           '[SKILL design-system] Consulta indices/STYLES.md para tokens disponibles.',
           '[SKILL angular-signals] signal() para estado UI, computed() para derivados, effect() para side-effects.',
+          '[REGLA facades.md] Puede inyectar MULTIPLES Facades para composicion cross-domain. Logica pesada va en core/utils/ como funcion pura.',
           '[INDICE] Revisa anti-patrones: indices/ANTI-PATTERNS.md (evita shortcuts que degradan el sistema).'
         );
       }
@@ -349,6 +350,17 @@ process.stdin.on('end', () => {
         '  - Clases semanticas disponibles: .kpi-value, .kpi-label, .surface-hero, .surface-glass, .indicator-live, .badge-pulse.',
         '  - PrimeNG overrides: ya estan en _primeng-overrides.scss. No sobrescribir en componentes.',
         '[SKILL design-system] Consulta indices/STYLES.md para la lista completa de tokens y layout helpers.'
+      );
+    }
+
+    // --- Pure Utils ---
+    if (normalizedPath.includes('core/utils/') && normalizedPath.endsWith('.ts') && !normalizedPath.endsWith('.spec.ts')) {
+      contextParts.push(
+        '[REGLA architecture.md] Este es un archivo de FUNCIONES PURAS (core/utils/).',
+        '  - Sin inject(), sin signal(), sin side effects. Solo Data In -> Data Out.',
+        '  - Naming: {dominio}.utils.ts (kebab-case). Export via barrel core/utils/index.ts.',
+        '  - DEBE tener .spec.ts companero — son las funciones mas faciles de testear.',
+        '  - Se usan desde computed() en Smart Components o Facades para logica cross-domain.'
       );
     }
 

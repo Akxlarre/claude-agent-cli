@@ -5,7 +5,7 @@
 ```text
 src/
 ├── app/
-│   ├── core/         # Facades, Guards, Interceptors, Modelos
+│   ├── core/         # Facades, Guards, Interceptors, Modelos, Utils
 │   ├── features/     # Smart Components (páginas enrutables)
 │   ├── shared/       # Dumb Components (UI presentacional)
 │   └── layout/       # Sidebar, Topbar, Shell
@@ -21,7 +21,38 @@ supabase/
 - La UI **NUNCA** inyecta `SupabaseService`, `HttpClient`, ni clientes REST directamente.
 - **SIEMPRE** usar un `*FacadeService` que centraliza estado vía Signals.
 - El Facade expone data al template con `toSignal()`.
-- **NÚCLEO FUNCIONAL (Functional Core):** No acumules lógica compleja, matemática pesada o transformaciones de datos algorítmicas dentro de la Facade ni en los componentes. Extrae esa inteligencia a **funciones puras** de TypeScript (Data Out, Data In) en `core/utils/` o dominios específicos. Esto permite testear la lógica del negocio instantáneamente sin levantar inyecciones de Angular.
+- **NÚCLEO FUNCIONAL (Functional Core):** No acumules lógica compleja, matemática pesada o transformaciones de datos algorítmicas dentro de la Facade ni en los componentes. Extrae esa inteligencia a **funciones puras** de TypeScript (Data Out, Data In) en `core/utils/`. Esto permite testear la lógica del negocio instantáneamente sin levantar inyecciones de Angular.
+
+## Funciones Puras (`core/utils/`)
+
+Ubicación obligatoria para lógica de negocio reutilizable que **no depende de estado ni inyecciones**:
+
+```text
+core/utils/
+├── sales.utils.ts       # Rankings, agregaciones de ventas
+├── date.utils.ts        # Formateo, parsing, comparaciones
+├── validation.utils.ts  # Validadores de email, RFC, etc.
+└── index.ts             # Barrel export
+```
+
+### Cuándo crear una util
+
+- Lógica de combinación/agregación que se repite en **2+ Smart Components**
+- Cálculos puros (rankings, porcentajes, filtros complejos) que ensucian un `computed()`
+- Transformaciones de datos que no requieren estado de Angular
+
+### Cuándo NO crear una util
+
+- Lógica que solo se usa en 1 lugar → dejarla inline en el `computed()` del Smart Component
+- Lógica que necesita estado reactivo → pertenece al Facade
+- Wrappers triviales de una línea → no agregan valor
+
+### Convenciones
+
+- Archivo: `{dominio}.utils.ts` (kebab-case)
+- Funciones: puras, sin side effects, sin `inject()`, sin `signal()`
+- Exports: siempre a través del barrel `core/utils/index.ts`
+- Tests: cada `*.utils.ts` debe tener su `*.utils.spec.ts` — son las más fáciles de testear
 
 ## Detección de cambios
 

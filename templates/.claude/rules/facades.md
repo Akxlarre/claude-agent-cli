@@ -62,7 +62,70 @@ export class EjemploFacade {
 4. **Acción 3:** Inyectar el `<Dominio>Facade` en el Smart Component.
 5. **Acción 4:** Disparar un método del Facade (ej: `cargar()`) desde el `ngOnInit` (o constructor) y dejar que la UI se actualice sola por reactividad (vía `OnPush` y señales). Nunca esperar (await) la respuesta en la UI a menos que sea una acción bloqueante específica (ej. login).
 
-## 6. Transformación de Modelos (DTO -> UI Model)
+## 6. Composición Cross-Domain (Multi-Facade)
+
+Un Smart Component puede — y debe — inyectar **múltiples Facades** cuando necesita datos de varios dominios:
+
+```typescript
+// features/dashboard/dashboard.component.ts
+@Component({ ... })
+export class DashboardComponent {
+  private products = inject(ProductsFacade);
+  private users = inject(UsersFacade);
+  private sales = inject(SalesFacade);
+
+  // Composición local con computed — vive y muere con la página
+  topSelling = computed(() =>
+    calculateTopSelling(this.products.list(), this.sales.list())
+  );
+}
+```
+
+### Reglas de composición
+
+| Escenario | Solución | Dónde vive |
+|---|---|---|
+| 1 página combina 2-3 Facades | `computed()` en el Smart Component | `features/` |
+| Lógica de combinación se repite en 3+ páginas | Función pura reutilizable | `core/utils/` |
+| Transformación DTO → UI de un solo dominio | `computed()` dentro del Facade | `core/facades/` |
+
+### Prohibiciones
+
+- **NUNCA** crear "Orchestrator Facades" ni Facades que inyectan otros Facades — esto introduce dependencias circulares y singletons permanentes innecesarios.
+- **NUNCA** duplicar lógica de combinación en múltiples Smart Components. Si se repite, extraer a `core/utils/` como función pura.
+- **NUNCA** poner lógica de negocio pesada (rankings, agregaciones, filtros complejos) dentro del `computed()` del Smart Component. Extraer a una función pura en `core/utils/` y llamarla desde el `computed()`.
+
+### Ejemplo con función pura extraída
+
+```typescript
+// core/utils/sales.utils.ts
+export function calculateTopSelling(
+  products: Product[],
+  sales: Sale[],
+  limit = 10
+): Product[] {
+  const salesByProduct = new Map<string, number>();
+  for (const sale of sales) {
+    salesByProduct.set(sale.productId, (salesByProduct.get(sale.productId) ?? 0) + sale.amount);
+  }
+  return products
+    .sort((a, b) => (salesByProduct.get(b.id) ?? 0) - (salesByProduct.get(a.id) ?? 0))
+    .slice(0, limit);
+}
+```
+
+```typescript
+// features/dashboard/dashboard.component.ts
+import { calculateTopSelling } from '@core/utils/sales.utils';
+
+topSelling = computed(() =>
+  calculateTopSelling(this.products.list(), this.sales.list())
+);
+```
+
+> **Principio:** Los Facades gestionan dominios aislados. Los Smart Components componen. Las funciones puras calculan.
+
+## 7. Transformación de Modelos (DTO -> UI Model)
 
 El Facade es el **único lugar** donde se permite transformar un DTO de base de datos en un modelo de UI.
 

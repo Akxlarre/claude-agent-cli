@@ -102,6 +102,45 @@ En componentes con datos numéricos (KPIs, métricas, estadísticas):
 - `this.themeService.setColorMode('dark' | 'light' | 'system')`
 - PrimeNG: usar `darkModeSelector: '.fake-dark-mode'` para evitar conflictos
 
+## Personalización de marca por cliente (Multi-Brand)
+
+Cuando un cliente requiere colores corporativos distintos al default, **no crees un tema paralelo ni dupliques tokens**. El sistema de 4 capas ya lo soporta:
+
+### Cómo aplicar
+
+Sobreescribir **solo Layer 3 (Brand)** en `_variables.scss`:
+
+```scss
+// Antes (default del Blueprint)
+:root {
+  --ds-brand: #0ea5e9;
+  --color-primary-hover: #0284c7;
+  --gradient-hero: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+}
+[data-mode="dark"] {
+  --ds-brand: #38bdf8;
+  --color-primary-hover: #7dd3fc;
+}
+
+// Después (cliente "Acme Corp" con verde corporativo)
+:root {
+  --ds-brand: #16a34a;
+  --color-primary-hover: #15803d;
+  --gradient-hero: linear-gradient(135deg, #16a34a 0%, #059669 100%);
+}
+[data-mode="dark"] {
+  --ds-brand: #4ade80;
+  --color-primary-hover: #86efac;
+}
+```
+
+### Reglas
+
+- **SOLO** tocar Layer 3 (brand, gradientes, estados). Layers 1, 2 y 4 no cambian.
+- El dark mode del brand **debe cumplir WCAG AA** (contraste ≥ 4.5:1 sobre `--bg-surface`). Verificar en [webaim.org/resources/contrastchecker](https://webaim.org/resources/contrastchecker/).
+- Los component tokens (Layer 4) como `--btn-primary-bg: var(--ds-brand)` heredan automáticamente — no necesitan cambios.
+- **NUNCA** crear selectores `[data-brand="x"]` ni CSS condicional por cliente. Un proyecto = una marca. Si necesitas multi-tenant runtime, eso es una feature distinta que requiere `ThemeService` extendido.
+
 ## Animaciones y Motion Physics (GSAP obligatorio)
 
 - **PROHIBIDO** `@angular/animations` ni CSS `@keyframes` para entradas de vistas.
